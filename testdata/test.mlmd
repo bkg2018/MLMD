@@ -1,0 +1,72 @@
+This is a test file.
+Lines preceding the `.languages` directive are ignored.
+
+.languages fr,en main=en
+
+# first title
+
+Any text outside directives and appearing after the `.languages` directive
+is generated as default text as if it were in a `.((` section.
+.fr((Tout texte en dehors des directives d'ouverture et de fermeture de langue
+est considéré comme du texte par défaut comme si une directive `.((` était active..))
+
+```code
+.all((
+```
+
+### Examples.fr((Exemples.))
+
+.numbering 1:.((Chapter .)).fr((Chapitre .)):&I:-,2::1:.,3::1
+.!((Ignored text:
+numbering scheme for file 2 title 3 subtitle 4 is II-3.4
+.))
+.topnumber 1
+
+# .((English Main File Title.)).fr((Titre de fichier principal Français.)) MLMD
+
+.toc title=.((Default toc title.)).fr((Table des matières.)) level=1-3
+
+
+
+Example of `single backtick` text.
+Example of ``double backtick`` text.
+Example of ```not a code fence``` but escaped text.
+Example of .{mlmd escaping .fr((this is also escaped.)).}
+
+```code
+Code fenced text
+```
+
+    Code using space indentation.
+    .fr((Code utilisant l'indentation..))
+
+.((default text 1 with ignored EOL between directives..))
+.fr((texte en Français 1 avec EOL ignorée entre les directives..))
+
+.((default text with an EOL inside
+the text..)).fr((texte en français avec
+un EOL dedans..))
+
+Text with variable main: {main}
+Text with variable file: {file}
+Text with variable language: {language}
+Text with variable iso: {iso}
+Text with variable extension: {extension}
+
+.((Inlined default text 2..)).fr((Texte Français en ligne 2..))
+
+## .((Default title I-1.)).fr((Titre Français I-1.))
+
+.all((Text for ALL..))
+
+### Title I-1.1
+
+Text for ALL.
+
+#### Title level 4 A not in toc
+
+#### Title level 4 B not in toc
+
+## Title I-2
+
+End of main file.

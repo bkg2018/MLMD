@@ -1,0 +1,153 @@
+.languages fr,en main=en
+.topnumber 0
+
+# .all((MLMD - .))Multilingual Markdown Generator.fr((Générateur de Markdown Multilingue.))
+
+MLMD generates one or more Markdown files for a set of declared languages from one or more
+multilingual source files UTF-8 encoded, using directives in the files to distinguish each
+language parts.
+.fr((MLMD génère un ou plusieurs fichiers Markdown dans plusieurs langues à partir d'un ou
+plusieurs fichiers sources encodés en UTF-8, à l'aide de directives dans le texte qui 
+délimitent les parties propres à chaque langue..))
+
+## How?.fr((Comment ?.))
+
+MLMD is a PHP script. It takes source files and some parameters, analyzes 
+them and generates corresponding Markdown files for each declared language.
+.fr((MLMD est un script PHP. It reçoit en paramètre une liste de fichiers et quelques
+réglages, analyse les fichiers et génère les fichiers Markdown pour chaque langue..))
+
+MLMD requires a PHP interpreter version 7 or more.
+.fr((MLMD nécessite l'interpréteur PHP version 7 ou ultérieure..))
+
+## What?.fr((Quoi ?.))
+
+An MLMD source file is a text file encoded with UTF-8 and using the `.mlmd` extension.
+The `.base.md` extension is also supported.
+.fr((Un fichier source MLMD est un fichier texte encodé en UTF-8 qui utilise l'extension `.mlmd`.
+L'extension `.base.md` est également acceptée..))
+
+MLMD process the source files for each declared language, and generated Markdown files
+for each file and each language: *`file.mlmd`* will generate *`file.fr.md`*, *`file.en.md`*
+etc.
+.fr((MLMD traite chaque fichier source pour chaque langue déclarée, et génère les fichiers
+Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* génèrera *`fichier.fr.md`*,
+*`fichier.en.md`* et ainsi de suite..))
+
+Languages must be declared in at least one of the source files. Parts of the text for each
+language are enclosed between opening and closing directives, while other directives can
+generate tables of contents, number heading levels, add input files or other tasks.
+.fr((Les langues doivent être déclarées dans au moins un des fichiers sources. Les parties de
+texte dans chaque langue sont entourées de directives de début et de fin, tandis que d'autres
+directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
+ou effectuent d'autres tâches..))
+
+## How fast?.fr((Quelle rapidité ?.))
+
+Writing language parts is very fast and easy. Default text, which is generally the native
+language of the original author, doesn't need any specific directive and is written just
+like normal text, while language specific parts are simply surrounded by
+little open/close directive. For example starting english text is done by writing `.en((`, 
+followed by the text, and ended by `.))`. Empty lines, code fences, tables, any text and
+Markdown features can be put between these two markers. Headings starting with `#` can include
+open/close language directives too, or they can be put between markers if the author like 
+it this way.
+.fr((Ecrire des parties dans une langue est rapide et facile. Le texte par défaut qui est
+généralement dans la langue de l'auteur original du texte n'a pas besoin de directives
+particulières, tandis que les parties dans d'autres langues sont simplement entourées de
+petites directives d'ouverture et de fermeture. Par exemple, pour du texte en français on
+écrit la directive d'ouverture `.fr((`, suivie du texte, et on termine par `.))`. Les
+lignes vides, barrières de bloc de code, les tableaux ou toute autre fonctionnalité Markdown
+peuvent se trouver entre les deux marqueurs. Les titres commençant par `#` peuvent également
+contenir des parties dans des langues, ou être entourés par les directives si le rédacteur
+préfère cette manière de procéder..))
+
+As of processing speed, MLMD script generates the 2000 lines of its own documentation 
+in about 2 seconds on an Intel i7 at 2 GHz, files being written on a SSD.
+.fr((Concernant la vitesse de traitement, le script MLMD traite les 2000 lignes de sa propre
+documentation en environ 2 secondes sur un Intel i7 à 2GHz, les fichiers étant générés sur SSD..))
+
+## Why?.fr((Pourquoi ?.))
+
+I designed MLMD because I needed to write a technical documentation both in English and in
+French for a project. Looking on the Web I found a very efficient Python script from Hong-ryul Jong
+at https://github.com/ryul1206/multilingual-markdown. However after using it a little I found
+I needed some more features and I wanted to design a set of directives which would keep the
+text more readable and easier to type than HTML comment tags. I kept most of basic Hong-ryul ideas like
+ignored text, language declaration but also worked the design so directives could be put
+right into the text and not using the HTML syntax. I also designed various output modes to
+adjust for different HTML or pure Markdown contexts.
+.fr((J'ai conçu MLMD pour mes besoins alors que je devais rédiger une documentation technique
+en Anglais et en Français pour un projet. En cherchant sur le Web j'ai rapidement trouvé un script
+Python très efficace de Hong-ryul Jong : https://github.com/ryul1206/multilingual-markdown.
+Toutefois après un peu d'utilisation il me manquait des fonctionnalités et je souhaitais des directives
+qui conserveraient une meilleure lisibilité du texte et plus faciles à saisir que les tags de
+commentaire HTML. J'ai conservé" la plupart des idées de départ de Hong-ryul Jong comme le texte
+ignoré et la déclaration des langues mais j'ai aussi retravaillé le design pour que les directives
+puissent être insérées directement dans le texte et n'utilisent pas la syntaxe HTML. J'ai aussi
+implémenté différents modes de sortie pour pouvoir travailler dans des contextes HTML ou Markdown pur..))
+
+MLMD lets the user write default text when no language specific translation is available, 
+put sophisticated numbering schemes for heading levels in all or each file, generate global
+or local table of contents, include other files, escape text, use a few variables to ease
+language-independent linking to other files and many other tasks.
+.fr((MLMD permet à l'utilisateur de rédiger du texte par défaut lorsqu'une traduction n'est
+pas encore disponible, de choisir des schémas complexes de numérotation des titres globalement
+ou dans chaque fichier, d'inclure d'autres fichiers au traitement, d'échapper du texte, 
+d'utiliser quelques variables pour créer des liens indépendants de la langue, et bien d'autres 
+possibilités..))
+
+Special features let the writer separate language parts or stream them as he/ or she likes.
+.fr((Des fonctionnalités spéciales permettent de séparer les parties des différentes langues
+dans des paragraphes distincts ou de les enchaîner au choix du rédacteur..))
+
+Writing MLMD files is almost as easy as writing Markdown files. MLMD is UTF-8 by nature and
+will accept any language and characters sets in a same file.
+.fr((Ecrire des fichiers sources MLMD est presque aussi simple que rédiger des fichiers Markdown.
+MLMD se conforme à UTF-8 par nature et s'accordera à tous les jeux de caractères de toutes les
+langues au sein des mêmes fichiers..))
+
+MLMD is a convenient way of keeping the documentation structure in source files while permitting
+translation by different authors in a unique and shared place. And being text files, the MLMD
+multilingual sources work very well with versioning systems like Git, allowing diff comparisons,
+pull requests and files merging. 
+.fr((MLMD est un moyen pratique pour conserver la structure d'une documentation tout en
+permettant sa traduction progressive par des auteurs différents. EN tant que fichiers textes,
+les sources multilingues MLMD se glissent parfaitement dans les outils de gestion de version
+comme Git, permettant les comparaisons, les pull-requests et la fusion de fichiers..))
+
+## Documentation
+
+Full documentation can be found in [the `docs` directory](docs/MLMD.md) under this file.
+.fr((Une documentation complète est disponible dans [le répertoire `docs`](docs/MLMD.fr.md) 
+en dessous de ce fichier..))
+
+The sources for the README documentation you are reading can be found in [this root directory](README.mlmd).
+.fr((Le fichier source du README que vous lisez actuellement se trouve dans ce [répertoire racine](README.mlmd)..))
+
+The documentation source is written in MLMD itself and can be found in [the `docsource` directory](docsource/MLMD.mlmd).
+It is a comprehensive example of MLMD source possible writing styles and directives uses.
+.fr((La source de la documentation complète est rédigée en MLMD elle-même et se trouve dans
+[le répertoire `docsource`](docsource/MLMD.mlmd). Elle constitue un exemple exhaustif des styles d'écriture
+des sources MLMD et de l'utilisation des différentes directives..))
+
+## Enjoy!.fr((Amusez-vous !.))
+
+I hope MLMD will help you to easily maintain multilingual documentations.
+.fr((J'espère que MLMD vous aidera à maintenir facilement vos documentations multilingues..))
+
+In these Covid days, please stay safe and protect others.
+.fr((En ces jours de Covid, prenez soin de vous et des autres.))
+
+Francis Piérot
+.((
+August-December 2020
+To my father Serge, 1932-2020
+I learned from him that an engineer works hard to work less.
+.)).fr((
+Aout-Décembre 2020
+A mon papa Serge, 1932-2020
+Il m'a appris qu'un ingénieur travaille dur à travailler moins.
+.))
+
+[Français](README.fr.md) - [English](README.md)

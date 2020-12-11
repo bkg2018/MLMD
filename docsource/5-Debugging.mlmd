@@ -1,0 +1,266 @@
+.topnumber 5
+# Debugging source files.fr((Correction des fichiers sources.))
+
+MLMD directives and command line arguments build a kind of programming language with which
+you write source files, that you compile into generated Markdown files.
+.fr((Les directives MLMD et les paramètres de la ligne de commande forment une sorte
+de langage de programmation avec lequel on rédige les fichiers sources, que l'on compile
+ensuite en fichiers Markdown..))
+
+Like with all programming language, the writer sometimes put *bugs* in his/her source files.
+MLMD generator do its best to help find and fix these bugs but there also exists a few
+technics to limit the risks.
+.fr((Comme avec tout langage de programmation, les fichiers sources comportent parfois
+des *bugs*. MLMD fait son possible pour aider à localiser ces bugs mais il existe aussi des
+techniques qui limitent les risques.))
+
+This part will explain the tools MLMD gives, the possible bugs and the technics to avoid them.
+.fr((Cette partie décrit les outils offerts par MLMD, les bugs possibles et les techniques pour
+les éviter..))
+
+But first, an important advice.
+.fr((Mais tout d'abord, un conseil important.))
+
+## DON'T FIX GENERATED FILES.fr((NE CORRIGEZ PAS LES FICHIERS GENERES.))
+
+If you ever fix the generated french, english, polish, korean or any language specific generated files,
+you will find your errors back the next time you will run MLMD on source files.
+.fr((Si vous corrigez des erreurs directement dans les fichiers en français, anglais, polonais, coréen
+ou tout autre langue, vous retrouverez vos erreurs la prochaine fois que vous passerez MLMD sur vos sources..))
+
+The right place where to fix the errors is in the source files.
+.fr((Le bon endroit où corriger les erreurs est le fichier source..))
+
+Read your generated files attentively, then notice the errors, then go to the source files to fix them
+and finally generate files again with MLMD.
+.fr((Lisez soigneusement vos fichiers générés, notez les erreurs, puis corrigez les dans les
+fichiers sources avant de régénérer les fichiers..))
+
+## Trace mode: `-trace`.fr((Mode trace : `-trace`.))
+
+The `-trace` optional arguments will display a trace of all lines as they are read, as well as
+some more informations. If the generated files are not as expected, the first thing to do is trying
+to follow what's displayed by the trace mode: MLMD displays each line with its number, except for
+code fences (.{```.}) which are jumped over with only the first line displayed.
+.fr((Le paramètre `-trace` facultatif affiche une trace des lignes lues dans les fichiers sources.
+Si les lignes générées ne sont pas celles espérées, la première chose à faire est de regarder cette
+trace: MLMD doit affiche chaque ligne avec son numéro, sauf pour les portions de barrière de code
+où seule la première ligne est affichée..))
+
+Make sure every line is read and the code fences are matched with each other: missing an ending fence
+would make the following text disappear from trace until the next code fence or the end of file.
+.fr((Il faut s'assurer que toutes les  lignes sont présentes et que les barrières de code sont
+bien repérées : s'il manque une barrière fermante par exemple, la trace sautera toutes les lignes
+suivant l'ouverture soit jusqu'à la prochaine barrière, soit jusqu'à la fin du fichier..))
+
+## Unclosed sections.fr((Sections non closes.))
+
+At the end of each source file, MLMD will check if all language sections have been closed and will
+display the starting line of any non-closed sections. Make sure you read these warnings and fix them
+by adding closing directives `.))` at the right places.
+.fr((A la fin de  chaque fichier source, MLMD vérifie si toutes les sections de langue ont bien
+été fermées et signale la ligne de début de celles qui ne le sont pas. Il est important de bien lire
+les avertissements et de fermer les sections dont le `.))` a été oublié..))
+
+## Wrong indentations.fr((Mauvaises indentations.))
+
+MLMD will reproduce space indentation only if it occurs *after*  language opening directives, so if
+indentation disappear first check if it is correctly placed:
+.fr((MLMD reproduit les indentations situées *après* les directives d'ouverture de langue, aussi lorsque
+l'indentation semble disparaitre il faut vérifier si elle est correctement placée. L'exemple suivant :.))
+
+```code
+   .fr((Text.))
+```
+
+will generate non-indented `text` in the `.fr.md` file. To keep indentation, this line must be written
+this way:
+.fr((génèrera `text` sans indentation dans le fichier `.fr.md`. Pour conserver les espaces la ligne doit
+être réécrite de cette manière :.))
+
+```code
+.fr((   Text.))
+````
+
+## Wrong language.fr((Langue erronée.))
+
+If you find wrong language text in a generated file it generally means the wrong open language
+directive has been used or a section has not been closed:
+.fr((Lorsque le texte de la mauvaise langue se retrouve dans un fichier qui ne lui était pas destiné, 
+cela signifie en général que la mauvaise directive d'ouverture a été utilisée ou qu'une section
+n'a pas été refermée :.))
+
+.((
+- maybe missing an opening parenthesis : `.fr(` will *not* start a french sections
+- maybe wrong code was used: `.enn((' will be unknown if `en` was the intended code
+- maybe the previous closing directive was misspelled: `.)` won't close a sections
+.)).fr((
+- il manque peut-être une parenthèse ouvrante : `.fr(` ne démarre *pas* une section en français
+- un mauvais code a peut-être été utilisé : `.enn((` n'est pas une directive si le code attendu est `en``
+- une directive de fermeture a peut-être été mal écrite : `.)` ne ferme pas la section en cours
+.))
+
+As a conclusion, when something looks odd about languages, first check each opening and closing
+directives around the suspected text.
+.fr((En conclusion, lorsque quelque chose ne va pas concernant la langue utilisée, il faut
+vérifier les directives d'ouverture et de fermeture autour du texte concerné..))
+
+## Misplaced default text.fr((Texte par défaut mal placé.))
+
+Your supposedly default text doesn't go into the expected language files if it appears
+after language specific sections instead of before. Default text always apply to upcoming
+sections, not past ones.
+.fr((Le texte par défaut ne sera pas généré dans les fichiers attendus s'il apparait
+après les sections spécifiques aux langues plutôt qu'avant elles. Le texte par défaut doit
+s'applique toujours aux sections de langue qui le suivent, et non à celles qui le précèdent..))
+
+Here's a  exemple of wrong ordering:
+.fr(( Voici un exemple de mauvais ordre :.))
+
+`.fr((Texte en français.))Default text`
+
+With this order, first the french file will receive `Texte en français`, then the
+`Default text' will go into *all* language files, including the french file.
+.fr((Avec cet ordre, le fichier français va recevoir `Texte en français`, puis le 
+texte par défaut `Default text` sera envoyé dans tous les fichiers y compris le français..))
+
+To fix this, default must be put first and language specific sections appear later:
+.fr((Pour corriger cela il faut placer le texte par défaut en premier et les sections des
+langues ensuite :.))
+
+`Default text.fr((Texte en français.))`
+
+This fixed line will have the expected effect: the default text will not go into the french file.
+.fr((Cette ligne corrigée aura l'effet désiré : le texte par défaut n'ira pas dans le fichier français..))
+
+## Inconsistent Markdown lists and tables.fr((Listes et tableaux Markdown incohérents.))
+
+Markdown allows easy writing of lists using `*` and `-` line start, as well as single lines tables
+using specific notations. However with MLMD writing each line or list element for multiple languages
+can lead to inconsistent structures because end of lines between close/open directives have a special
+meaning to MLMD. A much easier way of doing is to keep complete tables and lists in separate language
+sections.
+.fr((Markdown permet de rédiger facilement des listes à l'aide des préfixes `*` et `-` en début de
+ligne ainsi que des tableaux de lignes. Toutefois avec MLMD écrire chaque ligne de tableau ou élément
+de liste avec toutes ses sections de langues peut avoir des effets indésirables en raison de l'interprétation
+spéciale de la fin de ligne entre les directives fermantes et ouvrantes des sections. Une méthode plus
+appropriée est de conserver les tables et listes entières dans des sections de langue séparées..))
+
+For example the following list tries to translate each line one by one:
+.fr((Dans l'exemple suivant on essaie de traduire chaque ligne une à une :.))
+
+```code
+.en((- first line in english.)).fr((Première ligne en français.))
+.en((- second line in english.)).fr((Deuxième ligne en français.))
+```
+
+The problem is that the first end of line will be canceled by MLMD because it's preceding an opening
+directive. Instead of this, MLMD recommended structure is to keep language sections complete:
+.fr((Le problème est que la fin de la première ligne est supprimée par MLMD parce qu'elle intervient
+entre la fermeture de section française et l'ouverture de la suivante en anglais. Au lieu de cela
+il faut rédiger les listes séparément chacune dans sa propre section :.))
+
+```code
+.en((
+- first line in english
+- second line in english
+.)).fr((
+- première ligne en français
+- deuxième ligne en français
+.))
+````
+
+It doesn't look as simple but is much more controllable and MLMD will always generate the correct sections
+for each language when it finds this kind of structure.
+.fr((Bien que cela ne paraisse pas aussi simple c'est une méthode beaucoup plus fiable et facile à contrôler,
+avec laquelle MLMD génèrera toujours les bonnes sections dans les bons fichiers sans supprimer de fins de
+lignes de manière apparemment intempestive..))
+
+It should be noted that the end of line cancelling is a trade-off for MLMD to make languages sections
+visual separations easier.
+.fr((Il faut souligner que cette suppression de fin de ligne est un compromis qui a été adopté dans
+MLMD pour faciliter la séparation visuelle des sections de différentes langues..))
+
+## Wrong headings numbering.fr((Mauvaise numérotation des titres.))
+
+If the headings numbering doesn't match what was expected, some possible errors are:
+.fr((Lorsque la numérotation des titres ne correspond pas à celle attendue, voici quelques erreurs
+possibles :.))
+
+.((
+- a mistake about the supposed order in which files are processed which changes the level 1 heading number
+  of each file and indirectly, the first number of all headings numbering
+- there can be a bug in the  numbering scheme itself, e.G. a missing `:` or `,``
+- there can be multiple and inconsistent `.numbering` directives in files
+.)).fr((
+- une supposition erronée quant à l'ordre de traitement des fichiers sources qui modifie le numéro
+  du titre de niveau 1 et, indirectement, le premier nombre de la numérotation de chaque titre
+- il peut y avoir un bug dans la rédaction du schéma de numérotation, par exemple il manque un `:` ou une `,`
+- il peut y avoir plusieurs directives `.numbering` incompatibles dans les fichiers sources
+.))
+
+For a best result, all processed files should follow the rules below:
+.fr((Pour obtenir un bon résultat, les fichiers traités peuvent respecter les règles suivantes :.))
+
+.((
+- have the same `.numbering` scheme or don't use one and let `-numbering` command line parameter do the job
+- use `.topnumber` to force the level 1 number either to disappear (`.topnumber 0`) either to
+have a given value.
+.)).fr((
+- utiliser le même schéma `.numbering` ou ne pas en utiliser et laisser le paramètre `-numbering` de la ligne 
+de commande faire le travail
+- utiliser `.topnumber` pour réserver leur numéro de titre de premier niveau ou le supprimer avec `.topnumber 0`
+.))
+
+Files will be ordered in TOCs and in process either by their `topnumber` value, 
+either by the time they have been written in directory first, which is generally not what is
+expected and almost never what is displayed by operating systems. The best results are 
+definitely obtained by using `.topnumber` in source files.
+.fr((Les fichiers sont triés dans les sommaires et le traitement selon leur numéro `topnumber`, mais
+en l'absence de celui-ci ils seront ordonnés en fonction de leur place dans leur répertoire, qui n'est
+généralement pas celle attendue et pratiquement jamais celle affichée par les systèmes d'exploitation.
+Les meilleurs résultats sont donc obtenus en utilisant `.topnumber` dans les fichiers sources..))
+
+## Disappearing ending period.fr((Disparition de point final.))
+
+If an ending period is disappearing from a sentence, chances are that the dot from a closing
+directive following the sentence has been mistaken for that period. Dots must be doubled at the end
+of a section sentence: the first dot is the ending period for the sentence, then the second dot is
+the directive start:
+.fr((Si des points terminant des phrases disparaissent dans les fichiers générés, cela provient 
+généralement d'une confusion avec le point qui commence la directive de fermeture d'une section. A la fin
+de la dernière phrase d'une section, il faut doubler le point. Le premier point termine la phrase,
+le second est celui de la directive de fermeture :.))
+
+.((
+```code
+.en((This sentence is not ended by a period.))
+.en((This sentence is ended by a period..))
+```
+.)).fr((
+.fr((Cette phrase ne se termine pas par un point.))
+.fr((Cette phrase se termine par un point..))
+.))
+
+## Spellchecking.fr((Orthographe.))
+
+Most text files editor softwares have spellchecking plugins which check te text on the fly as it
+is entered. Visual Code for example has extensions for spellchecking in many languages.
+.fr((La plupart des éditeurs de texte possèdent des modules de correction orthographique
+qui vérifient à la volée le texte au fur et à mesure de sa saisie Visual Code par exemple
+propose une extension qui supporte de nombreuses langues..))
+
+If possible, spellchecking should be done on source files, however this can be problematic if 
+many languages have different spelling for similar words and the spellchecker won't signal errors.
+For example the word `exemple` in english text won't be signaled by the spellchecker if it also
+checks the french language.
+.fr((Si possible, la vérification doit être effectuée sur les fichiers sources, toutefois cela peut
+poser problème si plusieurs langues sont activées et proposent des orthographes différentes pour des
+mots similaires, le module ne signalant alors pas d'erreur. Par exemple, le mot `example` dans
+du texte en français ne sera pas signalé si le correcteur vérifie aussi la langue anglaise..))
+
+If reading generated files reveals errors, then spellchecking can be done in the right language
+on each generated file, but corrections be done in source files before generating again with MLMD.
+.fr((Si la relecture des fichiers générés révèle beaucoup d'erreurs, alors on peut activer la correction
+avec juste la langue concernée sur le fichier généré, noter toutes les erreurs et les corriger dans
+les fichiers sources avant de régénérer les fichiers avec MLMD..))

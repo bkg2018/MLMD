@@ -1,0 +1,676 @@
+.topnumber 4
+# Directives Reference.fr((Références des directives.))
+
+In this part, each directive will be explained in detail with syntax, use notes
+and examples.
+.fr((Dans cette partie de la documentation sont décrites les directives avec
+leur syntaxe, des notes d'utilisation et des exemples.))
+
+## Declaring languages: `.languages`.fr((Déclarer les langues: `.languages`.))
+
+The `.languages` directive declares the possible languages which can be found in the sources, assign them
+a code and an optional associated ISO code, and optionally tells which code is the *main* language.
+.fr((La directive `.languages` déclare les langues utilisables dans les fichiers sources en leur affectant
+un code, un code ISO associé et facultatif, et en indiquant éventuellement le code *main* de la langue
+*principale*..))
+
+The *main* language has files generated without the language code suffix, e.g. `README.md` while other
+languages will have the language code suffix, e.g. `README.fr.md`.
+.fr((La langue *principale* a pour seule particularité que les fichiers générés pour cette langue
+auront l'extension `.md` sans le code de langue par exemple `README.md`, par opposition aux autres
+langues dont les fichiers auront l'extension `.code.md`, par exemple `README.fr.md`..))
+
+### Syntax.fr((Syntaxe.))
+
+The `.languages` directive lies alone on a line and is followed by the list of language codes to be
+used in all source files, optionally associated to an ISO code. One code can be declared as the
+main language.
+.fr((La directive `.languages` est située seule sur une ligne et est suivie d'une liste de codes
+pour chacune des langues utilisées dans les fichiers sources, chaque code pouvant être associé à un
+code ISO facultatif; L'un des codes peut être déclaré comme langue principale..))
+
+```code
+.languages <code>[=<iso>][,...] [main=<code>]
+```
+
+Each  `<code>` declares a language which can then be used with `.<code>((` directives to start text
+sections for the `<code>` language.
+.fr((Chaque `<code>` déclare une langue qui pourra être utilisée avec la directive `.<code>((` qui
+ouvrira une section de texte rédigée dans cette langue..))
+
+The optional `main=<code>` parameter tells which language is the main language: files generated for
+this main language will have an `.md` extension instead of a `.<code>.md` extension. As an example,
+the `README.base.md` source file will generate a `README.md` for the main language and
+`README.<code>.md` for other language codes. This is particularly useful with Git deposits which
+require a `README.md` file at the deposit root.
+.fr((Le paramètre facultatif `main=<code>` indique la langue principale : les fichiers générés pour ce
+code de langue auront une extension simple `.md` au lieu de `.<code>.md`. Par exemple, le fichier
+source `README.base.md` génèrera un fichier `README.md` pour la langue principale et des fichiers
+`README.<code>.md` pour chacun des autres codes de langue. Ceci est utile pour les documents destinés
+à des environnements qui contrôlent les fichiers Markdown déposés, comme les dépôts Git qui exigent un
+fichier `README.md` en racine du dépôt..))
+
+### Notices.fr((Remarques.))
+
+- No file is generated before the `.languages` directive is met: any preceding text will be ignored.
+- The directive has a global effect over all the source files so it can be put in the first processed
+file. If there is any doubt about which file will be processed first, the directive can be put in all
+the sources with no undesirable effect. The order can also be chosen with a `.topnumber` directive
+in each source file.
+- After the `.languages` directive, the generator will consider all text as default text
+and send it to all languages files until a language opening directive changes this.
+.fr((
+- Aucun fichier n'est généré avant qu'une directive `.languages` ait été localisée dans tous les fichiers
+sources. Tout texte précédant cette directive sera ignoré.
+- La directive est globale à tous les fichiers sources, elle peut donc être placée dans le premier fichier
+traité. En cas de doute sur l'ordre dans lequel les fichiers seront traités, on peut placer la même directive
+au début de chaque fichier sans effet indésirable. L'ordre peut également être forcé en plaçant une directive
+`.topnumber` dans chaque fichier source.
+- Après la directive `.languages`, le générateur se place en mode texte par défaut et enverra tout texte à
+toutes les langues jusqu'à ce qu'une directive d'ouverture de langue change cela.
+.))
+
+### Example.fr((Exemple.))
+
+```code
+.languages en=en_US,fr main=en
+```
+
+Generated files will be named with a `.md` extension for the `en` language and with `.fr.md` for
+the `fr` language.
+.fr((Avec cette directive les fichiers seront générés avec une extension `.md` pour la langue du code
+`en` et `.fr.md` pour la langue `fr`..))
+
+## Defining a numbering scheme: `.numbering`.fr((Définition d'un schéma de numérotation : `.numbering`.))
+
+The `.numbering` directive defines the numbering scheme for current file headings and TOC lines.
+The syntax is identical to the `-numbering` command line argument.
+.fr((La directive `.numbering` définit le schéma de numérotation pour le fichier actuel et les sommaires.
+La syntaxe est identique à celle du paramètre `-numbering` de la ligne de commande..))
+
+> WARNING: the `-numbering` command line argument has global effect on all files, while the `.numbering`
+directive only applies to the file where it appears.
+.fr((> ATTENTION : le paramètre de ligne de commande s'applique à tous les fichiers sources, tandis
+que la directive permet de modifier le schéma pour le fichier où elle apparait..))
+
+### Syntax.fr((Syntaxe.))
+
+.((
+```code
+.numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+```
+.)).fr((
+```code
+.numbering [<niveau>]:[<préfixe>]:<symbole>[<séparateur>][,...]]
+```
+.))
+
+Following are details about each definition part. These are identical as for the command line parameter.
+.fr((Voici une description des parties de la définition de niveau. Elles sont identiques aux
+paramètres de la ligne de commande..))
+
+- `<level>` is optional and is a digit between `1` and `9` representing the heading level (which is the number of '#' at
+the heading beginning). By default, this defines the next level, starting with 1 and incrementing at each definition.
+- `:` is a mandatory separator between parts of the definition, even for the empty ones.
+- `prefix` is an optional prefix for the level numbering, e.g. '`Chapter `'. The prefix only appears in the level numbering
+for the heading of this level, and will be omitted from inferior levels numbering.
+- `<symbol>` is a mandatory symbol which can be an uppercase letter `A` to `Z`, a lowercase letter from `a` to `z`,
+a digit from `1` to `9` or the special notation '&I' or '&i' for uppercase or lowercase Roman numbers. It sets the starting
+value for the level numbering, except for Roman numbers which always start at `I`.
+- `separator` is an optional symbol which will be concatenated to the numbering symbol before the next level numbering.
+Conventional symbols can be `.`, `-`or `)`. Omitting this separator for the last level is identical to using `.`.
+- `,` is a separator before the next level definition.
+.fr((
+- `<niveau>` est un chiffre entre `1` and `9` facultatif qui indique le ,niveau de titre concerné (c'est le nombre de `#`
+qui débute le titre). Par défaut c'est le niveau suivant celui de la définition précédente, en commençant par 1.
+- `:` est un séparateur obligatoire entre chacune des parties de la définition, même pour les parties omises.
+- `préfixe` est un préfixe facultatif pour le tout premier niveau de titre, par exemple `Chapitre `. Le préfixe n'apparait
+que dans le libellé des titres de premier niveau, même s'il est spécifié pour un autre niveau.
+- `<symbole>` est un symbole obligatoire qui peut être une lettre majuscule `A` à `Z`, une lettre minuscule `a` à `z`,
+un chiffre de `1` à `9` ou la mention spéciale `&I` ou `&i` pour représenter les chiffres romains en majuscules
+ou minuscules. Ce symbole indique la valeur de départ pour la numérotation du niveau, sauf pour les chiffres romains
+qui commencent toujours à `I` ou `i`.
+- `séparateur` est un caractère facultatif qui sera écrit après les symboles de numérotation de ce niveau. Les symboles
+séparateurs les plus courants sont `.`, `-` ou `)`. Par défaut les niveaux de la numérotation sont séparés par un `.`.
+- `,` sépare les différentes définitions de niveau.
+.))
+
+A level N always starts with the defined symbol, then all the following headings at the same level N will increment
+this symbol until a heading with a level N-1 above will reset the current level N, and continue with the next number
+in the setting for the above level N.
+.fr((Le premier titre d'un niveau N est numéroté avec le symbole indiqué, les suivants au même niveau N seront ensuite
+incrémentés jusqu'à ce que survienne un titre de niveau supérieur N-1 qui réinitialisera la prochaine séquence de
+niveau N au symbole de départ..))
+
+## Numbering level 1 heading: `topnumber`.fr((Numéro de titre niveau 1 : `.topnumber`.))
+
+The `.topnumber` directive defines the starting number for the level 1 heading in the current file for the
+numbering scheme set by `.numbering` or the `-numbering`command line parameter. This 
+can be used to number successive source files in table of contents. Each file has only one level 1 heading.
+If the `.topnumber` directive is used in files, they will be processed in the order defined by this
+directive.
+.fr((La directive `.topnumber` définit le numéro du titre de niveau 1 du fichier actuel au sein du schéma de
+numérotation défini par `.numbering` ou le paramètre `-numbering`de la ligne de commande. Ce numéro peut
+être utiliser pour numéroter les fichiers successifs dans un sommaire général. Chaque fichier possède un
+seul titre de niveau 1. Si la directive `.topnumber` est utilisée dans les fichiers, ils seront traités dans
+l'ordre défini par ces directives..))
+
+### Syntax.fr((Syntaxe.))
+
+```code
+.topnumber <n>
+````
+
+The parameter `n` can be any integer number starting at 1. Each file should have a unique number, as using
+identical numbers will have unpredictable effects.
+.fr((Le paramètre `n` est n'importe quel nombre entier à partir de 1. Chaque fichier doit avoir un numéro unique,
+car l'utilisation de numéros identiques aura des effets imprévisibles..))
+
+## Generating Table Of Content: `.toc`.fr((Génération de sommaire : `.toc`.))
+
+The `.toc` directive generates a Table Of Contents using chosen header levels. The header levels are defined
+by the number of `#` prefixes in Markdown syntax: `#` is header level 1 which is unique in a file, `##` is
+level 2 etc.
+.fr((La directive `.toc`génère un sommaire à partir des niveaux de titres qui lui sont indiqués. Dans la
+syntaxe Markdown, ces niveaux sont définis par le nombre de caractères `#` en début de ligne : `#` est pour
+le titre de niveau 1 qui doit être unique dans le fichier, `##` pour les titres de niveau 2 etc..))
+
+By default, level 1 is ignored: it is considered as the file title, and levels 2 to 4 are put in TOC.
+But level 1 can be used to build a global TOC for the headings from the full set of files. Such a global
+TOC is generally placed in the main file from which all other files can be accessed.
+.fr((Par défaut, le titre de niveau 1 est ignoré dans les sommaires car il est considéré comme le titre
+du fichier, et le sommaire inclut les niveaux de titre 2 à 4. Mais le niveau 1 peut être ajouté
+pour générer un sommaire global des titres de tous les fichiers. Un tel sommaire global est généralement
+placé dans le fichier principal à partir duquel on peut accéder aux autres fichiers..))
+
+The Table of Contents has one link for each accepted heading.
+.fr((Le sommaire insère un lien vers chaque titre de chaque fichier qu'il inclut.))
+
+.((
+> The table will be put at the place of the `.toc` directive.
+> The table has an automatic anchor named `toc` which can be used in links from other files.
+> If a numbering scheme has been set with the `-numbering` script argument or
+  `.numbering` directive, it will be used for the toc headings.
+> The TOC title is written as a level 2 heading in the generated files.
+.)).fr((
+> Le sommaire sera placé à l'endroit de la directive `.toc`.
+> Le sommaire reçoit une ancre nommée ou identifiée `toc` qui peut être utilisée comme cible
+  dans les fautes fichiers.
+> Si un schéma de numérotation a été programmé avec le paramètre `-numbering` ou une directive
+  `.numbering`, il sera utilisé pour les titres placés dans le sommaire.
+> Le titre du sommaire est écrit comme un titre de niveau 2 dans les fichiers générés.
+.))
+
+### Syntax.fr((Syntaxe.))
+
+The `.toc` directive must be written alone on its line with its parameters. Most of the time, the TOC
+lies after the file title and some introduction. A default TOC with no parameters will build a table
+of contents for the current file with headings `##` to `###`. (Level 2 to 4 headings.)
+.fr((La directive `.toc` doit être écrite sur une ligne isolée avec ses paramètres. La plupart du
+temps elle se situe après le titre du fichier et une introduction. Un sommaire sans
+aucun paramètre écrira la liste des titres `##` à `###` du fichier en cours (niveaux 2 à 4)..))
+
+.((
+```code
+.TOC [level=[m][-][n]] [title=<title text>] [out=md|html]
+```
+.)).fr((
+```code
+.TOC [level=[m][-][n]] [title=<texte de titre>] [out=md|html]
+```
+.))
+
+#### `level` parameter.fr((Paramètre `level`.))
+
+This parameter sets the heading levels which will appear in the TOC.
+.fr((Ce paramètre choisit les niveaux des titres qui apparaitront dans le sommaire..))
+
+Syntax for this parameter is `level=[m][-][n]`:
+.fr((La syntaxe pour ce paramètre est `level=[m][-][n]` :.))
+
+.((
+- If neither `m` nor `n` are given, the TOC will contain heading levels 2 to 4 (matching
+  headings `##` to `###`).
+- If `m` only is given, TOC titles will be level `m` headings only.
+- If `m-` is given without `n`, TOC titles will be level `m` to level 9 headings.
+- If `m-n` is given, TOC titles will be level `m` to level `n` headings.
+- If `-n` is given, TOC titles will be level 1 to level `n` headings.
+.)).fr((
+- Si ni `m` ni `n` ne sont indiqués, les niveaux 2 à 4 seront retenus.
+- Si `m` seulement est fourni, seuls les titres de niveau `m` seront retenus.
+- Si `m-` est fourni sans `n`, les niveaux `n`à 9 seront retenus.
+- Si `m-n` est fourni, les niveaux `m` à `n` seront retenus.
+- Si `-n` est fourni, les niveaux 1 à `n` seront retenus.
+.))
+
+#### `title` parameter.fr((Paramètre `title`.))
+
+This parameter is followed by text which will be placed as a level 2 (`##`) heading right
+before the table.
+.fr((Ce paramètre est suivi d'un titre qui sera placé comme titre de niveau 2 (`##`))) juste
+avant le sommaire..))
+
+.((
+- The title text can use language, all, ignore and default directives just like any other text.
+- If no title text is given, `Table Of Contents` will be used.
+- Everything that follows `title=` is used as title text until either the end of the line,
+  either the `level=`parameter.
+.)).fr((
+- Le titre du texte peut utiliser les directives de langue, all, ignore et default comme
+  le reste du texte.
+- Si aucun titre n'est fourni, `Table Of COntents` sera écrit.
+- Tout ce qui suit `title=` jusqu'à la fin de ligne ou jusqu'au paramètre `level=` est
+  utilisé dans le titre.
+.))
+
+### Examples.fr((Exemples.))
+
+```code
+.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents))"
+```
+
+This directive generates a TOC using the headings `#` to `##` found in each file. The order
+of files in the table will be either the one dictated by `.topnumber` directives in files,
+either the 'natural' order of files in directories, which is generally the order they were written
+to for the first time and is not easily controllable.
+.fr((Cette directive place une table des matières à partir des niveaux `#` à `##` des titres
+trouvés dans tous les fichiers traités. L'ordre des fichiers est soit dirigé par les directives
+`.topnumber` trouvées dans les fichiers, soit celui dans lequel les fichiers ont été créés dans
+les répertoires la première fois, ce qui n'est pas facilement contrôlable..))
+
+The table title will be `## Table Of Contents` by default in any language.
+.fr((Le titre des sommaires est `Table Of Contents` par défaut dans toutes les langues..))
+
+## Generating for all languages: `.all((`.fr((Texte pour toutes les langues : `.all((`.))
+
+The `.all((` directive starts a section of text which will be put in each of the languages
+files declared in the `.languages` directive.
+.fr((La directive `.all((` ouvre une section de texte qui sera écrite dans les fichiers de toutes
+les langues déclarées dans `.languages`..))
+
+This directive is ended or suspended by any of the following conditions:
+.fr((Cette directive est suspendue ou terminée lorsque l'une des conditions suivantes se présente :.))
+
+.((
+- The `.))` directive which returns to previous state.
+- The `.<code>((` directives which start a language specific section of text.
+- The `.ignore((` directive which starts ignored text.
+- The `.default((` or `.((` directive which starts the default value for a section of text.
+.)).fr((
+- Une directive `.))` ferme la section de texte et retourne au contexte précédent.
+- Une directive `.<code>((` démarre une section pour une des langues déclarées dans `.languages`.
+- Une directive `.ignore((` démarre une section de texte ignoré.
+- Une directive `.default((` ou `.((` démarre une section de texte par défaut.
+.))
+
+By default, any text outside directives and appearing after the `.languages` directive
+is generated as default text in all the languages files with no specific text as if it were
+in a `.((` section.
+.fr((Par défaut, tout texte en dehors des directives d'ouverture et de fermeture de langue
+est considéré comme du texte par défaut écrit dans tous les fichiers des langues qui n'ont pas de
+section spécifique, comme si une directive `.((` était active..))
+
+### Syntax.fr((Syntaxe.))
+
+```code
+.all((
+```
+
+### Examples.fr((Exemples.))
+
+Directives can always be alone on a line, surrounding the text they act on:
+.fr((Les directives peuvent être placées seules sur une ligne autour du texte sur lequel elles agissent :.))
+
+.((
+```code
+.all((
+text for all languages
+.))
+```
+.)).fr((
+```code
+.all((
+texte pour toutes les langues
+.))
+```
+.))
+
+They can also be put inline within text:
+.fr((Elles peuvent également être placées n'importe où dans le texte :.))
+
+.((
+```code
+.en((text for 'en' language .all((text for all languages.)) rest of text for 'en' language.))
+```
+.)).fr((
+```code
+.fr((texte pour la langue 'fr' .all((texte pour toutes les langues.)) suite du texte pour 'fr'.))
+```
+.))
+
+And they can be embedded within headings:
+.fr((Et elles peuvent être insérées dans les titres :.))
+
+.fr((
+```code
+# .en((Heading text for English .all(added text for all languages.)) heading text for English again .)) text for all languages
+```
+.)).fr((
+```code
+# .fr((Texte du titre en français .all(added text for all languages.)) suite du texte en français .)) texte pour toutes les langues
+```
+.))
+
+Remember that by default, text goes in all the language files with no specific section. This défault context
+is resumed when no language specific section is active anymore, as it is at the end of the exemple above after the
+last `.))` directive.
+.fr((Rappel : par défaut, le texte va dans les fichiers de toutes les langues qui n'ont pas de section spécifique.
+Ce contexte par défaut est restauré lorsqu'aucune directive d'ouverture n'est plus active, comme c'est le cas
+à la fin du titre exemple ci-dessus après la dernière directive `.))`..))
+
+## Default text: `.default((` or `.((`.fr((Texte par défaut : `.((` ou `.default((`.))
+
+The `.default((`  or `.((` directive starts a default text section which will be put in
+the generated language files for which no specific language section is available after this
+default section.
+.fr((La directive `.default((` ou `.((` ouvre une section dans laquelle le texte
+ira dans toutes les langues qui n'auront pas de section spécifique à la suite de ce texte
+par défaut..))
+
+This directive is not generally needed as it is always active when no language specific
+section is. It applies to all the upcoming text until either a closing or an opening
+language directive is met.
+.fr((Cette directive n'est en général pas nécessaire car elle est en permanence active si aucune
+directive de langue n'a ouvert une section spécifique. Elle concerne tout le texte à venir jusqu'à
+ce qu'une ouverture ou fermeture de langue soit rencontrée..))
+
+Putting text in `.default((` is **not** the same as `.all((`:
+.fr((Une section de texte par défaut n'est **pas** équivalente à une section `.all((` :.))
+
+.((
+- Text for all languages will unconditionally go in each generated file for each language.
+- Default text will only go in files for which there is no language section following it.
+.)).fr((
+- Le texte pour toutes les langues ira dans chaque fichier de chaque langue inconditionnellement.
+- Le texte par défaut ira uniquement dans les fichiers des langues qui n'auront pas de section
+  spécifique à la suite du texte par défaut.
+.))
+
+The goal of the `.default((` directive is to prepare the original text and headings in a
+common language like english, then add language specific sections on the fly while still having
+the default text for languages which are not translated yet.
+.fr((La raison d'être du texte par défaut est de préparer le texte original du document et des titres
+dans une langue courante comme l'anglais, puis d'ajouter les sections spécifiques à la volée tout en
+disposant du texte original par défaut pour les langues qui n'auront pas encore été traduites.))
+
+### Syntax.fr((Syntaxe.))
+
+```code
+.default((
+```
+
+or:.fr((ou :.))
+
+```code
+.((
+```
+
+### Examples.fr((Exemples.))
+
+An special use of default text is in headings, because the `#` is handled separately and
+is automatically written for all languages by MLMD without the need to use directives, and the default
+context is restored after this prefix:
+.fr((Les titres sont un cas spécial de texte par défaut car leur préfixe `#` est traité séparément
+par MLMD et écrit dans les fichiers de toutes les langues, puis le contexte par défaut est restauré
+pour le texte qui suit le préfixe :.))
+
+```code
+# .Main Title.fr((Titre principal.))
+```
+
+This will put `# Main Title` in all the generated files except the `.fr.md` file where the
+generator will put `# Titre Principal`.
+.fr((Ceci placera `# Main title` dans tous les fichiers générés sauf le fichier français `.fr.md`
+qui recevra `# Titre principal`..))
+
+For text blocks, the default text can be put right before the language specific sections, or it
+can be explicitly placed into opening default and closing directives to avoid ambiguity. Single
+end of lines will be ignored when they only separate closing and opening directives with no text
+in between, which permits a visual separation of blocks.
+.fr((Pour les blocs de texte, le texte par défaut peut être placé juste avant les sections
+spécifiques aux langues lui correspondant, ou il peut être placé explicitement entre les directives
+d'ouverture de défaut et de fermeture pour supprimer toute ambigüité. Les fins de ligne simples
+sont ignorée lorsqu'elles ne séparent que les directives d'ouverture et de fermeture ce qui permet
+de séparer visuellement les blocs.))
+
+Here the default text is directly followed by a french translation and explicit default `.((`
+directive is not needed:
+.fr((Ici le texte par défaut est directement suivi par une traduction en français et il n'y
+a pas besoin de spécifier une directive `.((` :.))
+```code
+This is the default original text..fr((Ceci est la traduction en français..))
+```
+
+In the following example, the default and specific sections are explicit to avoid
+any ambiguity:
+.fr((Dans l'exemple ci-dessous, les sections de texte par défaut et spécifiques sont explicitement
+marquées pour éviter toute ambigüité :.))
+
+```code
+.((
+This is the default original text.
+.)).fr((
+Ceci est la traduction en français.
+.))
+```
+
+## Ignoring text: `.ignore` or `.!((`.fr((Texte ignoré : `.ignore((` ou `.!((`.))
+
+The `.ignore` directive starts an ignored section of text. Ignored text won't be put in
+any generated file. It is useful for many tasks:
+.fr((La directive `.ignore` démarre une section de texte qui ne sera écrite dans
+aucun fichier d'aucune langue. Elle a plusieurs utilités :.))
+
+.((
+- comments about the source file or text sections
+- TODO lists in source files
+- work in progress text sections which are not ready for publishing yet
+.)).fr((
+- commentaires dans les fichiers sources
+- écrire les listes TODO de tâches restant à effectuer
+- marquer les sections de texte encore à l'ébauche qui ne sont pas encore prêtes pour publication
+.))
+
+This directive is ended or suspended by:
+.fr((Elle peut être suspendue ou terminée par :.))
+
+.((
+- The `.))` directive which returns to previous state.
+- The `.all((` directive which starts a section for all languages.
+- The `.<code>((` directives which start a language specific section of text.
+- The `.default((` or `.((` directive which starts the default value for a section of text.
+.)).fr((
+- Une directive `.))` qui termine le texte ignoré et restaure le contexte précédent.
+- Une directive `.all((` qui démarre du texte pour toutes les langues.
+- Une directive `.<code>((` qui démarre le texte spécifique à une langue.
+- Une directive `.((` ou `.default((` qui démarre du texte par défaut.
+.))
+
+### Syntax.fr((Syntaxe.))
+
+```code
+.ignore((
+```
+
+### Example.fr((Exemple.))
+
+The directive can be applied to full blocks of text:
+.fr((La directive peut s'appliquer à des blocs entiers de texte :.))
+
+```code
+.ignore((
+text to ignore
+.))
+```
+
+The directive can also appear in default or language specific text:
+.fr((La directive peut également se trouver à l'intérieur de texte par défaut ou d'une langue :.))
+
+.((
+```code
+Text to generate .ignore((text to ignore.)) following text to generate
+# Title for all languages .ignore((ignore this.)) title following
+```
+.)).fr((
+```code
+Texte à générer .ignore((texte à ignorer.)) suite du texte à générer
+# Titre pour toutes les langues .ignore((text ignoré.)) suite du titre
+```
+.))
+
+## Generating for languages: `.<code>((`.fr((Texte pour une langue : `.<code>((`.))
+
+The `.<code>((` directive starts a section of text which will only be put in the generated
+file for the language whose code `<code>` has been declared in the `.languages` directive.
+.fr((La directive `.<code>` démarre une section de texte destinée uniquement à la langue
+dont le code `<code>` a été déclaré dans la directive `.languages`..))
+
+This directive is ended or suspended by:
+.fr((Cette directive est suspendue ou terminée par :.))
+
+.((
+- The `.))` directive which returns to previous state.
+- The `.all((` directive which starts a section for all languages.
+- Another `.<code>((` directives which starts a language specific section of text.
+- The `.default((` or `.((` directive which starts the default value for a section of text.
+- The `.ignore` or `.!((` directive which starts ignored text.
+.)).fr((
+- Une directive `.))` qui termine le texte ignoré et restaure le contexte précédent.
+- Une directive `.all((` qui démarre du texte pour toutes les langues.
+- Une directive `.<code>((` qui démarre le texte spécifique à une langue.
+- Une directive `.((` ou `.default((` qui démarre du texte par défaut.
+- Une directive `.ignore((` ou `.!((` qui démarre du texte ignoré.
+.))
+
+Language sections must be closed by a matching `.))`. Although sections can be chained,
+it is recommended to close a section before beginning an other one, else you'll have to
+close all of them at the end of sections. See examples below for language chaining.
+.fr((Ls sections propres à une langue doivent être fermées par `.))`. Bien que les
+sections puissent s'enchainer il est conseillé de fermer la précédente avant d'en ouvrir
+une nouvelle sans quoi il faudra toutes les fermer à la fin des sections de chaque langue.
+Les exemples ci-après illustrent l'enchainement de langues..))
+
+### Syntax.fr((Syntaxe.))
+
+```code
+.<code>((
+```
+
+In this syntax, `<code>` is one of the codes declared after the `.languages` directive
+at the source files start. The angle brackets `<` and `>` are only for notation and not part
+of the code and should not be entered.
+.fr((Dans cette syntaxe, `<code>` est l'un des codes déclarés dans `.languages` au début des 
+fichiers sources. Les crochets `<` et `>` sont uniquement présents pour la notation et ne
+doivent pas être saisis autour du code..))
+
+### Examples.fr((Exemples.))
+
+The directive can enclose text or headings:
+.fr((La directive peut entourer du texte ou des titres :.))
+
+```code
+.en((
+Text for English language only.
+
+## Heading for English generated file
+.))
+```
+
+It can also be put inline within text or headings:
+.fr((Elle peut également intervenir à l'intérieur du texte ou des titres :.))
+
+```code
+.fr((Texte pour le fichier en Français.)).en((text for the English file.))
+
+# .fr((Titre en Français.)).en((English Title.))
+```
+
+Notice that the apparently ending '.' in titles is in fact the dot from the `.))` 
+closing directive. This somewhat misleading visual effect can be avoided by using spaces:
+.fr((Il faut remarquer que le point `.` final est en réalité une partie de la directive de
+fermeture `.))`. Cet effet visuel un peu trompeur peut être évité en utilisant des espaces :.))
+
+```code
+.fr((Un peu de texte en Français. .)).en((Some english text. .))
+```
+
+The spaces between directives are generally default text and will restore the default context,
+which can have undesired effects as it would break the current default/specific text chain.
+To put a space after some text it is best to put it inside the language blocks:
+.fr((Les espaces entre des directives sont généralement du texte par défaut et restaurent le
+contexte par défaut, ce qui peut avoir des effets indésirables car cela rompt la chaine des textes
+par défaut et spécifiques en cours. Pour utiliser des espaces il est donc préférable de les placer
+à l'intérieur des directives ouvrantes et fermantes :.))
+
+```code
+.fr((Texte en Français suivi d'un espace .)).en((English text followed by a space .))
+```
+
+As mentioned above, language sections can be chained without closing them, but each one will
+have to be closed eventually. The line below has the same effect as the previous example:
+.fr((Comme expliqué précédemment, les sections de langues peuvent être enchainées sans
+les fermer, toutefois chacune devra finalement être refermée. La ligne suivante a le même effet
+que l'exemple précédent :.))
+
+```code
+.fr(( Texte en Français .en(( English text .)).))
+```
+
+Notice that there are two successive closing directives at the end of the line.
+.fr((On remarque les deux directives de fermeture en fin de ligne..))
+
+A opened section stays active until it is closed or until next directive is met. In the
+next example, the closing on the first line ends the `.en` section, but the `.fr` stays active
+and the following text will be generated in the `.fr.md` file. The example shows other
+effects of opening and closing directives.
+.fr((Une section ouverte reste active jusqu'à ce qu'elle soit fermée ou qu'une autre
+directive ouvrante soit trouvée. Dans l'exemple suivant, la première fermeture termine
+la section `.en`, mais la section `.fr` reste active et le texte ira dans le fichier
+`.fr.md`. La suite de l'exemple montre d'autres effets des ouvertures et fermetures..))
+
+```code
+This text has no directive and will go in all files.
+.fr(( Texte en Français .en(( English text .))
+This text will only go into the french file because the opening . fr (( directive has not
+been closed yet. .))
+Now this text is in the `all` section and go in all files.
+# .fr(( Titre en Français .en(( English Title .))
+This text will only go into the french file because its opening directive has not been closed yet.
+```
+
+## Escaping text: `.{` and `.}`.fr((Texte échappé : `.{` et `.}`.))
+
+Text can be 'escaped' by surrounding it with `.{` and `.}`.
+.fr((Le texte peut être 'échappé' en l'entourant des directives `.{` et `.}`..))
+
+In the escaped text, directives and variables are ignored and text is copied as-is in the
+generated files.
+.fr((Dans le texte échappé, les directives et variables sont ignorées par MLMD qui
+écrit le texte à l'identique dans les fichiers générés..))
+
+In Markdown syntax, text can also be escaped by surrounding it with single or multiple
+back-ticks .{`.}, code fences .{```.} or double quotes `"`. MLMD will respect these Markdown
+escaping and forward the escaped text with its escape markers into generated files while
+ignoring any variables and directives in it. The difference with MLMD escaping directives is that
+these last directives `.{` and `.}` will not be written and only the escaped text will.
+.fr((En syntaxe Markdown, le texte peut également être échappé en l'entourant d'accents inversés
+multiples .{`.}, de barrières de code .{```.} ou de guillemets `"`. MLMD respectera ces
+échappements Markdown et écrira le texte échappé avec ses marqueurs dans les fichiers générés
+tout en ignorant toute variable ou directive qui pourrait s'y trouver. La différence avec les
+directives d'échappement MLMD est que ces directives `.{` et `.}` ne seront pas écrites et seul
+le texte échappé ira dans les fichiers générés..))
+
+## Examples.fr((Exemples.))
+
+The `Examples` directory has a few `mlmd` and `base.md` examples sources.
+.fr((Le répertoire `Examples` contient divers fichiers sources exemples..))

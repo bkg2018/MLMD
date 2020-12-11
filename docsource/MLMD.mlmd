@@ -1,0 +1,61 @@
+.languages fr=fr_FR,en=en_UK main=en
+.numbering 1::&I:-,2::1:.,3::1
+.topnumber 0
+.include 1-Installation.mlmd
+.include 2-Using.mlmd
+.include 3-Writing.mlmd
+.include 4-Directives.mlmd
+.include 5-Debugging.mlmd
+.include 6-Conclusion.mlmd
+
+# Multilingual Markdown Generator .fr((Générateur de Markdown Multilingue .)).all((MLMD.))
+
+MLMD generates one or more Markdown files for a set of declared languages from one or more
+multilingual source files UTF-8 encoded, using directives in the files to distinguish each
+language parts.
+.fr((MLMD génère des fichiers Markdown dans plusieurs langues à partir de fichiers sources
+multilingues encodés en UTF-8 grâce à des directives placées dans les fichiers pour distinguer
+les parties propres à chaque langue..))
+
+MLMD is a convenient way of keeping the documentation structure in unique files without having
+to duplicate them for each target language, and permits the translation by different authors while
+keeping the file in a unique and shared place. Being text files, the MLMD multilingual sources
+work well with versioning systems like Git. 
+.fr((MLMD est un moyen simple pour conserver la structure d'une documentation dans des fichiers
+uniques sans avoir à les dupliquer pour chaque langue, et facilite la rédaction par plusieurs
+traducteurs se partageant les fichiers. Les fichiers sources multilingues sont de simples
+fichiers texte et s'utilisent facilement avec les systèmes de contrôle de version comme Git.))
+
+MLMD can add tables of content (TOC) in the generated Markdown files and allow a numbering scheme
+to be applied on all headings in all files and in tables of content. Table of contents can be
+global and include headings from all the input files, or they can be local to their own file.
+.fr((MLMD peut ajouter des sommaires (table des matières) et numéroter les titres dans les fichiers
+et les sommaires. Une table des matières peut être globale et inclure les titres de tous les
+fichiers en entrée ou rester locale et n'inclure que les titres de son propre fichier..))
+
+The user has control over the generated languages, the table of content generation and the
+headings numbering scheme using either command line parameters or directives in source files.
+.fr((L'utilisateur contrôle les langues, la génération des sommaires et le schéma
+de numérotation des titres par le biais de paramètres de la ligne de commande ou par
+des directives placées dans les fichiers sources..))
+
+.toc title=Table Of Contents.fr((Sommaire.)) level=1-3
+
+I hope MLMD will help you to easily maintain multilingual documentations.
+.fr((J'espère que MLMD vous aidera à maintenir facilement vos documentations multilingues..))
+
+In these Covid days, please stay safe and protect others.
+.fr((En ces jours de Covid, prenez soin de vous et des autres.))
+
+Francis Piérot
+.((
+August-December 2020
+To my father Serge, 1932-2020
+I learned from him that an engineer works hard at working less.
+.)).fr((
+Août-Décembre 2020
+A mon papa Serge, 1932-2020
+Il m'a appris qu'un ingénieur travaille dur à travailler moins.
+.))
+
+[Français](README.fr.md) - [English](README.md)
