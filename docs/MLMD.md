@@ -1,4 +1,5 @@
-# Multilingual Markdown Generator MLMD<A id="a1"></A>
+# MLMD - Multilingual Markdown Generator<A id="a1"></A>
+[Français](README.fr.md) - [English](README.md)
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual source files UTF-8 encoded, using directives in the files to distinguish each
@@ -18,7 +19,7 @@ headings numbering scheme using either command line parameters or directives in 
 
 ## Table Of Contents<A id="toc"></A>
 
-- [Multilingual Markdown Generator MLMD](#a1)
+- [MLMD - Multilingual Markdown Generator](#a1)
 - I) [Installation](1-Installation.md#a2)
   - I-1) [PHP version](1-Installation.md#a3)
   - I-2) [Storing MLMD](1-Installation.md#a4)
@@ -100,8 +101,8 @@ In these Covid days, please stay safe and protect others.
 
 Francis Piérot
 
-August-December 2020
-To my father Serge, 1932-2020
-I learned from him that an engineer works hard at working less.
+August-December 2020<br />
+To my father Serge, 1932-2020<br />
+He taught me an engineer works hard at working less.
 
 [Français](README.fr.md) - [English](README.md)

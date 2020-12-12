@@ -89,8 +89,8 @@ En ces jours de Covid, prenez soin de vous et des autres
 
 Francis Piérot
 
-Aout-Décembre 2020
-A mon papa Serge, 1932-2020
+Août-Décembre 2020<br />
+A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 
 [Français](README.fr.md) - [English](README.md)

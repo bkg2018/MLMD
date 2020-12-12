@@ -81,8 +81,8 @@ In these Covid days, please stay safe and protect others.
 
 Francis Piérot
 
-August-December 2020
-To my father Serge, 1932-2020
-I learned from him that an engineer works hard to work less.
+August-December 2020<br />
+To my father Serge, 1932-2020<br />
+He taught me an engineer works hard at working less.
 
 [Français](README.fr.md) - [English](README.md)
