@@ -8,8 +8,8 @@ dépendances peuvent être placés dans n'importe quel répertoire accessible à
 
 ## PHP version.fr((Version PHP.))
 
-MLMD has been tested with PHP 7.3 CLI version. Version 7.2 at least is required.
-.fr((MLMD a été testé avec PHP 7.3 CLI. La version 7.2 minimale est requise..))
+MLMD has been tested with PHP 7.3, 7.4 and 8.0 CLI version. Version 7.2 at least is required.
+.fr((MLMD a été testé avec PHP 7.3, 7.4 et 8.0 CLI. La version 7.2 minimale est requise..))
 
 To make sure PHP is accessible from a command line type the following command:
 .fr((La commande suivante permet de vérifier que PHP est accessible depuis une ligne de commande :.))

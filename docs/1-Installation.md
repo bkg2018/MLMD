@@ -5,7 +5,7 @@ dependencies files can be put anywhere at user choice.
 
 ## I-1) PHP version<A id="a3"></A>
 
-MLMD has been tested with PHP 7.3 CLI version. Version 7.2 at least is required.
+MLMD has been tested with PHP 7.3, 7.4 and 8.0 CLI version. Version 7.2 at least is required.
 
 To make sure PHP is accessible from a command line type the following command:
 

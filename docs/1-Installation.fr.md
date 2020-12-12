@@ -5,7 +5,7 @@ dépendances peuvent être placés dans n'importe quel répertoire accessible à
 
 ## I-1) Version PHP<A id="a3"></A>
 
-MLMD a été testé avec PHP 7.3 CLI. La version 7.2 minimale est requise.
+MLMD a été testé avec PHP 7.3, 7.4 et 8.0 CLI. La version 7.2 minimale est requise.
 
 La commande suivante permet de vérifier que PHP est accessible depuis une ligne de commande :
 
