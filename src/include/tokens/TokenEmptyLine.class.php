@@ -50,13 +50,16 @@ namespace MultilingualMarkdown {
         /**
          * Check beginning of line before checking the key marker.
          */
-        public function identifyInBuffer(string $buffer, int $pos): bool
+        public function identifyInBuffer(?string $buffer, int $pos): bool
         {
-            $prevChar = ($pos > 0) ? mb_substr($buffer, $pos - 1, 1) : "\n";
-            if ($prevChar != "\n") {
-                return false;
+            if ($buffer != null) {
+                $prevChar = ($pos > 0) ? mb_substr($buffer, $pos - 1, 1) : "\n";
+                if ($prevChar != "\n") {
+                    return false;
+                }
+                return parent::identifyInBuffer($buffer, $pos);
             }
-            return parent::identifyInBuffer($buffer, $pos);
+            return false; 
         }
         /**
          * Check beginning of line before checking the key marker.

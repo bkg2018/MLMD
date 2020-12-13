@@ -131,6 +131,20 @@ It is a comprehensive example of MLMD source possible writing styles and directi
 [le répertoire `docsource`](docsource/MLMD.mlmd). Elle constitue un exemple exhaustif des styles d'écriture
 des sources MLMD et de l'utilisation des différentes directives..))
 
+Building the MLMD documentation is done with the following command:
+.fr((La documentation MLMD est construite avec al commande suivante :.))
+
+```code
+php src/mlmd.php  -i docsource/MLMD.mlmd -out md -od docs
+```
+
+Building this README documentation is done with the following command:
+.fr((Ce document README est construit avec la commande suivante :.))
+
+```code
+php src/mlmd.php -i README.mlmd -out md
+```
+
 ## Enjoy!.fr((Amusez-vous !.))
 
 I hope MLMD will help you to easily maintain multilingual documentations.

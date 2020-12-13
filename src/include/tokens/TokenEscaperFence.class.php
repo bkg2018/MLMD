@@ -51,15 +51,18 @@ namespace MultilingualMarkdown {
          * Identify self against an UTF-8 buffer and position.
          * Make sure code fence starts a new line.
          */
-        public function identifyInBuffer(string $buffer, int $pos): bool
+        public function identifyInBuffer(?string $buffer, int $pos): bool
         {
-            if ($pos > 0) {
-                $lf = mb_substr($buffer, $pos - 1, 1);
-                if ($lf != "\n") {
-                    return false;
+            if ($buffer != null) {
+                if ($pos > 0) {
+                    $lf = mb_substr($buffer, $pos - 1, 1);
+                    if ($lf != "\n") {
+                        return false;
+                    }
                 }
+                return parent::identifyInBuffer($buffer, $pos);
             }
-            return parent::identifyInBuffer($buffer, $pos);
+            return false;
         }
         /**
          * Let the token self-identify against an input Filer or Storage object.

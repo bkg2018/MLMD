@@ -112,18 +112,10 @@ namespace MultilingualMarkdown {
          * @return bool true if the token recognizes itself at the given position in the
          *              given buffer.
          */
-        public function identifyInBuffer(string $buffer, int $pos): bool
+        public function identifyInBuffer(?string $buffer, int $pos): bool
         {
             return false;
         }
-
-        /**
-         * Tells if a token has a content and should be instanciated.
-        public function hasContent(): bool
-        {
-            return false;
-        }         */
-
 
         /**
          * Skip over the token itself in the input object.

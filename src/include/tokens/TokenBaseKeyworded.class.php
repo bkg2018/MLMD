@@ -73,11 +73,14 @@ namespace MultilingualMarkdown {
             *
             * @return bool true if the token can be found at the given position in the given buffer
             */
-        public function identifyInBuffer(string $buffer, int $pos): bool
+        public function identifyInBuffer(?string $buffer, int $pos): bool
         {
-            $test = mb_substr($buffer, $pos, $this->keywordLength);
-            $testLower = \mb_strtolower($test);
-            return ($this->ignoreCase ? (\strcasecmp($testLower, $this->keyword) == 0) : (\strcmp($test, $this->keyword) == 0) );
+            if ($buffer != null) {
+                $test = mb_substr($buffer, $pos, $this->keywordLength);
+                $testLower = \mb_strtolower($test);
+                return ($this->ignoreCase ? (\strcasecmp($testLower, $this->keyword) == 0) : (\strcmp($test, $this->keyword) == 0) );
+            }
+            return false;
         }
         /**
          * Let the token self-identify against an input handler Filer or Storage object.

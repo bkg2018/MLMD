@@ -73,6 +73,18 @@ The sources for the README documentation you are reading can be found in [this r
 The documentation source is written in MLMD itself and can be found in [the `docsource` directory](docsource/MLMD.mlmd).
 It is a comprehensive example of MLMD source possible writing styles and directives uses.
 
+Building the MLMD documentation is done with the following command:
+
+```code
+php src/mlmd.php  -i docsource/MLMD.mlmd -out md -od docs
+```
+
+Building this README documentation is done with the following command:
+
+```code
+php src/mlmd.php -i README.mlmd -out md
+```
+
 ## Enjoy!<A id="a7"></A>
 
 I hope MLMD will help you to easily maintain multilingual documentations.

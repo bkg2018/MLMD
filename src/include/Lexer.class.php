@@ -908,6 +908,7 @@ namespace MultilingualMarkdown {
                     } while ($text !== null && !$this->tokenFENCE->identifyInBuffer($text, 0));
                     if ($text === null) {
                         $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
+                        break;
                     }
                 }
                 if ($this->tokenINCLUDE->identifyInBuffer($text, 0)) {

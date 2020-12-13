@@ -81,6 +81,18 @@ La source de la documentation complète est rédigée en MLMD elle-même et se t
 [le répertoire `docsource`](docsource/MLMD.mlmd). Elle constitue un exemple exhaustif des styles d'écriture
 des sources MLMD et de l'utilisation des différentes directives.
 
+La documentation MLMD est construite avec al commande suivante :
+
+```code
+php src/mlmd.php  -i docsource/MLMD.mlmd -out md -od docs
+```
+
+Ce document README est construit avec la commande suivante :
+
+```code
+php src/mlmd.php -i README.mlmd -out md
+```
+
 ## Amusez-vous !<A id="a7"></A>
 
 J'espère que MLMD vous aidera à maintenir facilement vos documentations multilingues.
