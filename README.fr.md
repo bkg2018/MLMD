@@ -25,7 +25,7 @@ texte dans chaque langue sont entourées de directives de début et de fin, tand
 directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
 ou effectuent d'autres tâches.
 
-Génération des fichiers et directives](docs/Images/File Generation.png)
+Génération des fichiers et directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/File%20Generation.png)
 
 ## Quelle rapidité ?<A id="a4"></A>
 
