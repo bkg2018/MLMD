@@ -22,7 +22,9 @@ etc.
 
 Languages must be declared in at least one of the source files. Parts of the text for each
 language are enclosed between opening and closing directives, while other directives can
-generate tables of contents, number heading levels, add input files or other tasks.
+generate tables of contents or heading numbering, add input files and other tasks.
+
+![File generation and directives](docs/Images/File Generation.png)
 
 ## How fast?<A id="a4"></A>
 

@@ -25,6 +25,8 @@ texte dans chaque langue sont entourées de directives de début et de fin, tand
 directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
 ou effectuent d'autres tâches.
 
+Génération des fichiers et directives](docs/Images/File Generation.png)
+
 ## Quelle rapidité ?<A id="a4"></A>
 
 Ecrire des parties dans une langue est rapide et facile. Le texte par défaut qui est
