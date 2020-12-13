@@ -36,11 +36,13 @@ Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* génèrera *`
 
 Languages must be declared in at least one of the source files. Parts of the text for each
 language are enclosed between opening and closing directives, while other directives can
-generate tables of contents, number heading levels, add input files or other tasks.
+generate tables of contents or heading numbering, add input files and other tasks.
 .fr((Les langues doivent être déclarées dans au moins un des fichiers sources. Les parties de
 texte dans chaque langue sont entourées de directives de début et de fin, tandis que d'autres
 directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
 ou effectuent d'autres tâches..))
+
+![File generation and directives.fr((Génération des fichiers et directives.))](docs/Images/File Generation.png)
 
 ## How fast?.fr((Quelle rapidité ?.))
 
