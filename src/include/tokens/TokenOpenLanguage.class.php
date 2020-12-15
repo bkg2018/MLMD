@@ -53,7 +53,6 @@ namespace MultilingualMarkdown {
         {
             $this->language = $language;
         }
-
         public function getLanguage(): string
         {
             return $this->language;

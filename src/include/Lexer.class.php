@@ -133,7 +133,7 @@ namespace MultilingualMarkdown {
         {
 
             // streamed language directives
-            $this->mlmdTokens['.))']        = new TokenClose();
+            $this->mlmdTokens['.))']        = new TokenClose(null); // for identification
             $this->tokenCLOSE = &$this->mlmdTokens['.))'];
             // NB: TokenOpenLanguage will be instantiated by the .languages directive for each declared language <code>, stored in $this->mlmdTokens['code']
             // NB: TokenText will be instantiated by Lexer for each normal text part, stored in the tokens flow $this->curTokens
@@ -422,9 +422,9 @@ namespace MultilingualMarkdown {
                 $this->recalculatePreviousEols();
             }
             $this->curTokens[] = $token;
-            // if ($this->trace) {
-            //     echo '<TOKEN: ' . \get_class($token) . ">\n";
-            // }
+            if ($this->trace) {
+                 echo '<TOKEN: ' . \get_class($token) . ">\n";
+            }
         }
 
         /**
@@ -759,11 +759,12 @@ namespace MultilingualMarkdown {
                 if ($this->tokenize($lineContent, $filer, true)) {
                     $this->appendTokenEOL($filer);
                 }
-                // empty line is a good place to send tokens to output
-                if ((count($this->languageStack) == 0) && ($this->eolCount == 2)) {
+                // DISABLED - to be reworked, a few tokens must be kept ahead current one
+                // or EOL cancelling won't work as expected
+                // if ((count($this->languageStack) == 0) && ($this->eolCount == 2)) {
                     //$this->output($filer);
                     //$filer->flushOutput();
-                }
+                //}
                 $lineContent = $filer->getLine();
             }
             // process anything left
@@ -786,6 +787,18 @@ namespace MultilingualMarkdown {
             $filer->endOutput();  // will add final EOL if needed
             $this->resetCurrentText();
             return true;
+        }
+
+        /**
+         * Get current language from stack.
+         * Returns the array with code and line, or null at top level.
+         */
+        public function getCurrentLanguage(): ?array
+        {
+            if (count($this->languageStack) > 1) {
+                return $this->languageStack[array_key_last($this->languageStack)];
+            }
+            return null;
         }
 
         /**

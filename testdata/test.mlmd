@@ -5,6 +5,11 @@ Lines preceding the `.languages` directive are ignored.
 
 # first title
 
+1. default list 1
+.fr((1. texte de liste 1.))
+2. default list 2
+.fr((2. texte de liste 2.))
+
 Any text outside directives and appearing after the `.languages` directive
 is generated as default text as if it were in a `.((` section.
 .fr((Tout texte en dehors des directives d'ouverture et de fermeture de langue

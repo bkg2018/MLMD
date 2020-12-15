@@ -37,6 +37,37 @@ See [`.language` directive](#declaring-languages-languages-directive) for the sy
 of languages declaration.
 .fr((Voir [Directive `.language`]())) pour la syntaxe de la déclaration des langues..))
 
+The following table summarize MLMD directives and source text effects in generated files.
+.fr((Le tableau suivant résume les effets des directives MLMD et du texte source sur
+les fichiers générés..)) 
+
+.((
+| Directive / text  | Effect in generated files |
+|-------------------|---------------------------|
+| `.languages`      | <ul><li>declares language codes: en, fr etc for file extension `.en.md`, `.fr.md` etc</li><li>may associate ISO codes: en_US …</li><li>may declare a main language with file extension `.md` alone</li></ul>|
+| `.numbering`      | <ul><li>sets a numbering scheme for headings</li><li>equivalent to `-numbering` command line parameter</li><li>may set a specific scheme for current file</li></ul>|
+| `.topnumber`      | <ul><li>sets the level 1 # heading number for this file in the global numbering scheme</li><li>set to 0 to disable level 1 heading numbering in current file</li></ul>|
+| `.include`        | <ul><li>add a source file to generation and global numbering scheme</li></ul>|
+| `# title`         | <ul><li>level 1 heading, used as Markdown file title</li><li>may include language specific text parts</li></ul>|
+| `text …`          | <ul><li>default text when no language specific text exists for current part</li><li>easy use for original text before translation</li></ul>|
+| `.fr((text.))`    | <ul><li>language specific text for `fr` code (french)</li><li>the language code must have been declared in `.languages` directive</li><li>`.fr((` opens language and `.))` closes it</li><li>can be followed by other language parts and preceded by default text</li></ul>|
+| `.all(text.))`    | <ul><li>text will unconditionally go in all language files</li></ul>|
+| `.!((text.))`     | <ul><li>text is ignored and won’t go in any generated file</li></ul>|
+.)).fr((
+| Directive / texte | Effet dans les fichiers générés |
+|-------------------|---------------------------------|
+| `.languages`      | <ul><li>déclare les codes des langues : en, fr etc avec extension de fichier `.en.md`, `.fr.md` etc</li><li>peut associer des codes ISO : en_US …</li><li>peut déclarer une langue principale avec l'extension `.md` seule</li></ul>|
+| `.numbering`      | <ul><li>programme un schéma de numérotation des niveaux de titres</li><li>équivalent au paramètre `-numbering` de la ligne de commande</li><li>peut changer le schéma pour le fichier en cours</li></ul>|
+| `.topnumber`      | <ul><li>programme le numéro du titre de niveau 1 du fichier en cours dans le schéma de numérotation</li><li>mettre à zéro pour désactiver la numérotation du niveau 1 dans le fichier en cours</li></ul>|
+| `.include`        | <ul><li>ajoute un fichier source pour la génération et le schéma de numérotation global</li></ul>|
+| `# title`         | <ul><li>titre de niveau 1 utilisé comme titre de fichier Markdown</li><li>peut inclure des parties pour autres langues</li></ul>|
+| `text …`          | <ul><li>texte par défaut pour les langues sans partie spécifique</li><li>utilisation facile pour le texte original avant traduction</li></ul>|
+| `.fr((text.))`    | <ul><li>texte pour la langue de code `fr` (français)</li><li>le code doit avoir été déclaré dans la directive `.languages`</li><li>`.fr((` ouvre la langue `.))` la referme</li><li>peut être suivi d'autres langues et précédé de texte par défaut</li></ul>|
+| `.all(text.))`    | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
+| `.!((text.))`     | <ul><li>le texte sera ignoré et n'ira dans aucun fichier d'aucune langue</li></ul>|
+.))  
+
+
 ## Source beginning.fr((Début de fichier source.))
 
 MLMD will not output anything into any file until it first meet a `.languages` directives
@@ -57,44 +88,49 @@ partie de texte, la première chose à vérifier est l'emplacement de la directi
 
 A best practice can be to put the same `.languages` directive at the start of all source files
 so there is no ambiguous interpretation but it's not mandatory.
-.fr((Pour éviter les ambigüités on peut placer la même directive `.languages` au début de chacun
-des fichiers sources traités mais ce n'est pas obligatoire.))
+.fr((Pour éviter les ambiguïtés on peut placer la même directive `.languages` au début de chacun
+des fichiers sources traités mais ce n'est pas obligatoire..))
 
+.((
 - Any text before the `.languages` directive is ignored and not sent to any output file.
-.fr((- Tout texte précédant la première directive `.languages` est ignoré et ne sera générés
-  dans aucun fichier..))
-- The `.languages` directive must be written at the beginning of a separate line with no 
-  other content than its own parameters.
-.fr((- La directive `.languages` doit être placée au début d'une ligne isolée sans aucun
-  autre contenu que ses propres paramètres..))
+- The `.languages` directive must be written at the beginning of a separate line with
+  no other content than its own parameters.
 - Having some content before the heading level 1 is not conforming to Markdown conventions,
   but MLMD will write any text before the heading level 1 into all generated files, provided
   it appears after the .languages directive.
-.fr((- Les conventions Markdown interdisent tout contenu avant le titre de niveau 1 qui est
-  considéré comme le titre du fichier, mais MLMD ignore cela et génère tout texte précédant
-  le premier titre, à condition qu'il se situe après la première directive `.languages`..))
 - The optional `.numbering` and `.topnumber` directives can be placed between the `.languages`
   and the level 1 `#` heading. The `.numbering` is ignored if a `-numbering` parameter is
   given to the command line.
-.fr((- Les directives facultatives `.numbering` et `.topnumber` peuvent se situer entre
+.)).fr((
+- Tout texte précédant la première directive `.languages` est ignoré et ne sera généré dans aucun fichier.
+- La directive `.languages` doit être placée au début d'une ligne isolée sans aucun
+  autre contenu que ses propres paramètres.
+- Les conventions Markdown interdisent tout contenu avant le titre de niveau 1 qui est
+  considéré comme le titre du fichier, mais MLMD ignore cela et génère tout texte précédant
+  le premier titre, à condition qu'il se situe après la première directive `.languages`.
+- Les directives facultatives `.numbering` et `.topnumber` peuvent se situer entre
   la directive `.languages` et le titre de niveau 1 `#`. Le `.numbering` sera ignoré si
   un paramètre `-numbering` a été fourni à la ligne de commande..))
+.))
 
-## Including files.fr((Inclusion de fichiers.))
+## Including source files.fr((Inclusion de fichiers sources.))
 
 Any file set by the `-i` command line parameters or from scanning the starting directory
 can add other files in the set of input files. File inclusion do not actually insert a file content
 but rather include the file into the set of processed files.
 .fr((Tout fichier indiqué dans un paramètre `-i` de la ligne de commande ou résultant
 de l'exploration du répertoire de démarrage peut ajouter d'autres fichiers à la liste de ceux
-traités. L'inclusion n'insère pas réellement le texte d'un autre fichier à un endroit
-d'un autre fichier mais l'ajoute à l'ensemble des fichiers sources..))
+traités. L'inclusion n'insère pas réellement le texte d'un autre fichier dans le fichier
+en cours mais l'ajoute à l'ensemble des fichiers sources..))
 
 This allows a main file to reference the various parts of documentation from separate files
 and keep a clean and simple main file with a global table of contents.
 .fr((Cette fonction permet à un fichier principal de référencer des fichiers dans lesquels
 se trouvent les différentes parties de la documentation tout en conservant un fichier principal
 simple et propre avec un sommaire global..))
+
+You can see an example of this use in the MLMD main documentation file in `docsource/MLMD.mlmd`.
+.fr((Cet usage est illustré dans le fichier principal de la documentation MLMD `docsource/MLMD.mlmd`..))
 
 ### Include directive.fr((Directive d'inclusion.))
 
@@ -152,7 +188,7 @@ appear with the right number in a global TOC.
 `.topnumber` règle le numéro du titre de niveau 1 dans un fichier. Un bon moyen de l'employer 
 est d'utiliser `.topnumber 0` dans le fichier principal pour supprimer la numérotation de son
 titre de niveau 1, puis d'inclure une directive `.topnumber` dans chaque fichier inclus
-pour indiquer l'ordre dans lequel ils doivent apparaitre dans le sommaire global..))
+pour indiquer l'ordre dans lequel ils doivent apparaître dans le sommaire global..))
 
 The MLMD documentation uses this scheme:
 .fr((La documentation MLMD utilise ce schéma :.))
@@ -184,8 +220,8 @@ leur ordre dans le sommaire global :.))
   ...
 ```
 
-Refer to MLMD own's documentation for a complete example of MLMD `.include` and `.topnumber` use.
-.((La documentation de MLMD illustre l'utilisation des directivess `.include` et `.topnumber`..))
+Refer to MLMD own documentation for a complete example of MLMD `.include` and `.topnumber` use.
+.fr((La documentation de MLMD illustre l'utilisation des directives `.include` et `.topnumber`..))
 
 ## Headings.fr((Titres.))
 
@@ -193,10 +229,10 @@ MLMD requires `#` prefixed headings and doesn't recognize the alternate syntax f
 level 1 and 2 headings, which is available by adding `==` or `--` on the line
 following the heading. The `==`and `--` lines can be used but will not be sufficient
 for a heading to be recognized by MLMD.
-.fr((MLMD reconnait les symboles `#` en début de ligne comme préfixe indiquant
-un niveau de titre. Il ne reconnait pas les syntaxes alternatives des niveaux 1 et 2
+.fr((MLMD reconnaît les symboles `#` en début de ligne comme préfixe indiquant
+un niveau de titre. Il ne reconnaît pas les syntaxes alternatives des niveaux 1 et 2
 accessibles en soulignant les titres avec `==` ou `--` sur la ligne suivante. Ces
-syntaxes peuvent être utilisées afin d'apparaitre dans les fichiers Markdown générés
+syntaxes peuvent être utilisées afin d'apparaître dans les fichiers Markdown générés
 mais elles ne suffiront pas pour que MLMD reconnaisse les titres et les inclue dans
 le schéma de numérotation ou les sommaires..))
 
@@ -300,29 +336,32 @@ Some other text....fr((Autre texte....))
 MLMD interprets the three lines block this way:
 .fr((MLMD interprète le bloc de trois lignes de cette façon :.))
 
+.((
 1. The block starts line 1 by setting default text which will go in all generated file except those
    for which a language specific section is found.
-.fr((1. Le bloc commence sur la première ligne avec du texte par défaut qui ira dans 
-   les fichiers de toutes les langues sauf celles possédant du texte spécifique.))
 2. The end-of-line at line 1 is ignored because it is immediately followed by another directive.
-.fr((2. La fin de ligne de la première ligne est ignorée car elle est immédiatement
-   suivie d'une directive de langue.))
 3. Line 2 will put text only in the FR file, which will ignore the default text.
-.fr((3. La deuxième ligne placera le texte dans le fichier de la langue française, qui
-   ignorera alors le texte par défaut de la première ligne..))
 4. The end-of-line at line 2 is ignored because it is immediately followed by another directive.
-.fr((4. La fin de ligne de la deuxième ligne est ignorée car suivie d'une ouverture de langue.))
 5. Line 3 will put text only in the EN file, which will ignore the default text.
-.fr((5. La troisième ligne place le texte dans le fichier de la langue anglaise, qui ignorera
-le texte par défaut..))
 6. The double end-of-line after line 3 ends the paragraph and generates text in relevant files.
-.fr((6. La double fin de ligne après la troisième ligne termine le paragraphe et la section de
-texte multilingue qui précède, retournant en mode texte par défaut.))
+.)).fr((
+1. Le bloc commence sur la première ligne avec du texte par défaut qui ira dans 
+   les fichiers de toutes les langues sauf celles possédant du texte spécifique.
+2. La fin de ligne de la première ligne est ignorée car elle est immédiatement
+   suivie d'une directive de langue.
+3. La deuxième ligne placera le texte dans le fichier de la langue française, qui
+   ignorera alors le texte par défaut de la première ligne.
+4. La fin de ligne de la deuxième ligne est ignorée car suivie d'une ouverture de langue.
+5. La troisième ligne place le texte dans le fichier de la langue anglaise, qui ignorera
+   le texte par défaut.
+6. La double fin de ligne après la troisième ligne termine le paragraphe et la section de
+   texte multilingue qui précède, retournant en mode texte par défaut.
+.))
 
 Because end-of-lines are ignored when they only separate directives, the following line is
 identical to the previous example and both will generate the same text in the same files:
-.fr(Etant donné que les fins de ligne entre sections de langue sont ignorées, la ligne suivante
-est équivalente au bloc précédent et génèrera le même texte dans les mêmes fichiers :.))
+.fr((Etant donné que les fins de ligne entre sections de langue sont ignorées, la ligne suivante
+est équivalente au bloc précédent et générera le même texte dans les mêmes fichiers :.))
 
 ```code
 .((default text.)).fr((french text.)).en((english text.))
@@ -345,14 +384,16 @@ Web Browsers generally do not bother about this limit and will display the text 
 modern text editors will make the text fit into the displayed width even if there is no end of line.
 Most often they feature a 'soft-wrapping' setting or viewing option in menus to put artificial
 end-of-lines which aren't actually in the file. For example, this option is called *Toggle Word Wrap* in
-Visual Code and is accessible ![in the *View* menu:](Images/word_wrap_vscode.png).
+Visual Code and is accessible in the *View* menu:
+![](https://github.com/bkg2018/MLMD/blob/main/docs/Images/word_wrap_vscode.png).
 .fr((Bien que la syntaxe Markdown impose une limite de ligne à 80 caractères, les visualiseurs ou
 éditeurs de fichiers Markdown ainsi que les browsers Internet ne se préoccupent pas de cette limite
 et formatent le texte correctement. De même les éditeurs de texte modernes peuvent formater le texte
 sur plusieurs ligne même en l'absence de fin de ligne. La plupart possèdent une commande de formatage
 ou un paramètre pour cela dans les menus ou les dialogues de réglages afin d'insérer des fins de ligne
 artificielles qui ne se trouvent pas réellement dans les fichiers. Par exemple, dans Visual Code cette
-possibilité s'appelle 'soft-wrapping' et on l'active ![dans le menu *View* :](Images/word_wrap_vscode.png)..))
+possibilité s'appelle 'soft-wrapping' et on l'active dans le menu *View* :
+![](https://github.com/bkg2018/MLMD/blob/main/docs/Images/word_wrap_vscode.png)..))
 
 Although this is not mandatory, it is best to be consistent in the style of opening and closing
 directives relatively to their text. A file should either use separate lines around the text for both
@@ -365,20 +406,101 @@ de mélanger les styles dans des parties importantes de texte, faute de quoi on 
 seront les vraies fins de ligne.))
 
 - Separated lines:
-.fr((*Lignes séparées :.))
+.fr((-Lignes séparées :.))
 
-  ```code
+```code
   .fr((
   Some french text.
   .))
-  ```
+```
 
 - Same line:
-.fr((Même ligne :.))
+.fr((-Même ligne :.))
 
-  ```code
+```code
   .fr((Some french text..))
-  ```
+```
+
+## Multi-line blocks (lists, quotes, tables).fr((Blocs multi-lignes (listes, citations, tableaux).))
+
+Because MLMD handles end of lines between language parts and default texte in a special way, some multiple
+lines structures in markdown can not currently be translated line by line but rather block by block.
+.fr((En raison de la façon dont MLMD traite les fins de ligne entre les parties traduites et le texte par
+défaut, les blocs à lignes multiples ne doivent pas  être traduits ligne par ligne mais plutôt par bloc
+entier..))
+
+Here's an unordered list example:
+.fr((Voici un exemple de liste non ordonnée :.))
+
+```code
+- first line
+- second line
+```
+
+In Markdown, this will put two lines of text with a bullet prefix sign. A line by line translation
+in MLMD could be written this way:
+.fr((En Markdown, ceci placera deux lignes de texte préfixées d'une puce. Une traduction ligne par
+ligne en MLMD pourrait être rédigée de la façon suivante :.))
+
+```code
+- first line.fr((- première ligne.))
+- second line.fr((- deuxième ligne.))
+```
+
+However, this will lead to a correct default languages structure but a wrong french translated structure
+where end of lines will have disappeared:
+.fr((Cependant, cela conduira à une structure correcte pour le texte par défaut mais pas pour la
+structure traduite où les fins de lignes auront été supprimées :.))
+
+Default text:
+.fr((Texte par défaut :.))
+
+```code
+- first line
+- second line
+````
+
+French text:
+.fr((Texte français :.))
+
+```code
+- première ligne- deuxième ligne
+```
+
+This behavior is because the end of line between french text and previous default text is cancelled.
+This will be addressed in a future version of MLMD but currently, all lines must be kept in separate
+blocks like the following example shows:
+.fr((Ce comportement provient de la suppression automatique des fins de ligne entre les blocs de texte
+séparés uniquement par les directives d'ouverture/fermeture. Ce contexte particulier sera traité par une
+prochaine version de MLMD mais en attendant les blocs doivent être traduits en conservant leur intégrité :.))
+
+```code
+- first line
+- second line
+.fr((
+- première ligne
+- deuxième ligne
+.))
+```
+
+The same principle applies to other multi lines blocks:
+.fr((Le même principe s'applique aux autres blocs multi-lignes :.))
+
+.((
+- ordered lists (`1. etc`)
+- quote lines (starting with `>`)
+- tables (using the `|` separators)
+.)).fr((
+- listes ordonnées (`1. etc`)
+- citations (commençant par `>`)
+- tableaux (utilisant le séparateur `|`)
+.))
+
+All parts of these blocks must be treated as consistent blocks and be translated as a whole.
+The MLMD documentation contains numerous examples of such structures.
+.fr((Toutes les parties de ces blocs doivent être conservées groupées et traduites en
+intégralité pour conserver leurs fins de lignes. La documentation de MLMD contient de
+nombreux exemples de telles structures..))
 
 ## Escaping text.fr((Texte échappé.))
 
@@ -396,7 +518,8 @@ Example:.fr((Exemple :.))
 The .{.)).} directive closes a language part.
 ```
 
-In this exemple, the `.))` directive will be considered as simple text and not as a directive.
+In this example, the `.))` directive will be considered as simple text and not as a directive.
+.fr((Dans cet exemple, la directive `.))` sera considérée comme du texte et non comme une directive..))
 
 ## Quoted text and code fences.fr((Texte en citation et barrières de code.))
 
@@ -407,63 +530,67 @@ and variables:
 ainsi que les barrières de code Markdown. Dans ces parties de texte 'échappées', les variables et
 directives n'auront pas d'effet et seront recopiées sans interprétation.))
 
-- .{` ``` `.}: code fences surround code text in which directives and variables will not
+.((
+- .{```.}: code fences surround code text in which directives and variables will not
   be interpreted.
-.fr((- .{` ``` `.} : les barrières de code placées sur une ligne isolée entourent du texte
-  où les variables et directives ne seront pas interprétées..))
 - `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close
   the current directive.
-.fr((- `"` : les guillemets autour du texte neutralisent les directives et variables, par exemple
-`".))"` ne fermera pas le bloc de langue actuel..))
 - .{`` ` ``.}: back-ticks around text also neutralize directives and variables, e.g. .{`.((`.}
   will not open default text part.
-.fr((- .{`` ` ``.} : les accents inversés simples, doubles ou triples peuvent entourer du texte
-échappé, par exemple .{`.((`.} ne commencera pas un bloc de texte par défaut..))
-
-> Quoted and fenced text must be entirely put *inside* enclosing directives (default or language
+- Quoted and fenced text must be entirely put *inside* enclosing directives (default or language
   directives) as they cannot embed directives.
-.fr((> Le texte échappé d'une langue doit intégralement se trouver à l'intérieur des marqueurs
-  d'ouverture et fermeture de langue, puisque ces directives ne seront pas interprétées si
-  elles se trouvent à l'intérieur du texte échappé..))
-> Simple quotes `'` have *no neutralizing effect* and no specific surrounding function.
+- Simple quotes `'` have *no neutralizing effect* and no specific surrounding function.
   MLMD has been designed this way because the simple quote character is used separately in a lot of
   languages for other uses than surrounding text.
-.fr((> Les apostrophes `'` n'ont pas d'effet particulier. Ce choix a été fait dans MLMD parce que
-  l'apostrophe est utilisé dans de nombreuses langues pour dans d'autres buts que pour entourer
-  du texte..))
-> Escaping back-ticks: to use actual back-ticks `` ` `` without the special effect, they can be
+- Escaping back-ticks: to use actual back-ticks `` ` `` without the special effect, they can be
   embedded in doubled back-ticks with spaces
   (see [Markdown syntax about escapes](https://daringfireball.net/projects/markdown/syntax#autoescape))
   and this whole sequence surrounded by MLMD escaping.
-.fr((> Accents inversés : pour utiliser ce caractère sans générer l'effet d'échappement de texte
-  ils peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour 
+.)).fr((
+- .{```.} : les barrières de code placées sur une ligne isolée entourent du texte
+  où les variables et directives ne seront pas interprétées.
+- `"` : les guillemets autour du texte neutralisent les directives et variables, par exemple
+`".))"` ne fermera pas le bloc de langue actuel.
+- .{`` ` ``.} : les accents inversés simples, doubles ou triples peuvent entourer du texte
+  échappé, par exemple .{`.((`.} ne commencera pas un bloc de texte par défaut.
+- Le texte échappé d'une langue doit intégralement se trouver à l'intérieur des marqueurs
+  d'ouverture et fermeture de langue, puisque ces directives ne seront pas interprétées si
+  elles se trouvent à l'intérieur du texte échappé.
+- Les apostrophes `'` n'ont pas d'effet particulier. Ce choix a été fait dans MLMD parce que
+  l'apostrophe est utilisé dans de nombreuses langues dans d'autres buts que pour entourer
+  du texte.
+- Accent inversé : pour utiliser ce caractère sans générer l'effet d'échappement de texte
+  il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour 
   l'échappement](https://daringfireball.net/projects/markdown/syntax#autoescape) et la séquence
-  complète peut être entourée des marqueurs MLmD `.{` et `.}`..))
+  complète peut être entourée des marqueurs MLmD `.{` et `.}`.
+.))
 
 ## Variables
 
 MLMD recognizes a few *variables*. These variables can be put anywhere in headings, links or text in the 
 sources and will take a language specific value in the generated files.
-.fr((MLMD connait quelques *variables*. Ces variables peuvent être placées n'importe où dans le texte,
+.fr((MLMD connaît quelques *variables*. Ces variables peuvent être placées n'importe où dans le texte,
 les titres ou les liens dans les fichiers sources et prendront lors de la génération une valeur
 correspondant à la langue ou au fichier généré.))
 
 .((
-| Variable    | Replaced by                                   | Example in generated file         |
-|-------------|-----------------------------------------------|-----------------------------------|
-| {file}      | Name of the currently generated file          | `file.en.md`              |
-| {main}      | Name of main input file with no extension     | `README`                  |
-| {extension} | Extension of the currently generated file     | `.en.md`                  |
-| {language}  | Language code of the currently generated text | `en`                      |
-| {iso}       | ISO code associated to language code          | `en_US`                   |
+| Variable      | Replaced by                                   | Example in generated file          |
+|---------------|-----------------------------------------------|------------------------------------|
+| `{file}`      | Name of the currently generated file          | `file.en.md`                       |       
+| `{filename}`  | Base name of the currently generated file     | `file`                             |
+| `{main}`      | Name of main input file with no extension     | `README`                           |
+| `{extension}` | Extension of the currently generated file     | `.en.md`                           |
+| `{language}`  | Language code of the currently generated text | `en`                               |
+| `{iso}`       | ISO code associated to language code          | `en_US`                            |
 .)).fr((
-| Variable    | Remplacé par                                   | Exemple dans les fichiers générés |
-|-------------|------------------------------------------------|-----------------------------------|
-| {file}      | Nom du fichier en cours de génération          | `file.fr.md`              |
-| {main}      | Nom du fichier principal sans extension        | `README`                  |
-| {extension} | Extension du fichier en cours de génération    | `.fr.md`                  |
-| {language}  | Code de langue du texte en cours de génération | `fr`                      |
-| {iso}       | Code ISO associé au code de langue en cours    | `fr_FR`                   |
+| Variable      | Remplacé par                                   | Exemple dans les fichiers générés |
+|---------------|------------------------------------------------|-----------------------------------|
+| `{file}`      | Nom du fichier en cours de génération          | `file.fr.md`                      |
+| `{filename}`  | Nom de base du fichier en cours de génération  | `file`                            |
+| `{main}`      | Nom du fichier principal sans extension        | `README`                          |
+| `{extension}` | Extension du fichier en cours de génération    | `.fr.md`                          |
+| `{language}`  | Code de langue du texte en cours de génération | `fr`                              |
+| `{iso}`       | Code ISO associé au code de langue en cours    | `fr_FR`                           |
 .))
 
 The `{main}` variable will be replaced by the generated main file path (from the `-main` script argument).
@@ -496,7 +623,7 @@ This feature is detailed in the directive `.default((` later.
 .fr((En dehors des blocs délimités par les directives d'ouverture et de fermeture de langue, tout texte est
 considéré comme du texte par défaut. Ceci est décrit dans la directive `.default((`..))
 
-## Avoiding ambiguities.fr((Comment éviter les ambigüités.))
+## Avoiding ambiguities.fr((Comment éviter les ambiguïtés.))
 
 To avoid undesirable effects with end of lines, unordered or numbered lists and indented text,
 a practical structure can be used for both the default text blocks and the language specific blocks.
@@ -505,7 +632,7 @@ new line closes default text and open a language section followed by the languag
 then a new line closes this section and the structure can be reproduced as many times as needed
 for each language.
 .fr((Pour éviter les effets indésirables liés aux fins de ligne ou aux listes numérotées ou non,
-il y a une structure qui peut séparer dans ambigüité les blocs de texte par défaut ou spécifiques.
+il y a une structure qui peut séparer dans ambiguïté les blocs de texte par défaut ou spécifiques.
 En premier lieu on place la directive pour ouvrir une section par défaut sur une ligne seule, suivie
 du bloc de texte par défaut, puis sur une nouvelle ligne on ferme la section et on ouvre une nouvelle
 pour une langue, suivie du texte pour cette langue, que l'on clot avec une nouvelle ligne. La structure
@@ -519,8 +646,10 @@ aucune incertitude..))
 ```code
 .((
     - Here is some default text with special feature (indented list element)
+    - Here is another line with default text
 .)).fr((
     - Voici du texte en français avec une particularité (élément de liste indenté)
+    - Voici une autre ligne avec du texte en français
 .))
 ```
 

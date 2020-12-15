@@ -23,11 +23,12 @@
  * @link      TODO
  */
 
-if (function_exists('xdebug_start_code_coverage')) {
+ // create code coverage if env variable 'coverage' is not 0 and xdebug has been loaded
+if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 }
 
-$MLMD_VERSION = "1.0.3";
+$MLMD_VERSION = "1.0.4";
 $MLMD_DATE    = strftime("%F (%X)", filemtime(__FILE__));
 
 require_once 'include/Functions.php';
@@ -137,6 +138,6 @@ $dashes  = str_repeat('-', 79);
 $seconds = sprintf("%.02f", $timeEnd - $timeStart);
 echo "$dashes\nTOTAL: {$generator->getProcessedLines()} lines processed in $seconds seconds\n";
 
-if (function_exists('xdebug_start_code_coverage')) {
+if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     DumpCoverage();
 }

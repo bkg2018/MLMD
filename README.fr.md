@@ -1,5 +1,7 @@
 # MLMD - Générateur de Markdown Multilingue<A id="a1"></A>
 
+[English README](README.md)[English documentation](docs/MLMD.md)
+
 MLMD génère un ou plusieurs fichiers Markdown dans plusieurs langues à partir d'un ou
 plusieurs fichiers sources encodés en UTF-8, à l'aide de directives dans le texte qui 
 délimitent les parties propres à chaque langue.
@@ -17,7 +19,7 @@ Un fichier source MLMD est un fichier texte encodé en UTF-8 qui utilise l'exten
 L'extension `.base.md` est également acceptée.
 
 MLMD traite chaque fichier source pour chaque langue déclarée, et génère les fichiers
-Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* génèrera *`fichier.fr.md`*,
+Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* générera *`fichier.fr.md`*,
 *`fichier.en.md`* et ainsi de suite.
 
 Les langues doivent être déclarées dans au moins un des fichiers sources. Les parties de
@@ -107,4 +109,4 @@ Août-Décembre 2020<br />
 A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 
-[Français](README.fr.md) - [English](README.md)
+[English README](README.md)[English documentation](docs/MLMD.md)

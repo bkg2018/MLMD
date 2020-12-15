@@ -5,7 +5,8 @@
  *
  * This class is the token for the .)) language ending directive.
  * It closes the previous opening .<code>(( directive and restores previous language
- * from the Lexer language stack.
+ * from the Lexer language stack. The class exist globally with null language for identification,
+ * but it instantiates itself for the closed language when appending to the Lexer tokens.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -41,16 +42,28 @@ namespace MultilingualMarkdown {
      */
     class TokenClose extends TokenBaseInline
     {
-        public function __construct()
+        private $language = ''; // language code from .languages directives
+
+        public function __construct(?string $language)
         {
+            $this->language = $language;// can be null for generic close
             parent::__construct(TokenType::CLOSE_DIRECTIVE, '.))', true);
         }
-
+        public function getLanguage(): string
+        {
+            return $this->language;
+        }
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->skipSelf($input);
-            if ($lexer->popLanguage($filer)) {
-                $lexer->appendToken($this, $filer);
+            $curLanguage = $lexer->getCurrentLanguage();
+            // self instantiate for current language then store in Lexer
+            if ($curLanguage != null) {
+                $lexer->popLanguage($filer);
+                $token = new TokenClose($curLanguage['code']);
+                $lexer->appendToken($token, $filer);
+            } else {
+                //$$ closing default text: maybe we could issue a warning?
             }
             $currentChar = $input->getCurrentChar();
             $lexer->setCurrentChar($currentChar);

@@ -13,6 +13,8 @@
 
 ## EVOLUTIONS at 2020-11-14
 
+- smart handling for multiline block structures: lists, quotes so
+  translation can be put line by line, currently doesn't work well
 - copy of dependencies (images and other files) in output directory
 - .. in relative filenames for {main} expansion while in subfiles
 - directive to control the starting anchor ID in each file (similar

@@ -17,6 +17,20 @@ which code would be appropriate for your needs, as multiple standard versions ex
 See [`.language` directive](#declaring-languages-languages-directive) for the syntax
 of languages declaration.
 
+The following table summarize MLMD directives and source text effects in generated files. 
+
+| Directive / text  | Effect in generated files |
+|-------------------|---------------------------|
+| `.languages`      | <ul><li>declares language codes: en, fr etc for file extension `.en.md`, `.fr.md` etc</li><li>may associate ISO codes: en_US …</li><li>may declare a main language with file extension `.md` alone</li></ul>|
+| `.numbering`      | <ul><li>sets a numbering scheme for headings</li><li>equivalent to `-numbering` command line parameter</li><li>may set a specific scheme for current file</li></ul>|
+| `.topnumber`      | <ul><li>sets the level 1 # heading number for this file in the global numbering scheme</li><li>set to 0 to disable level 1 heading numbering in current file</li></ul>|
+| `.include`        | <ul><li>add a source file to generation and global numbering scheme</li></ul>|
+| `# title`         | <ul><li>level 1 heading, used as Markdown file title</li><li>may include language specific text parts</li></ul>|
+| `text …`          | <ul><li>default text when no language specific text exists for current part</li><li>easy use for original text before translation</li></ul>|
+| `.fr((text.))`    | <ul><li>language specific text for `fr` code (french)</li><li>the language code must have been declared in `.languages` directive</li><li>`.fr((` opens language and `.))` closes it</li><li>can be followed by other language parts and preceded by default text</li></ul>|
+| `.all(text.))`    | <ul><li>text will unconditionally go in all language files</li></ul>|
+| `.!((text.))`     | <ul><li>text is ignored and won’t go in any generated file</li></ul>|  
+
 ## III-1) Source beginning<A id="a23"></A>
 
 MLMD will not output anything into any file until it first meet a `.languages` directives
@@ -30,8 +44,8 @@ A best practice can be to put the same `.languages` directive at the start of al
 so there is no ambiguous interpretation but it's not mandatory.
 
 - Any text before the `.languages` directive is ignored and not sent to any output file.
-- The `.languages` directive must be written at the beginning of a separate line with no 
-  other content than its own parameters.
+- The `.languages` directive must be written at the beginning of a separate line with
+  no other content than its own parameters.
 - Having some content before the heading level 1 is not conforming to Markdown conventions,
   but MLMD will write any text before the heading level 1 into all generated files, provided
   it appears after the .languages directive.
@@ -39,7 +53,7 @@ so there is no ambiguous interpretation but it's not mandatory.
   and the level 1 `#` heading. The `.numbering` is ignored if a `-numbering` parameter is
   given to the command line.
 
-## III-2) Including files<A id="a24"></A>
+## III-2) Including source files<A id="a24"></A>
 
 Any file set by the `-i` command line parameters or from scanning the starting directory
 can add other files in the set of input files. File inclusion do not actually insert a file content
@@ -47,6 +61,8 @@ but rather include the file into the set of processed files.
 
 This allows a main file to reference the various parts of documentation from separate files
 and keep a clean and simple main file with a global table of contents.
+
+You can see an example of this use in the MLMD main documentation file in `docsource/MLMD.mlmd`.
 
 ### III-2.1) Include directive<A id="a25"></A>
 
@@ -109,8 +125,7 @@ The MLMD documentation uses this scheme:
   ...
 ```
 
-Refer to MLMD own's documentation for a complete example of MLMD `.include` and `.topnumber` use.
-La documentation de MLMD illustre l'utilisation des directivess `.include` et `.topnumber`.
+Refer to MLMD own documentation for a complete example of MLMD `.include` and `.topnumber` use.
 
 ## III-3) Headings<A id="a27"></A>
 
@@ -184,8 +199,6 @@ MLMD interprets the three lines block this way:
 
 Because end-of-lines are ignored when they only separate directives, the following line is
 identical to the previous example and both will generate the same text in the same files:
-.fr(Etant donné que les fins de ligne entre sections de langue sont ignorées, la ligne suivante
-est équivalente au bloc précédent et génèrera le même texte dans les mêmes fichiers :
 
 ```code
 .((default text.)).fr((french text.)).en((english text.))
@@ -203,7 +216,8 @@ Web Browsers generally do not bother about this limit and will display the text 
 modern text editors will make the text fit into the displayed width even if there is no end of line.
 Most often they feature a 'soft-wrapping' setting or viewing option in menus to put artificial
 end-of-lines which aren't actually in the file. For example, this option is called *Toggle Word Wrap* in
-Visual Code and is accessible ![in the *View* menu:](Images/word_wrap_vscode.png).
+Visual Code and is accessible in the *View* menu:
+![](https://github.com/bkg2018/MLMD/blob/main/docs/Images/word_wrap_vscode.png).
 
 Although this is not mandatory, it is best to be consistent in the style of opening and closing
 directives relatively to their text. A file should either use separate lines around the text for both
@@ -212,17 +226,77 @@ both techniques on large parts of text, or it would be unclear where the actual 
 
 - Separated lines:
 
-  ```code
-  
-  ```
+```code
+  .fr((
+  Some french text.
+  .))
+```
 
 - Same line:
 
-  ```code
-  
-  ```
+```code
+  .fr((Some french text..))
+```
 
-## III-5) Escaping text<A id="a30"></A>
+## III-5) Multi-line blocks (lists, quotes, tables)<A id="a30"></A>
+
+Because MLMD handles end of lines between language parts and default texte in a special way, some multiple
+lines structures in markdown can not currently be translated line by line but rather block by block.
+
+Here's an unordered list example:
+
+```code
+- first line
+- second line
+```
+
+In Markdown, this will put two lines of text with a bullet prefix sign. A line by line translation
+in MLMD could be written this way:
+
+```code
+- first line.fr((- première ligne.))
+- second line.fr((- deuxième ligne.))
+```
+
+However, this will lead to a correct default languages structure but a wrong french translated structure
+where end of lines will have disappeared:
+
+Default text:
+
+```code
+- first line
+- second line
+````
+
+French text:
+
+```code
+- première ligne- deuxième ligne
+```
+
+This behavior is because the end of line between french text and previous default text is cancelled.
+This will be addressed in a future version of MLMD but currently, all lines must be kept in separate
+blocks like the following example shows:
+
+```code
+- first line
+- second line
+.fr((
+- première ligne
+- deuxième ligne
+.))
+```
+
+The same principle applies to other multi lines blocks:
+
+- ordered lists (`1. etc`)
+- quote lines (starting with `>`)
+- tables (using the `|` separators)
+
+All parts of these blocks must be treated as consistent blocks and be translated as a whole.
+The MLMD documentation contains numerous examples of such structures.
+
+## III-6) Escaping text<A id="a31"></A>
 
 Directives and variables can be neutralized in a text section by surrounding it with the opening
 escape `.{` and the closing escape `.}` directives. The directives won't have effect on generated files,
@@ -234,43 +308,43 @@ Example:
 The .{.)).} directive closes a language part.
 ```
 
-In this exemple, the `.))` directive will be considered as simple text and not as a directive.
+In this example, the `.))` directive will be considered as simple text and not as a directive.
 
-## III-6) Quoted text and code fences<A id="a31"></A>
+## III-7) Quoted text and code fences<A id="a32"></A>
 
 MLMD roughly copies the parts of text which are surrounded by *back-ticks* (reversed quote),
 *double quotes* and *code fences*. In these parts of text, MLMD doesn't interpret directives
 and variables:
 
-- ` ``` `: code fences surround code text in which directives and variables will not
+- ```: code fences surround code text in which directives and variables will not
   be interpreted.
 - `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close
   the current directive.
 - `` ` ``: back-ticks around text also neutralize directives and variables, e.g. `.((`
   will not open default text part.
-
-> Quoted and fenced text must be entirely put *inside* enclosing directives (default or language
+- Quoted and fenced text must be entirely put *inside* enclosing directives (default or language
   directives) as they cannot embed directives.
-> Simple quotes `'` have *no neutralizing effect* and no specific surrounding function.
+- Simple quotes `'` have *no neutralizing effect* and no specific surrounding function.
   MLMD has been designed this way because the simple quote character is used separately in a lot of
   languages for other uses than surrounding text.
-> Escaping back-ticks: to use actual back-ticks `` ` `` without the special effect, they can be
+- Escaping back-ticks: to use actual back-ticks `` ` `` without the special effect, they can be
   embedded in doubled back-ticks with spaces
   (see [Markdown syntax about escapes](https://daringfireball.net/projects/markdown/syntax#autoescape))
   and this whole sequence surrounded by MLMD escaping.
 
-## III-7) Variables<A id="a32"></A>
+## III-8) Variables<A id="a33"></A>
 
 MLMD recognizes a few *variables*. These variables can be put anywhere in headings, links or text in the 
 sources and will take a language specific value in the generated files.
 
-| Variable    | Replaced by                                   | Example in generated file         |
-|-------------|-----------------------------------------------|-----------------------------------|
-| 3-Writing.md      | Name of the currently generated file          | `file.en.md`              |
-| MLMD.md      | Name of main input file with no extension     | `README`                  |
-| .md | Extension of the currently generated file     | `.en.md`                  |
-| en  | Language code of the currently generated text | `en`                      |
-| en_UK       | ISO code associated to language code          | `en_US`                   |
+| Variable      | Replaced by                                   | Example in generated file          |
+|---------------|-----------------------------------------------|------------------------------------|
+| `{file}`      | Name of the currently generated file          | `file.en.md`                       |       
+| `{filename}`  | Base name of the currently generated file     | `file`                             |
+| `{main}`      | Name of main input file with no extension     | `README`                           |
+| `{extension}` | Extension of the currently generated file     | `.en.md`                           |
+| `{language}`  | Language code of the currently generated text | `en`                               |
+| `{iso}`       | ISO code associated to language code          | `en_US`                            |
 
 The `{main}` variable will be replaced by the generated main file path (from the `-main` script argument).
 This allows to link to anchors in the main file, like a global table of content for example. All the
@@ -281,7 +355,7 @@ Each variable takes a value at generation time, except for `{main}` which is onl
 if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as
 `{main}` in the generated files.
 
-## III-8) Default text<A id="a33"></A>
+## III-9) Default text<A id="a34"></A>
 
 MLMD accepts default text in any part of the source: headings, table of contents title, normal text etc.
 The default text is used by MLMD when no language directive has been used to specify the language specific
@@ -290,7 +364,7 @@ text.
 When not bounded by opening and closing language directives, text is always considered as default text.
 This feature is detailed in the directive `.default((` later.
 
-## III-9) Avoiding ambiguities<A id="a34"></A>
+## III-10) Avoiding ambiguities<A id="a35"></A>
 
 To avoid undesirable effects with end of lines, unordered or numbered lists and indented text,
 a practical structure can be used for both the default text blocks and the language specific blocks.
@@ -304,8 +378,10 @@ As the following example shows, this structure is easy to read and avoid ambigui
 ```code
 .((
     - Here is some default text with special feature (indented list element)
+    - Here is another line with default text
 .)).fr((
     - Voici du texte en français avec une particularité (élément de liste indenté)
+    - Voici une autre ligne avec du texte en français
 .))
 ```
 
@@ -313,7 +389,7 @@ Although the default opening and closing directives are in fact optional, this s
 with explicit directives on separate lines is an easy way to make sure the generated text
 will be as expected.
 
-## III-10) Directives<A id="a35"></A>
+## III-11) Directives<A id="a36"></A>
 
 Actions for generating the language specific files are set by *directives* in the sources. MLMD
 directives always start with a dot `.` except for escape text markers - see previous details
@@ -348,7 +424,7 @@ Directives are not case sensitive: `.fr((` is the same as `.FR((`. Notice that e
 work as opening and closing directives around escaped text, but as they directly derive from Markdown syntax
 the markers will appear in the generated files, whereas MLMD directives won't.
 
-## III-11) Immediate vs enclosed effect<A id="a36"></A>
+## III-12) Immediate vs enclosed effect<A id="a37"></A>
 
 The `.languages`, `.numbering`, `.topnumber` and `.toc` directives have an *immediate effect*.
 It implies they generally should be alone on an isolated line, and preferably at the beginning of
@@ -360,7 +436,7 @@ matching `.))` is met, or until another `((` directive is opened.
 > Although this is not very useful, enclosing directives can be embedded: each `.<code>((` opening
 will suspend any current opened directive effect, and the matching `.))` closing will resume it.
 
-## III-12) Default directives values and effects<A id="a37"></A>
+## III-13) Default directives values and effects<A id="a38"></A>
 
 Details will follow but it must be mentioned that the script has some defaults and that directives
 themselves also have defaults settings.

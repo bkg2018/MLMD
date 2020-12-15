@@ -76,7 +76,7 @@ Global directives on one line:
 - .toc          generates a table of contents using headings levels
 - .topnumber    set the level 1 heading (single '#') logical number
 - .end          end the source file
-- .stop         help to put a debugging brezkpoing in mlmd script
+- .stop         help to put a debugging breakpoint in mlmd script
 
 Directives anywhere in the text and in headings:
 - .all((        starts a section for all languages
@@ -93,7 +93,7 @@ text will be written exactly as it appears with no language specific transformat
 variable expanding (see below).
 
 - text can be escaped anywhere between Markdown back-ticks '`', double back_ticks '``', 
-  triple backticks '```' and double quotes '\"'; The markers are written in output files
+  triple back_ticks '```' and double quotes '\"'; The markers are written in output files
 - text can be escaped between Markdown code fences '```' at the beginning of a line;
   the surrounding code fence lines are written in output files
 - text can be escaped between specific MLMD markers '.{' and '.}'; the markers
@@ -104,14 +104,17 @@ written in output files instead of being interpreted..
 
 When not between escape markers, the following variables are expanded in each generated file:
 
-- {file} expands to the current file name, localised for the language
+- {file} expands to the current file name, localized for the language
   ('file.xx.md' for language 'xx', 'file.md' for main language)
+- {filename} expands to the current file base name with no extension
+  ('file' for source file 'file.mlmd')
 - {extension} expands to the current written file extension
   ('.xx.md' for language 'xx', '.md' for main language)
-- {main} expands to the '-main' file name, localised for the language
+- {main} expands to the '-main' file name, localized for the language
   ('main.xx.md' for language 'xx' or 'main.md' for main language)
 - {language} expands to the language code as declared in the
   '.languages' directive ('xx' for language 'xx')
+- {iso} expands to the ISO code associated to current language
 
 \n";
 }
@@ -122,7 +125,7 @@ When not between escape markers, the following variables are expanded in each ge
 function displayVersion(): void
 {
     global $MLMD_VERSION, $MLMD_DATE;
-    echo "MLMD MultiMingual MarkDown Generator\nVersion $MLMD_VERSION - $MLMD_DATE\n";
+    echo "MLMD MultiLingual MarkDown Generator\nVersion $MLMD_VERSION - $MLMD_DATE\n";
 }
 
 /**
