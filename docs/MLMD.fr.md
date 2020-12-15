@@ -19,7 +19,7 @@ L'utilisateur contrôle les langues, la génération des sommaires et le schéma
 de numérotation des titres par le biais de paramètres de la ligne de commande ou par
 des directives placées dans les fichiers sources.
 
-Génération des fichiers et directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/File%20Generation.png)
+[Génération des fichiers et directives](Images/FileGeneration.png)
 
 ## Sommaire<A id="toc"></A>
 

@@ -27,7 +27,7 @@ Languages must be declared in at least one of the source files. Parts of the tex
 language are enclosed between opening and closing directives, while other directives can
 generate tables of contents or heading numbering, add input files and other tasks.
 
-![File generation and directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/FileGeneration.png)
+![File generation and directives](docs/Images/FileGeneration.png)
 
 ## How fast?<A id="a4"></A>
 
@@ -46,8 +46,8 @@ in about 2 seconds on an Intel i7 at 2 GHz, files being written on a SSD.
 ## Why?<A id="a5"></A>
 
 I designed MLMD because I needed to write a technical documentation both in English and in
-French for a project. Looking on the Web I found a very efficient Python script from Hong-ryul Jong
-at https://github.com/ryul1206/multilingual-markdown. However after using it a little I found
+French for a project. Looking on the Web I found a very efficient [Python script from Hong-ryul Jong]
+(https://github.com/ryul1206/multilingual-markdown). However after using it a little I found
 I needed some more features and I wanted to design a set of directives which would keep the
 text more readable and easier to type than HTML comment tags. I kept most of basic Hong-ryul ideas like
 ignored text, language declaration but also worked the design so directives could be put

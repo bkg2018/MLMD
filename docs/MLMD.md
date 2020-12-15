@@ -19,7 +19,7 @@ global and include headings from all the input files, or they can be local to th
 The user has control over the generated languages, the table of content generation and the
 headings numbering scheme using either command line parameters or directives in source files.
 
-![File generation and directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/File%20Generation.png)
+![File generation and directives](Images/FileGeneration.png)
 
 ## Table Of Contents<A id="toc"></A>
 

@@ -27,7 +27,7 @@ texte dans chaque langue sont entourées de directives de début et de fin, tand
 directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
 ou effectuent d'autres tâches.
 
-[Génération des fichiers et directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/FileGeneration.png)
+[Génération des fichiers et directives](docs/Images/FileGeneration.png)
 
 ## Quelle rapidité ?<A id="a4"></A>
 
@@ -47,8 +47,8 @@ documentation en environ 2 secondes sur un Intel i7 à 2GHz, les fichiers étant
 ## Pourquoi ?<A id="a5"></A>
 
 J'ai conçu MLMD pour mes besoins alors que je devais rédiger une documentation technique
-en Anglais et en Français pour un projet. En cherchant sur le Web j'ai rapidement trouvé un script
-Python très efficace de Hong-ryul Jong : https://github.com/ryul1206/multilingual-markdown.
+en Anglais et en Français pour un projet. En cherchant sur le Web j'ai rapidement trouvé un [script
+Python très efficace de Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
 Toutefois après un peu d'utilisation il me manquait des fonctionnalités et je souhaitais des directives
 qui conserveraient une meilleure lisibilité du texte et plus faciles à saisir que les tags de
 commentaire HTML. J'ai conservé" la plupart des idées de départ de Hong-ryul Jong comme le texte
