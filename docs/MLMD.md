@@ -1,5 +1,7 @@
 # MLMD - Multilingual Markdown Generator<A id="a1"></A>
-[Français](README.fr.md) - [English](README.md)
+
+[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md)
+[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md)
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual source files UTF-8 encoded, using directives in the files to distinguish each
@@ -108,4 +110,5 @@ August-December 2020<br />
 To my father Serge, 1932-2020<br />
 He taught me an engineer works hard at working less.
 
-[Français](README.fr.md) - [English](README.md)
+[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md)
+[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md)

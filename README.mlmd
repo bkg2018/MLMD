@@ -3,8 +3,8 @@
 
 # .all((MLMD - .))Multilingual Markdown Generator.fr((Générateur de Markdown Multilingue.))
 
-[README en français](README.fr.md).fr(([English README](README.md).))
-[Documentation en français](docs/MLMD.fr.md).fr(([English documentation](docs/MLMD.md).))
+[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md).fr(([README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md).))
+[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual source files UTF-8 encoded, using directives in the files to distinguish each
@@ -169,5 +169,5 @@ A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 .))
 
-[README en français](README.fr.md).fr(([English README](README.md).))
-[Documentation en français](docs/MLMD.fr.md).fr(([English documentation](docs/MLMD.md).))
+[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md).fr(([README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md).))
+[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))

@@ -1,6 +1,6 @@
 # MLMD - Générateur de Markdown Multilingue<A id="a1"></A>
 
-[English README](README.md)[English documentation](docs/MLMD.md)
+[README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md)[Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md)
 
 MLMD génère un ou plusieurs fichiers Markdown dans plusieurs langues à partir d'un ou
 plusieurs fichiers sources encodés en UTF-8, à l'aide de directives dans le texte qui 
@@ -27,7 +27,7 @@ texte dans chaque langue sont entourées de directives de début et de fin, tand
 directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
 ou effectuent d'autres tâches.
 
-Génération des fichiers et directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/File%20Generation.png)
+![Génération des fichiers et directives](https://github.com/bkg2018/MLMD/blob/main/docs/Images/File%20Generation.png)
 
 ## Quelle rapidité ?<A id="a4"></A>
 
@@ -109,4 +109,4 @@ Août-Décembre 2020<br />
 A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 
-[English README](README.md)[English documentation](docs/MLMD.md)
+[README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md)[Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md)
