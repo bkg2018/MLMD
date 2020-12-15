@@ -45,7 +45,7 @@ the `README.base.md` source file will generate a `README.md` for the main langua
 require a `README.md` file at the deposit root.
 .fr((Le paramètre facultatif `main=<code>` indique la langue principale : les fichiers générés pour ce
 code de langue auront une extension simple `.md` au lieu de `.<code>.md`. Par exemple, le fichier
-source `README.base.md` génèrera un fichier `README.md` pour la langue principale et des fichiers
+source `README.base.md` générera un fichier `README.md` pour la langue principale et des fichiers
 `README.<code>.md` pour chacun des autres codes de langue. Ceci est utile pour les documents destinés
 à des environnements qui contrôlent les fichiers Markdown déposés, comme les dépôts Git qui exigent un
 fichier `README.md` en racine du dépôt..))
@@ -91,7 +91,7 @@ La syntaxe est identique à celle du paramètre `-numbering` de la ligne de comm
 > WARNING: the `-numbering` command line argument has global effect on all files, while the `.numbering`
 directive only applies to the file where it appears.
 .fr((> ATTENTION : le paramètre de ligne de commande s'applique à tous les fichiers sources, tandis
-que la directive permet de modifier le schéma pour le fichier où elle apparait..))
+que la directive permet de modifier le schéma pour le fichier où elle apparaît..))
 
 ### Syntax.fr((Syntaxe.))
 
@@ -124,7 +124,7 @@ Conventional symbols can be `.`, `-`or `)`. Omitting this separator for the last
 - `<niveau>` est un chiffre entre `1` and `9` facultatif qui indique le ,niveau de titre concerné (c'est le nombre de `#`
 qui débute le titre). Par défaut c'est le niveau suivant celui de la définition précédente, en commençant par 1.
 - `:` est un séparateur obligatoire entre chacune des parties de la définition, même pour les parties omises.
-- `préfixe` est un préfixe facultatif pour le tout premier niveau de titre, par exemple `Chapitre `. Le préfixe n'apparait
+- `préfixe` est un préfixe facultatif pour le tout premier niveau de titre, par exemple `Chapitre `. Le préfixe n'apparaît
 que dans le libellé des titres de premier niveau, même s'il est spécifié pour un autre niveau.
 - `<symbole>` est un symbole obligatoire qui peut être une lettre majuscule `A` à `Z`, une lettre minuscule `a` à `z`,
 un chiffre de `1` à `9` ou la mention spéciale `&I` ou `&i` pour représenter les chiffres romains en majuscules
@@ -223,7 +223,7 @@ aucun paramètre écrira la liste des titres `##` à `###` du fichier en cours (
 #### `level` parameter.fr((Paramètre `level`.))
 
 This parameter sets the heading levels which will appear in the TOC.
-.fr((Ce paramètre choisit les niveaux des titres qui apparaitront dans le sommaire..))
+.fr((Ce paramètre choisit les niveaux des titres qui apparaîtront dans le sommaire..))
 
 Syntax for this parameter is `level=[m][-][n]`:
 .fr((La syntaxe pour ce paramètre est `level=[m][-][n]` :.))
@@ -401,7 +401,7 @@ common language like english, then add language specific sections on the fly whi
 the default text for languages which are not translated yet.
 .fr((La raison d'être du texte par défaut est de préparer le texte original du document et des titres
 dans une langue courante comme l'anglais, puis d'ajouter les sections spécifiques à la volée tout en
-disposant du texte original par défaut pour les langues qui n'auront pas encore été traduites.))
+disposant du texte original par défaut pour les langues qui n'auront pas encore été traduites..))
 
 ### Syntax.fr((Syntaxe.))
 
@@ -439,9 +439,9 @@ end of lines will be ignored when they only separate closing and opening directi
 in between, which permits a visual separation of blocks.
 .fr((Pour les blocs de texte, le texte par défaut peut être placé juste avant les sections
 spécifiques aux langues lui correspondant, ou il peut être placé explicitement entre les directives
-d'ouverture de défaut et de fermeture pour supprimer toute ambigüité. Les fins de ligne simples
+d'ouverture de défaut et de fermeture pour supprimer toute ambiguïté. Les fins de ligne simples
 sont ignorée lorsqu'elles ne séparent que les directives d'ouverture et de fermeture ce qui permet
-de séparer visuellement les blocs.))
+de séparer visuellement les blocs..))
 
 Here the default text is directly followed by a french translation and explicit default `.((`
 directive is not needed:
@@ -454,7 +454,7 @@ This is the default original text..fr((Ceci est la traduction en français..))
 In the following example, the default and specific sections are explicit to avoid
 any ambiguity:
 .fr((Dans l'exemple ci-dessous, les sections de texte par défaut et spécifiques sont explicitement
-marquées pour éviter toute ambigüité :.))
+marquées pour éviter toute ambiguïté :.))
 
 ```code
 .((
@@ -556,9 +556,9 @@ Language sections must be closed by a matching `.))`. Although sections can be c
 it is recommended to close a section before beginning an other one, else you'll have to
 close all of them at the end of sections. See examples below for language chaining.
 .fr((Ls sections propres à une langue doivent être fermées par `.))`. Bien que les
-sections puissent s'enchainer il est conseillé de fermer la précédente avant d'en ouvrir
+sections puissent s'enchaîner il est conseillé de fermer la précédente avant d'en ouvrir
 une nouvelle sans quoi il faudra toutes les fermer à la fin des sections de chaque langue.
-Les exemples ci-après illustrent l'enchainement de langues..))
+Les exemples ci-après illustrent l'enchaînement de langues..))
 
 ### Syntax.fr((Syntaxe.))
 
@@ -608,7 +608,7 @@ The spaces between directives are generally default text and will restore the de
 which can have undesired effects as it would break the current default/specific text chain.
 To put a space after some text it is best to put it inside the language blocks:
 .fr((Les espaces entre des directives sont généralement du texte par défaut et restaurent le
-contexte par défaut, ce qui peut avoir des effets indésirables car cela rompt la chaine des textes
+contexte par défaut, ce qui peut avoir des effets indésirables car cela rompt la chaîne des textes
 par défaut et spécifiques en cours. Pour utiliser des espaces il est donc préférable de les placer
 à l'intérieur des directives ouvrantes et fermantes :.))
 
@@ -618,7 +618,7 @@ par défaut et spécifiques en cours. Pour utiliser des espaces il est donc pré
 
 As mentioned above, language sections can be chained without closing them, but each one will
 have to be closed eventually. The line below has the same effect as the previous example:
-.fr((Comme expliqué précédemment, les sections de langues peuvent être enchainées sans
+.fr((Comme expliqué précédemment, les sections de langues peuvent être enchaînées sans
 les fermer, toutefois chacune devra finalement être refermée. La ligne suivante a le même effet
 que l'exemple précédent :.))
 

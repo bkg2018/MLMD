@@ -3,6 +3,9 @@
 
 # .all((MLMD - .))Multilingual Markdown Generator.fr((Générateur de Markdown Multilingue.))
 
+[README en français](README.fr.md).fr(([English README](README.md).))
+[Documentation en français](docs/MLMD.fr.md).fr(([English documentation](docs/MLMD.md).))
+
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual source files UTF-8 encoded, using directives in the files to distinguish each
 language parts.
@@ -31,7 +34,7 @@ MLMD process the source files for each declared language, and generated Markdown
 for each file and each language: *`file.mlmd`* will generate *`file.fr.md`*, *`file.en.md`*
 etc.
 .fr((MLMD traite chaque fichier source pour chaque langue déclarée, et génère les fichiers
-Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* génèrera *`fichier.fr.md`*,
+Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* générera *`fichier.fr.md`*,
 *`fichier.en.md`* et ainsi de suite..))
 
 Languages must be declared in at least one of the source files. Parts of the text for each
@@ -166,4 +169,5 @@ A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 .))
 
-[Français](README.fr.md) - [English](README.md)
+[README en français](README.fr.md).fr(([English README](README.md).))
+[Documentation en français](docs/MLMD.fr.md).fr(([English documentation](docs/MLMD.md).))

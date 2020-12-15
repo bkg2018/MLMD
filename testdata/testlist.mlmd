@@ -1,0 +1,20 @@
+.languages fr,en main=en
+
+- first line.fr((- première ligne.))
+- second line.fr((- deuxième ligne.))
+
+- first line
+- second line
+.fr((
+- première ligne
+- deuxième ligne
+.))
+
+default 1.fr((french 1.))
+default 2.fr((french 2.))
+
+1. default list 1
+.fr((1. texte de liste 1.))
+2. default list 2
+.fr((2. texte de liste 2.))
+

@@ -1,4 +1,4 @@
-# VI) Conclusion<A id="a77"></A>
+# VI) Conclusion<A id="a78"></A>
 
 MLMD est utilisé pour rédiger des sources de documentation multilingues tout en maintenant
 les différentes parties de la documentation dans des fichiers uniques et générer les

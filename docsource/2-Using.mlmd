@@ -64,7 +64,7 @@ coloration syntaxique Markdown fonctionnera dans la plupart des éditeurs de tex
 fichiers, toutefois les fichiers sources MLMD ne sont pas réellement des fichiers Markdown, ce qui peut
 mener à une certaine confusion lors de l'édition. L'extension `.mlmd` est plus explicite et montre clairement
 que les fichiers sont à destination de MLMD, et les éditeurs de texte peuvent généralement être paramétrés
-pour reconnaitre la syntaxe MLMD..))
+pour reconnaître la syntaxe MLMD..))
 
 When no source files parameter (`-i`) is given to the script, MLMD will explore the directory tree where
 it starts and generate files for all the sources it finds and the languages declared in them. The generated
@@ -348,7 +348,7 @@ Conventional symbols can be `.`, `-`or `)`. Omitting this separator for the last
 - `<niveau>` est un chiffre entre `1` and `9` facultatif qui indique le ,niveau de titre concerné (c'est le nombre de `#`
 qui débute le titre). Par défaut c'est le niveau suivant celui de la définition précédente, en commençant par 1.
 - `:` est un séparateur obligatoire entre chacune des parties de la définition, même pour les parties omises.
-- `préfixe` est un préfixe facultatif pour le tout premier niveau de titre, par exemple `Chapitre `. Le préfixe n'apparait
+- `préfixe` est un préfixe facultatif pour le tout premier niveau de titre, par exemple `Chapitre `. Le préfixe n'apparaît
 que dans le libellé des titres de premier niveau, même s'il est spécifié pour un autre niveau.
 - `<symbole>` est un symbole obligatoire qui peut être une lettre majuscule `A` à `Z`, une lettre minuscule `a` à `z`,
 un chiffre de `1` à `9` ou la mention spéciale `&I` ou `&i` pour représenter les chiffres romains en majuscules
@@ -394,10 +394,10 @@ pour les titres de niveau 3 :.))
   doesn't apply to level 2 numbering.
 - Level 3 headings will be numbered `A-1.1`, then `A-1.2`, `A-1.3` etc.
 .)).fr((
-- Les titres de niveau supérieur à 4 ne seront pas numérotés et n'apparaitront
+- Les titres de niveau supérieur à 4 ne seront pas numérotés et n'apparaîtront
   pas dans les sommaires si la directive .toc ne les mentionne pas. S'ils
   apparaissent dans la directive, ils seront préfixés par un tiret `-`.
-- Le titre de niveau 1 sera préfixé et apparaitra comme `Chapitre A)`.
+- Le titre de niveau 1 sera préfixé et apparaîtra comme `Chapitre A)`.
 - Les titres de niveau 2 seront numérotés `A-1)`, `A-2)` etc. Le préfixe
   du niveau 1 ne s'applique pas à partir du 2.
 - Les titres de niveau 3 seront numérotés `A-1.1` puis `A-1.2`, `A-1.3` etc.

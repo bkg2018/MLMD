@@ -283,7 +283,7 @@ namespace MultilingualMarkdown {
         {
             global $posFunction;
             // try to find this file name in registered files
-            $mainExtension = \isMLMDfile($name);
+            $mainExtension = \getMLMDExtension($name);
             if ($mainExtension === null) {
                 $this->error("wrong extension for main MLMD file, should be '.base.md' or '.mlmd'");
                 return false;
@@ -362,7 +362,7 @@ namespace MultilingualMarkdown {
             global $posFunction;
             $path = normalizedPath($path);
             // check file extension
-            $extension = isMLMDfile($path);
+            $extension = getMLMDExtension($path);
             if ($extension === null) {
                 return $this->error("invalid file extension ($path)");
             }
@@ -446,7 +446,7 @@ namespace MultilingualMarkdown {
          *
          * @param int $index an index value between 0 and getInputFilesMaxIndex().
          *
-         * @return string|null the rootdir relative file path or null if $index is invalid
+         * @return string|null the root directory relative file path or null if $index is invalid
          */
         public function getRelativeInputFile(int $index): ?string
         {
@@ -478,7 +478,7 @@ namespace MultilingualMarkdown {
                     $this->error("wrong root dir for file [$path], should be [{$this->rootDir}]", __FILE__, __LINE__);
                     return null;
                 }
-                $extension = isMLMDfile($path) ?? '';
+                $extension = getMLMDExtension($path) ?? '';
                 $path = mb_substr(normalizedPath(realpath($path)), $rootLen + 1, null);
                 return mb_substr($path, 0, -mb_strlen($extension));
             } else {
@@ -488,7 +488,7 @@ namespace MultilingualMarkdown {
                     return $this->getBasename($path);
                 }
             }
-            $extension = isMLMDfile(basename($path)) ?? '';
+            $extension = getMLMDExtension(basename($path)) ?? '';
             return basename($path, $extension);
         }
 
@@ -528,7 +528,7 @@ namespace MultilingualMarkdown {
             }
 
             // retain base name with full path but no extension as template and reset line number
-            $extension = \isMLMDfile($filename);
+            $extension = \getMLMDExtension($filename);
             if ($this->outRootDir == null) {
                 $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
             } else {
@@ -1060,10 +1060,11 @@ namespace MultilingualMarkdown {
         public function expand(string $text, string $language): string
         {
             $relFilename = $this->current();
-            $baseExtension = \isMLMDfile($relFilename);
+            $baseExtension = \getMLMDExtension($relFilename);
             $basename = mb_substr($relFilename, 0, - mb_strlen($baseExtension));
             $extension = $this->languageList->isMain($language) ? '.md' : ".{$language}.md";
             $result = str_replace('{file}', $basename . $extension, $text);
+            $result = str_replace('{filename}', $basename, $text);
             $result = str_replace('{extension}', $extension, $result);
             if ($this->mainFilename !== null) {
                 $result = str_replace('{main}', $this->mainFilename . $extension, $result);

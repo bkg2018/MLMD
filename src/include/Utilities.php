@@ -88,7 +88,7 @@ function normalizedPath($path)
  * @return string the file extension (.base.md or .mlmd), null if invalid
  *                mlmd file name.
  */
-function isMLMDfile(string $filename): ?string
+function getMLMDExtension(string $filename): ?string
 {
     $extension = ".base.md";
     $pos = mb_stripos($filename, $extension, 0);
@@ -123,7 +123,7 @@ function exploreDirectory(string $dirName): array
             $thisFile = $dirName . '/' . $file;
             if (is_dir($thisFile)) {
                 $filenames = array_merge($filenames, exploreDirectory($thisFile));
-            } elseif (isMLMDfile($thisFile) !== null) {
+            } elseif (getMLMDExtension($thisFile) !== null) {
                 $filenames[] = $thisFile;
             }
         }

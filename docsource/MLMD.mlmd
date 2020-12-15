@@ -40,6 +40,8 @@ headings numbering scheme using either command line parameters or directives in 
 de numérotation des titres par le biais de paramètres de la ligne de commande ou par
 des directives placées dans les fichiers sources..))
 
+![File generation and directives.fr((Génération des fichiers et directives.))](https://github.com/bkg2018/MLMD/blob/main/docs/Images/File%20Generation.png)
+
 .toc title=Table Of Contents.fr((Sommaire.)) level=1-3
 
 I hope MLMD will help you to easily maintain multilingual documentations.

@@ -67,7 +67,7 @@ les avertissements et de fermer les sections dont le `.))` a été oublié..))
 MLMD will reproduce space indentation only if it occurs *after*  language opening directives, so if
 indentation disappear first check if it is correctly placed:
 .fr((MLMD reproduit les indentations situées *après* les directives d'ouverture de langue, aussi lorsque
-l'indentation semble disparaitre il faut vérifier si elle est correctement placée. L'exemple suivant :.))
+l'indentation semble disparaître il faut vérifier si elle est correctement placée. L'exemple suivant :.))
 
 ```code
    .fr((Text.))
@@ -75,7 +75,7 @@ l'indentation semble disparaitre il faut vérifier si elle est correctement plac
 
 will generate non-indented `text` in the `.fr.md` file. To keep indentation, this line must be written
 this way:
-.fr((génèrera `text` sans indentation dans le fichier `.fr.md`. Pour conserver les espaces la ligne doit
+.fr((générera `text` sans indentation dans le fichier `.fr.md`. Pour conserver les espaces la ligne doit
 être réécrite de cette manière :.))
 
 ```code
@@ -110,7 +110,7 @@ vérifier les directives d'ouverture et de fermeture autour du texte concerné..
 Your supposedly default text doesn't go into the expected language files if it appears
 after language specific sections instead of before. Default text always apply to upcoming
 sections, not past ones.
-.fr((Le texte par défaut ne sera pas généré dans les fichiers attendus s'il apparait
+.fr((Le texte par défaut ne sera pas généré dans les fichiers attendus s'il apparaît
 après les sections spécifiques aux langues plutôt qu'avant elles. Le texte par défaut doit
 s'applique toujours aux sections de langue qui le suivent, et non à celles qui le précèdent..))
 
@@ -173,7 +173,7 @@ il faut rédiger les listes séparément chacune dans sa propre section :.))
 It doesn't look as simple but is much more controllable and MLMD will always generate the correct sections
 for each language when it finds this kind of structure.
 .fr((Bien que cela ne paraisse pas aussi simple c'est une méthode beaucoup plus fiable et facile à contrôler,
-avec laquelle MLMD génèrera toujours les bonnes sections dans les bons fichiers sans supprimer de fins de
+avec laquelle MLMD générera toujours les bonnes sections dans les bons fichiers sans supprimer de fins de
 lignes de manière apparemment intempestive..))
 
 It should be noted that the end of line cancelling is a trade-off for MLMD to make languages sections

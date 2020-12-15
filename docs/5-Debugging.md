@@ -1,4 +1,4 @@
-# V) Debugging source files<A id="a66"></A>
+# V) Debugging source files<A id="a67"></A>
 
 MLMD directives and command line arguments build a kind of programming language with which
 you write source files, that you compile into generated Markdown files.
@@ -11,7 +11,7 @@ This part will explain the tools MLMD gives, the possible bugs and the technics 
 
 But first, an important advice.
 
-## V-1) DON'T FIX GENERATED FILES<A id="a67"></A>
+## V-1) DON'T FIX GENERATED FILES<A id="a68"></A>
 
 If you ever fix the generated french, english, polish, korean or any language specific generated files,
 you will find your errors back the next time you will run MLMD on source files.
@@ -21,7 +21,7 @@ The right place where to fix the errors is in the source files.
 Read your generated files attentively, then notice the errors, then go to the source files to fix them
 and finally generate files again with MLMD.
 
-## V-2) Trace mode: `-trace`<A id="a68"></A>
+## V-2) Trace mode: `-trace`<A id="a69"></A>
 
 The `-trace` optional arguments will display a trace of all lines as they are read, as well as
 some more informations. If the generated files are not as expected, the first thing to do is trying
@@ -31,13 +31,13 @@ code fences (```) which are jumped over with only the first line displayed.
 Make sure every line is read and the code fences are matched with each other: missing an ending fence
 would make the following text disappear from trace until the next code fence or the end of file.
 
-## V-3) Unclosed sections<A id="a69"></A>
+## V-3) Unclosed sections<A id="a70"></A>
 
 At the end of each source file, MLMD will check if all language sections have been closed and will
 display the starting line of any non-closed sections. Make sure you read these warnings and fix them
 by adding closing directives `.))` at the right places.
 
-## V-4) Wrong indentations<A id="a70"></A>
+## V-4) Wrong indentations<A id="a71"></A>
 
 MLMD will reproduce space indentation only if it occurs *after*  language opening directives, so if
 indentation disappear first check if it is correctly placed:
@@ -53,7 +53,7 @@ this way:
 .fr((   Text.))
 ````
 
-## V-5) Wrong language<A id="a71"></A>
+## V-5) Wrong language<A id="a72"></A>
 
 If you find wrong language text in a generated file it generally means the wrong open language
 directive has been used or a section has not been closed:
@@ -65,7 +65,7 @@ directive has been used or a section has not been closed:
 As a conclusion, when something looks odd about languages, first check each opening and closing
 directives around the suspected text.
 
-## V-6) Misplaced default text<A id="a72"></A>
+## V-6) Misplaced default text<A id="a73"></A>
 
 Your supposedly default text doesn't go into the expected language files if it appears
 after language specific sections instead of before. Default text always apply to upcoming
@@ -84,7 +84,7 @@ To fix this, default must be put first and language specific sections appear lat
 
 This fixed line will have the expected effect: the default text will not go into the french file.
 
-## V-7) Inconsistent Markdown lists and tables<A id="a73"></A>
+## V-7) Inconsistent Markdown lists and tables<A id="a74"></A>
 
 Markdown allows easy writing of lists using `*` and `-` line start, as well as single lines tables
 using specific notations. However with MLMD writing each line or list element for multiple languages
@@ -118,7 +118,7 @@ for each language when it finds this kind of structure.
 It should be noted that the end of line cancelling is a trade-off for MLMD to make languages sections
 visual separations easier.
 
-## V-8) Wrong headings numbering<A id="a74"></A>
+## V-8) Wrong headings numbering<A id="a75"></A>
 
 If the headings numbering doesn't match what was expected, some possible errors are:
 
@@ -138,7 +138,7 @@ either by the time they have been written in directory first, which is generally
 expected and almost never what is displayed by operating systems. The best results are 
 definitely obtained by using `.topnumber` in source files.
 
-## V-9) Disappearing ending period<A id="a75"></A>
+## V-9) Disappearing ending period<A id="a76"></A>
 
 If an ending period is disappearing from a sentence, chances are that the dot from a closing
 directive following the sentence has been mistaken for that period. Dots must be doubled at the end
@@ -150,7 +150,7 @@ the directive start:
 .en((This sentence is ended by a period..))
 ```
 
-## V-10) Spellchecking<A id="a76"></A>
+## V-10) Spellchecking<A id="a77"></A>
 
 Most text files editor softwares have spellchecking plugins which check te text on the fly as it
 is entered. Visual Code for example has extensions for spellchecking in many languages.

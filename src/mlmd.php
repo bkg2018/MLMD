@@ -23,7 +23,8 @@
  * @link      TODO
  */
 
-if (function_exists('xdebug_start_code_coverage')) {
+ // create code coverage if env variable 'coverage' is not 0 and xdebug has been loaded
+if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 }
 
@@ -137,6 +138,6 @@ $dashes  = str_repeat('-', 79);
 $seconds = sprintf("%.02f", $timeEnd - $timeStart);
 echo "$dashes\nTOTAL: {$generator->getProcessedLines()} lines processed in $seconds seconds\n";
 
-if (function_exists('xdebug_start_code_coverage')) {
+if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     DumpCoverage();
 }
