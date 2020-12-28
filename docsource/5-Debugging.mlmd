@@ -80,7 +80,7 @@ this way:
 
 ```code
 .fr((   Text.))
-````
+```
 
 ## Wrong language.fr((Langue erronée.))
 
@@ -168,7 +168,7 @@ il faut rédiger les listes séparément chacune dans sa propre section :.))
 - première ligne en français
 - deuxième ligne en français
 .))
-````
+```
 
 It doesn't look as simple but is much more controllable and MLMD will always generate the correct sections
 for each language when it finds this kind of structure.

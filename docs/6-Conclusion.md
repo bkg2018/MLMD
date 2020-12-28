@@ -33,7 +33,7 @@ Here are some use notes.
   - Close each opened section with a `.))`
   - Use one end-of-line between directives to visually separate different sections
   - Use the variables to put language specific links or images in text body
-  - Markdown styles '===' and '---' for level 1 and 2 are not recognized
+  - Markdown styles `===` and `---` for level 1 and 2 are not recognized
 
 - Table Of Contents (`.toc` directive)
   - Use `level=1` to generate a global TOC with links to all the processed sources

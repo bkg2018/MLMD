@@ -266,7 +266,7 @@ Default text:
 ```code
 - first line
 - second line
-````
+```
 
 French text:
 

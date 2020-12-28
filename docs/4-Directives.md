@@ -93,7 +93,7 @@ directive.
 
 ```code
 .topnumber <n>
-````
+```
 
 The parameter `n` can be any integer number starting at 1. Each file should have a unique number, as using
 identical numbers will have unpredictable effects.

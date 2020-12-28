@@ -51,7 +51,7 @@ this way:
 
 ```code
 .fr((   Text.))
-````
+```
 
 ## V-5) Wrong language<A id="a72"></A>
 
@@ -110,7 +110,7 @@ directive. Instead of this, MLMD recommended structure is to keep language secti
 - première ligne en français
 - deuxième ligne en français
 .))
-````
+```
 
 It doesn't look as simple but is much more controllable and MLMD will always generate the correct sections
 for each language when it finds this kind of structure.

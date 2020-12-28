@@ -282,7 +282,7 @@ Texte par défaut :
 ```code
 - first line
 - second line
-````
+```
 
 Texte français :
 
