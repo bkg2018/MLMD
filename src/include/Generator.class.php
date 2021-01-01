@@ -265,21 +265,21 @@ namespace MultilingualMarkdown {
             if ($this->filer->getInputFilesMaxIndex() < 0) {
                 $this->filer->exploreDirectory(getcwd());
             }
-            $dashes = str_repeat('=', 60);
             $this->preProcess();
             $this->lexer->initSet();
             $this->processedLines = 0;
             foreach ($this->filer as $index => $relFilename) {
-                echo "$dashes\nProcessing file: $relFilename ";
+                echo "\nProcessing file: $relFilename ";
                 $timeStart = microtime(true);
                 if (!$this->process($index)) {
                     echo "\n";
                     return false;
                 }
                 $time = sprintf("%.1f", microtime(true) - $timeStart);
-                echo "{$this->filer->getProcessedLines()} lines in {$time} seconds\n";
+                echo "{$this->filer->getProcessedLines()} lines in {$time} seconds";
                 $this->processedLines += $this->filer->getProcessedLines();
             }
+            echo "\n";
             return true;
         }
 

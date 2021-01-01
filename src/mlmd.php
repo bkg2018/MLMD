@@ -137,7 +137,7 @@ $timeEnd = microtime(true);
 $dashes  = str_repeat('-', 79);
 $seconds = sprintf("%.02f", $timeEnd - $timeStart);
 echo "$dashes\nTOTAL: {$generator->getProcessedLines()} lines processed in $seconds seconds\n";
-
+echo "PHP version: ",phpversion(),"\n";
 if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     DumpCoverage();
 }

@@ -49,23 +49,33 @@ ou effectuent d'autres tâches..))
 
 ## How fast?.fr((Quelle rapidité ?.))
 
-Writing language parts is very fast and easy. Default text, which is generally the native
+Writing language parts is fast and easy. Default text, which is generally the native
 language of the original author, doesn't need any specific directive and is written just
-like normal text, while language specific parts are simply surrounded by
-little open/close directive. For example starting english text is done by writing `.en((`, 
-followed by the text, and ended by `.))`. Empty lines, code fences, tables, any text and
-Markdown features can be put between these two markers. Headings starting with `#` can include
-open/close language directives too, or they can be put between markers if the author like 
+like normal text, while language specific parts are surrounded by
+simple open/close directive. For example starting english text is done by writing `.en((`, 
+followed by the text and ending with `.))`. Empty lines, code fences, tables, any text and
+Markdown features can be put between these two markers. Headings starting with `#` can also include
+other language parts, or they can be put between markers if the author like 
 it this way.
 .fr((Ecrire des parties dans une langue est rapide et facile. Le texte par défaut qui est
 généralement dans la langue de l'auteur original du texte n'a pas besoin de directives
-particulières, tandis que les parties dans d'autres langues sont simplement entourées de
-petites directives d'ouverture et de fermeture. Par exemple, pour du texte en français on
-écrit la directive d'ouverture `.fr((`, suivie du texte, et on termine par `.))`. Les
-lignes vides, barrières de bloc de code, les tableaux ou toute autre fonctionnalité Markdown
-peuvent se trouver entre les deux marqueurs. Les titres commençant par `#` peuvent également
-contenir des parties dans des langues, ou être entourés par les directives si le rédacteur
+particulières, tandis que les parties dans d'autres langues sont entourées de
+simples directives d'ouverture et de fermeture. Par exemple, pour du texte en français on
+écrit la directive d'ouverture `.fr((`, suivie du texte que l'on termine par `.))`. Les
+lignes vides, barrières de bloc de code, les tableaux et toutes les fonctionnalités Markdown
+peuvent se situer entre les deux marqueurs. Les titres commençant par `#` peuvent également
+contenir des parties dans différentes langues, ou être entourés par les directives si le rédacteur
 préfère cette manière de procéder..))
+
+The following example show both ways of writing multilingual headings:
+.fr((L'exemple suivant montre comment écrire un titre multilingue :.))
+
+```code
+# Example of a multilingual title.fr((Exemple de titre multilingue.))
+
+.((# Default title.))
+.fr((# Titre en français.))
+```
 
 As of processing speed, MLMD script generates the 2000 lines of its own documentation 
 in about 2 seconds on an Intel i7 at 2 GHz, files being written on a SSD.
@@ -74,17 +84,17 @@ documentation en environ 2 secondes sur un Intel i7 à 2GHz, les fichiers étant
 
 ## Why?.fr((Pourquoi ?.))
 
-I designed MLMD because I needed to write a technical documentation both in English and in
-French for a project. Looking on the Web I found a very efficient [Python script from Hong-ryul Jong]
-(https://github.com/ryul1206/multilingual-markdown). However after using it a little I found
-I needed some more features and I wanted to design a set of directives which would keep the
-text more readable and easier to type than HTML comment tags. I kept most of basic Hong-ryul ideas like
-ignored text, language declaration but also worked the design so directives could be put
-right into the text and not using the HTML syntax. I also designed various output modes to
-adjust for different HTML or pure Markdown contexts.
+I designed MLMD because I needed to write a technical documentation  in English and in
+French for a DIY electronics project. Looking on the Web I found a very efficient
+[Python script from Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
+However after using it a little I found I needed some more features and I wanted to design
+a set of directives which would keep the text more readable and easier to type than HTML
+comment tags. I kept most of basic Hong-ryul ideas like ignored text, language declaration
+but also worked the design so directives could be put right into the text and not using the
+HTML syntax. I also designed various output modes to adjust for different HTML or pure Markdown contexts.
 .fr((J'ai conçu MLMD pour mes besoins alors que je devais rédiger une documentation technique
-en Anglais et en Français pour un projet. En cherchant sur le Web j'ai rapidement trouvé un [script
-Python très efficace de Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
+en Anglais et en Français pour un projet de kit électronique. En cherchant sur le Web j'ai rapidement
+trouvé un [script Python très efficace de Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
 Toutefois après un peu d'utilisation il me manquait des fonctionnalités et je souhaitais des directives
 qui conserveraient une meilleure lisibilité du texte et plus faciles à saisir que les tags de
 commentaire HTML. J'ai conservé" la plupart des idées de départ de Hong-ryul Jong comme le texte
@@ -123,28 +133,47 @@ comme Git, permettant les comparaisons, les pull-requests et la fusion de fichie
 
 ## Documentation
 
-Full documentation can be found in [the `docs` directory](docs/MLMD.md) under this file.
-.fr((Une documentation complète est disponible dans [le répertoire `docs`](docs/MLMD.fr.md) 
-en dessous de ce fichier..))
+- [Full documentation](docs/MLMD.md) can be found in the `docs` directory.
+.fr((Une [documentation complète](docs/MLMD.fr.md) est disponible dans le répertoire `docs`..))
 
-The sources for the README documentation you are reading can be found in [this root directory](README.mlmd).
-.fr((Le fichier source du README que vous lisez actuellement se trouve dans ce [répertoire racine](README.mlmd)..))
+- The [source fiel for this README](README.mlmd) documentation is the `README.mlmd` file.
+.fr((Le [fichier source de ce README](README.mlmd) se trouve dans le fichier `README.mlmd`..))
 
-The documentation source is written in MLMD itself and can be found in [the `docsource` directory](docsource/MLMD.mlmd).
-It is a comprehensive example of MLMD source possible writing styles and directives uses.
-.fr((La source de la documentation complète est rédigée en MLMD elle-même et se trouve dans
-[le répertoire `docsource`](docsource/MLMD.mlmd). Elle constitue un exemple exhaustif des styles d'écriture
-des sources MLMD et de l'utilisation des différentes directives..))
+- The [full documentation source](docsource/MLMD.mlmd) is written in MLMD itself and can be found
+in the `docsource` directory. It is a comprehensive example of MLMD source possible writing styles
+and directives uses and shows how to include other source files in a documentation.
+.fr((- La [source de la documentation complète](docsource/MLMD.mlmd) est rédigée en MLMD elle-même
+et se trouve dans le répertoire `docsource`. Elle constitue un exemple exhaustif des styles d'écriture
+des sources MLMD et de l'utilisation des différentes directives et montre comment inclure
+d'autres fichiers sources dans une documentation..))
+
+### Building full documentation.fr((Construction de la documentation complète.))
 
 Building the MLMD documentation is done with the following command:
-.fr((La documentation MLMD est construite avec al commande suivante :.))
+.fr((La documentation MLMD est construite avec la commande suivante :.))
 
 ```code
 php src/mlmd.php  -i docsource/MLMD.mlmd -out md -od docs
 ```
 
-Building this README documentation is done with the following command:
-.fr((Ce document README est construit avec la commande suivante :.))
+.((
+- The `-i` parameter tells MLMD where to find the input file, which will in turn include other files
+in the process.
+- The `-out` parameter sets the mixed Markdown/HTML output mode for links and Table Of Contents
+- The `-od` parameter gives a path where to write the generated documentation files. All paths given here are relative to
+the directory from where the script is launched, but absolute paths can also be used.
+.)).fr((
+- Le paramètre `-i` indique à MLMD où trouver le fichier source, qui incluera à son tour d'autres fichiers
+lors de son traitement.
+- Le paramètre `-out` règle le mode de sortie mixte Markdown/HTML pour les liens et les sommaires.
+- Le paramètre `-od` indique un répertoire où écrire les fichiers générés. Les chemins indiqués dans cette commande
+sont relatifs au répertoire d'où MLMD a été démarré, mais on peut utiliser des chemins absolus.
+.))
+
+### Building README.fr((Construction du README.))
+
+Building this README documentation you're currently reading is done with the following command:
+.fr((Ce document README que vous lisez actuellement est construit par la commande suivante :.))
 
 ```code
 php src/mlmd.php -i README.mlmd -out md
