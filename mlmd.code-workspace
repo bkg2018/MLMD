@@ -1,0 +1,61 @@
+{
+	"folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../RETROCOMP/Bluety/docsource"
+        }
+    ],
+	"launch": {
+        "php.executablePath": "/usr/local/opt/php/bin/php",
+		"version": "0.2.0",
+		"configurations": [
+
+			{
+				"name": "Listen for XDebug",
+				"type": "php",
+				"request": "launch",
+				"port": 9000
+			},
+			{
+				"name": "Launch currently open script",
+				"stopOnEntry": true,
+				"type": "php",
+				"request": "launch",
+				"program": "${file}",
+				"cwd": "${workspaceFolder}",
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"port": 9000
+			},
+			{
+				"name": "Launch MLMD TEST",
+				"stopOnEntry": true,
+				"type": "php",
+                "request": "launch",
+                "runtimeExecutable": "php",
+				"program": "${workspaceFolder}/src/mlmd.php",
+                "cwd": "${workspaceFolder}",
+                "args": ["-i", "README.mlmd", "-out","md","-od","out", "-trace"],
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"port": 9000
+			}
+		]
+    },
+    "settings": {
+        "cSpell.words": [
+            "MLMD",
+            "all",
+            "bluety",
+            "docsource",
+            "file",
+            "htmlold",
+            "in",
+            "mdpure",
+            "pathes",
+            "phpscripts",
+            "systemroot",
+            "topnumber"
+        ]
+    }
+}

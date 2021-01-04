@@ -15,12 +15,12 @@ Voici quelques notes d'usage.
     - le paramètre `-od` permet de choisir le répertoire où seront générés les fichiers Markdown
 
 - Langues et sections
-  - Les codes des langues sont déclarés dans la directive `.languages``
+  - Les codes des langues sont déclarés dans la directive `.languages`
   - Les codes sont valables sur l'ensemble des fichiers sources traités
   - Un code ISO facultatif peut être associé à chaque code de langue
-  - Tout texte est ignoré jusqu'à la rencontre de la directive `.languages``
+  - Tout texte est ignoré jusqu'à la rencontre de la directive `.languages`
   - Toute langue déclarée avec le code `<code>` possède une directive d'ouverture `.<code>((`
-  - Toute section ouverte doit être fermée avec `.))``
+  - Toute section ouverte doit être fermée avec `.))`
   - Tout texte en dehors des directives d'ouverture et fermeture est du texte par défaut
   - Ou on utilise `.((` pour ouvrir une section de texte par défaut
   - Les sections et le texte par défaut sont écrits dans tous les fichiers des langues qui n'ont pas de section spécifique

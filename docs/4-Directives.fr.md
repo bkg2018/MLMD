@@ -99,7 +99,7 @@ l'ordre défini par ces directives.
 
 ```code
 .topnumber <n>
-````
+```
 
 Le paramètre `n` est n'importe quel nombre entier à partir de 1. Chaque fichier doit avoir un numéro unique,
 car l'utilisation de numéros identiques aura des effets imprévisibles.

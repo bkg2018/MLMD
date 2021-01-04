@@ -54,7 +54,7 @@ générera `text` sans indentation dans le fichier `.fr.md`. Pour conserver les 
 
 ```code
 .fr((   Text.))
-````
+```
 
 ## V-5) Langue erronée<A id="a72"></A>
 
@@ -116,7 +116,7 @@ il faut rédiger les listes séparément chacune dans sa propre section :
 - première ligne en français
 - deuxième ligne en français
 .))
-````
+```
 
 Bien que cela ne paraisse pas aussi simple c'est une méthode beaucoup plus fiable et facile à contrôler,
 avec laquelle MLMD générera toujours les bonnes sections dans les bons fichiers sans supprimer de fins de
