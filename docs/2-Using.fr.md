@@ -252,5 +252,4 @@ pour les titres de niveau 3 :
 - Les titres de niveau 3 seront numérotés `A-1.1` puis `A-1.2`, `A-1.3` etc.
 
 Seul le niveau 1 peut bénéficier d'un préfixe. Bien que l'on puisse indiquer
-des préfixes d'autres niveau dans le schéma de numérotation, ils ne seront pas
-utilisés et n'auront aucun effet.
+des préfixes d'autres niveaux dans le schéma de numérotation, ils n'auront aucun effet.

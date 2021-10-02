@@ -143,8 +143,7 @@ namespace MultilingualMarkdown {
                 // sort by level 1 numbering to ensure correct toc order
                 $allFiles = [];
                 foreach ($allHeadingsArrays as $relFilename => $headingsArray) {
-                    $numbering = $lexer->getNumbering($relFilename);
-                    $topNumber = $numbering->getLevelNumbering(1);
+                    $topNumber = $lexer->getTopNumber($relFilename);//0 if none
                     $allFiles[$topNumber] = $relFilename;
                 }
                 ksort($allFiles);
@@ -156,7 +155,7 @@ namespace MultilingualMarkdown {
                 // output each heading if level between start and end
                 $numbering = $lexer->getNumbering($relFilename);
                 $headingsArray = $allHeadingsArrays[$relFilename];
-                if ($numbering->getStart() > $this->end || $numbering->getEnd() < $this->start) {
+                if (($numbering ?? false) && (($numbering->getStart() > $this->end) || ($numbering->getEnd() < $this->start))) {
                     $filer->error("Inconsistent levels in TOC directive or missing numbering scheme", $relFilename, $filer->getCurrentLineNumber());
                     continue;
                 }

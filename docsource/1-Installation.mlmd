@@ -32,11 +32,9 @@ The directory where the PHP installation and its setting files lie can be displa
 .fr((Le répertoire d'installation de PHP et de ses fichiers de configuration peut être affiché avec
 la commande `php --ini`..))
 
-PHP 7.2 may work but have not been tested. The Multibyte extension (mb) is needed but should not
-imply a specific setting as it should be embedded in standard PHP 7.3 distributions.
-.fr((PHP 7.2 peut fonctionner mais n'a pas été testé. L'extension MultiByte (mb) est utilisée mais
-ne nécessite pas de réglage particulier car elle est intégrée par défaut dans les distributions
-standards de PHP 7..))
+PHP 7.2 may work but have not been tested. The Multibyte extension (mbstring) is needed and should be set
+in PHP.INI..fr((PHP 7.2 peut fonctionner mais n'a pas été testé. L'extension MultiByte (mbstring) est utilisée
+et doit être activée dans PHP.INI..))
 
 ## Storing MLMD.fr((Emplacement de MLMD.))
 

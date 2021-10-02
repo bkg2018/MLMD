@@ -27,11 +27,11 @@ les fichiers générés.
 | `.numbering`      | <ul><li>programme un schéma de numérotation des niveaux de titres</li><li>équivalent au paramètre `-numbering` de la ligne de commande</li><li>peut changer le schéma pour le fichier en cours</li></ul>|
 | `.topnumber`      | <ul><li>programme le numéro du titre de niveau 1 du fichier en cours dans le schéma de numérotation</li><li>mettre à zéro pour désactiver la numérotation du niveau 1 dans le fichier en cours</li></ul>|
 | `.include`        | <ul><li>ajoute un fichier source pour la génération et le schéma de numérotation global</li></ul>|
-| `# title`         | <ul><li>titre de niveau 1 utilisé comme titre de fichier Markdown</li><li>peut inclure des parties pour autres langues</li></ul>|
-| `text …`          | <ul><li>texte par défaut pour les langues sans partie spécifique</li><li>utilisation facile pour le texte original avant traduction</li></ul>|
-| `.fr((text.))`    | <ul><li>texte pour la langue de code `fr` (français)</li><li>le code doit avoir été déclaré dans la directive `.languages`</li><li>`.fr((` ouvre la langue `.))` la referme</li><li>peut être suivi d'autres langues et précédé de texte par défaut</li></ul>|
-| `.all(text.))`    | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
-| `.!((text.))`     | <ul><li>le texte sera ignoré et n'ira dans aucun fichier d'aucune langue</li></ul>|
+| `# titre`         | <ul><li>titre de niveau 1 utilisé comme titre de fichier Markdown</li><li>peut inclure des parties pour autres langues</li></ul>|
+| `texte …`          | <ul><li>texte par défaut pour les langues sans partie spécifique</li><li>utilisation facile pour le texte original avant traduction</li></ul>|
+| `.fr((texte.))`    | <ul><li>texte pour la langue de code `fr` (français)</li><li>le code doit avoir été déclaré dans la directive `.languages`</li><li>`.fr((` ouvre la langue `.))` la referme</li><li>peut être suivi d'autres langues et précédé de texte par défaut</li></ul>|
+| `.all(texte.))`    | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
+| `.!((texte.))`     | <ul><li>le texte sera ignoré et n'ira dans aucun fichier d'aucune langue</li></ul>|
   
 
 ## III-1) Début de fichier source<A id="a23"></A>

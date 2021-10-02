@@ -28,7 +28,7 @@ if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 }
 
-$MLMD_VERSION = "1.0.4";
+$MLMD_VERSION = "1.0.5";
 $MLMD_DATE    = strftime("%F (%X)", filemtime(__FILE__));
 
 require_once 'include/Functions.php';
@@ -38,7 +38,11 @@ use MultilingualMarkdown\Generator as Generator;
 //MARK: CLI launch
 
 /// Create the generator instance
-mb_internal_encoding('UTF-8');
+if (!function_exists("mb_internal_encoding")) {
+    echo "ERROR: the mbstring extension must be enabled in your PHP.INI configuration file.\n";
+    exit(1);
+}
+\mb_internal_encoding('UTF-8');
 $generator = new Generator();
 
 /**

@@ -24,8 +24,8 @@ Zend Engine v3.3.20, Copyright (c) 1998-2018 Zend Technologies
 
 The directory where the PHP installation and its setting files lie can be displayed with `php --ini`.
 
-PHP 7.2 may work but have not been tested. The Multibyte extension (mb) is needed but should not
-imply a specific setting as it should be embedded in standard PHP 7.3 distributions.
+PHP 7.2 may work but have not been tested. The Multibyte extension (mbstring) is needed and should be set
+in PHP.INI.
 
 ## I-2) Storing MLMD<A id="a4"></A>
 

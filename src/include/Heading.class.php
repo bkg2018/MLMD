@@ -110,9 +110,11 @@ namespace MultilingualMarkdown {
 
         /**
          * Check Level limits.
+         * Returns true if no numbering scheme is set.
          */
-        public function isLevelWithin(object $numbering): bool
+        public function isLevelWithin(?object $numbering): bool
         {
+            if ($numbering == null) return true;
             return ($this->level <= $numbering->getEnd() && $this->level >= $numbering->getStart());
         }
         

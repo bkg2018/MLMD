@@ -34,13 +34,26 @@
 				"type": "php",
                 "request": "launch",
                 "runtimeExecutable": "php",
-				"program": "${workspaceFolder}/src/mlmd.php",
-                "cwd": "${workspaceFolder}",
-                "args": ["-i", "README.mlmd", "-out","md","-od","out", "-trace"],
+				"program": "${workspaceFolder:MLMD}/src/mlmd.php",
+                "cwd": "${workspaceFolder:MLMD}",
+                "args": ["-i", "README.mlmd", "-out","md","-od","out"],
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
-				"port": 9000
+				"port": 9003
+			},
+			{
+				"name": "Build MLMD doc",
+				"stopOnEntry": true,
+				"type": "php",
+                "request": "launch",
+                "runtimeExecutable": "php",
+                "runtimeArgs": ["-c", "C:\\php-8.0.10-nts-Win32-vs16-x64\\php-release.ini"],
+				"program": "${workspaceFolder:MLMD}/src/mlmd.php",
+                "cwd": "${workspaceFolder:MLMD}",
+                "args": ["-i", "docsource/MLMD.mlmd", "-out","md","-od","docs"],
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"port": 9003
 			}
-		]
+        ]
     },
     "settings": {
         "cSpell.words": [

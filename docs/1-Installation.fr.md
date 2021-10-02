@@ -25,9 +25,8 @@ Zend Engine v3.3.20, Copyright (c) 1998-2018 Zend Technologies
 Le répertoire d'installation de PHP et de ses fichiers de configuration peut être affiché avec
 la commande `php --ini`.
 
-PHP 7.2 peut fonctionner mais n'a pas été testé. L'extension MultiByte (mb) est utilisée mais
-ne nécessite pas de réglage particulier car elle est intégrée par défaut dans les distributions
-standards de PHP 7.
+PHP 7.2 peut fonctionner mais n'a pas été testé. L'extension MultiByte (mbstring) est utilisée
+et doit être activée dans PHP.INI.
 
 ## I-2) Emplacement de MLMD<A id="a4"></A>
 

@@ -489,7 +489,7 @@ namespace MultilingualMarkdown {
         /**
          * Get TOC full line for current or given heading.
          * This must be used sequentially on all headings of the array or numbering won't be consistent
-         * regarding previous heading level. the whole sequence must be started with a Numbering and
+         * regarding previous heading level. The whole sequence must be started with a Numbering and
          * current index reset.
          *
          * Components for TOC line :
@@ -498,13 +498,13 @@ namespace MultilingualMarkdown {
          * MD all variants:    <spacing><numbering> <TOClink>\n\n
          *
          * @param int       $index     index of the heading, -1 to use current exploration index.
-         * @param Numbering $numbering the Numbering object in charge of current file numbering scheme.
+         * @param Numbering $numbering the Numbering object in charge of current file numbering scheme or null
          * @param Filer     $filer    the caller object with an error() function, can be null to ignore errors.
          *
          * @return string the full heading line, or null if error or level not within
          *                numbering scheme limits.
          */
-        public function getTOCLine(int $index, Numbering &$numbering, ?Filer $filer = null): ?string
+        public function getTOCLine(int $index, ?Numbering $numbering, ?Filer $filer = null): ?string
         {
             $index = $this->checkIndex($index, $filer);
             if ($index === null) {
@@ -518,12 +518,19 @@ namespace MultilingualMarkdown {
             $numberingText = $this->getNumberingText($index, $numbering, true, $filer);
             $extension = pathinfo($this->file, PATHINFO_EXTENSION);
             $filename = mb_substr($this->file, 0, - (mb_strlen($extension) + 1));
+            $start = $numbering ? (int)$numbering->getStart() : 0;
+            $end = $numbering ? (int)$numbering->getEnd() : 10000;
             if ($filename . '.' . $extension == $filer->current()) {
-                $text = $this->getTOCLink('', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
+                $text = $this->getTOCLink('', $index, $start, $end, $filer);
             } else {
-                $text = $this->getTOCLink($filename . '{extension}', $index, (int)$numbering->getStart(), (int)$numbering->getEnd(), $filer);
+                // use template variable {extension} which will expand to current extension for this file (e.g. .fr)
+                $text = $this->getTOCLink($filename . '{extension}', $index, $start, $end, $filer);
             }
-            return '.all((' . $spacing . $numberingText . '.))' . $text;
+            if ($numberingText) {
+                return '.all((' . $spacing . $numberingText . '.))' . $text;
+            }
+            // no numbering: no need for .all prefix
+            return $text;
         }
     }
 }

@@ -1073,7 +1073,7 @@ namespace MultilingualMarkdown {
             $result = str_replace('{language}', $languageArray['code'], $result);
             if ($languageArray['iso']) {
                 $result = str_replace('{iso}', $languageArray['iso'], $result);
-            } elseif (strpos('{iso}', $result) !== false) {
+            } elseif (strpos($result, '{iso}') !== false) {
                 $this->warning("ISO code variable found and no associated iso for $language");
             }
             return $result;

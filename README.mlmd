@@ -97,7 +97,7 @@ en Anglais et en Français pour un projet de kit électronique. En cherchant sur
 trouvé un [script Python très efficace de Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
 Toutefois après un peu d'utilisation il me manquait des fonctionnalités et je souhaitais des directives
 qui conserveraient une meilleure lisibilité du texte et plus faciles à saisir que les tags de
-commentaire HTML. J'ai conservé" la plupart des idées de départ de Hong-ryul Jong comme le texte
+commentaire HTML. J'ai conservé la plupart des idées de départ de Hong-ryul Jong comme le texte
 ignoré et la déclaration des langues mais j'ai aussi retravaillé le design pour que les directives
 puissent être insérées directement dans le texte et n'utilisent pas la syntaxe HTML. J'ai aussi
 implémenté différents modes de sortie pour pouvoir travailler dans des contextes HTML ou Markdown pur..))

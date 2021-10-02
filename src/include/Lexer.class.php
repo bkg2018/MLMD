@@ -115,7 +115,7 @@ namespace MultilingualMarkdown {
         /** flag for a few prints or warnings control */
         private $trace = false;
         /** default numbering scheme, set by '-numbering' CLI parameter */
-        private $defaultNumberingScheme = '';
+        private $defaultNumberingScheme = null;
         /** number of previous successives EOL tokens */
         private $eolCount = 0;
         /** number of opened languages (handled by countOpenLanguage and countCloseLanguage) */
@@ -1042,13 +1042,13 @@ namespace MultilingualMarkdown {
                     // handle .topnumber directive
                     if ($this->tokenTOPNUMBER->identifyInBuffer($text, 0)) {
                         $this->allTopNumbers[$relFilename] = (int)(mb_substr($text, $this->tokenTOPNUMBER->getLength()));
-                        if (isset($this->allNumberings[$relFilename])) {
+                        if ($this->allNumberings[$relFilename] ?? false) {
                             $this->allNumberings[$relFilename]->setLevelNumber(1, $this->allTopNumbers[$relFilename]);
                         }
                     }
                     // handle .numbering directive
                     if ($this->tokenNUMBERING->identifyInBuffer($text, 0)) {
-                        if (!empty($this->allNumberingScheme[$relFilename])) {
+                        if ($this->allNumberingScheme[$relFilename] ?? false) {
                             $filer->warning("numbering scheme overloading for $relFilename", $filename, $firstLine);
                         }
                         $this->allNumberingScheme[$relFilename] = trim(mb_substr($text, $this->tokenNUMBERING->getLength()));
@@ -1138,11 +1138,11 @@ namespace MultilingualMarkdown {
         /**
          * Set the default numbering scheme before preprocessing.
          *
-         * @param string $scheme a string containing numbering scheme.
+         * @param string $scheme a string containing numbering scheme, or null to cancel
          *
          * @return nothing
          */
-        public function setNumbering(string $scheme): void
+        public function setNumbering(?string $scheme): void
         {
             $this->defaultNumberingScheme = $scheme;
         }
@@ -1178,6 +1178,19 @@ namespace MultilingualMarkdown {
                 return $this->allNumberings[$filename];
             }
             return null;
+        }
+
+        /**
+         * return top number for a given file.
+         * The index is the relative file name vs main file directory.
+         * Returns 0 if no top number.
+         */
+        public function getTopNumber(string $filename): int
+        {
+            if (\array_key_exists($filename, $this->allTopNumbers)) {
+                return $this->allTopNumbers[$filename];
+            }
+            return 0;
         }
     }
 }

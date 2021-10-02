@@ -221,5 +221,5 @@ level 3 headings:
   doesn't apply to level 2 numbering.
 - Level 3 headings will be numbered `A-1.1`, then `A-1.2`, `A-1.3` etc.
 
-Notice that only the level 1 can use a prefix. Although prefixes can be supplied
-for other levels in the numbering scheme, they will not be used and have no effect.
+Only the level 1 can use a prefix. Although prefixes can be supplied
+for other levels in the numbering scheme, they will have no effect.
