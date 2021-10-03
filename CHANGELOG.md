@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 1.0.5 / 2021-10-02
+
+- minor doc updates
+- check for mbstring extension at startup
+- false 'iso code' warnings due to inversion of parameters in one strpos() call
+- fixed crashes when no numbering scheme was set
+
 ## Version 1.0.4 / 2020-12-15
 
 - doc updates and french typos
