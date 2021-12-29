@@ -22,3 +22,5 @@
 - rework variable: {filename} instead of useless {file}
 - add tool variables: unique guid, url templates ...
 - ~~add? .include(( directive and an opened-files stack in Filer instead of single input file~~
+
+

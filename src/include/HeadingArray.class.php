@@ -372,7 +372,7 @@ namespace MultilingualMarkdown {
          * heading level so the last line can be detected.
          *
          * HTML all variants: <A href="file#id">text</A>
-         * MD all variants: [text](file#id)
+         * MD all variants: [text](<file#id>)
          *
          * @param string $path      the file path where lies the anchor, must be relative to root dir
          * @param int    $index     the index of the heading, -1 to use current exploration index.
@@ -398,7 +398,7 @@ namespace MultilingualMarkdown {
                 case OutputModes::MDPURE:
                 case OutputModes::MD:
                 case OutputModes::MDNUM:
-                    return ".all(([.)){$text}.all((]({$path}#a{$id}).))";
+                    return ".all(([.)){$text}.all((](<{$path}#a{$id}>).))";
                 default:
                     if ($this->isHeadingLastBetween($index, $start, $end)) {
                         return ".all((<A href=\"{$path}#a{$id}\">{$text}</A>.))";
@@ -526,11 +526,14 @@ namespace MultilingualMarkdown {
                 // use template variable {extension} which will expand to current extension for this file (e.g. .fr)
                 $text = $this->getTOCLink($filename . '{extension}', $index, $start, $end, $filer);
             }
-            if ($numberingText) {
-                return '.all((' . $spacing . $numberingText . '.))' . $text;
+            if (!empty($spacing ?? '') || !empty($numberingText ?? '')) {
+                if (empty($numberingText)) {
+                    $numberingText = '- ';
+                }
+                return '.all((' . $spacing . ($numberingText ?? '') . '.))' . $text;
             }
-            // no numbering: no need for .all prefix
-            return $text;
+            // no spacing and no numbering: don't need .all(( .)) heading
+            return '- ' . $text;
         }
     }
 }

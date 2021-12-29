@@ -303,9 +303,11 @@ de titres rencontrés dans tous les fichiers sources et dans les sommaires. Par 
 
 .((
 - globally for all generated files, using the `-numbering` script argument
+- globally in the main file using the `.numbering` directive
 - file by file using the `.numbering` directive.
 .)).fr((
 - globalement pour tous les fichiers avec l'argument `-numbering`
+- globalement dans le fichier principal avec la directive `.numbering`
 - fichier par fichier avec la directive `.numbering` dans les fichiers sources
 .))
 

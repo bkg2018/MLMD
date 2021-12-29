@@ -97,11 +97,11 @@ que la directive permet de modifier le schéma pour le fichier où elle apparaî
 
 .((
 ```code
-.numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+.numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]]
 ```
 .)).fr((
 ```code
-.numbering [<niveau>]:[<préfixe>]:<symbole>[<séparateur>][,...]]
+.numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]]
 ```
 .))
 
