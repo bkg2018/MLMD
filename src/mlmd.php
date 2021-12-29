@@ -28,8 +28,14 @@ if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 }
 
-$MLMD_VERSION = "1.0.5";
-$MLMD_DATE    = strftime("%F (%X)", filemtime(__FILE__));
+require_once 'include/Version.php';
+use function MultilingualMarkdown\GetVersion;
+$MLMD_VERSION = GetVersion();
+// CAn't seem to get date_crea_from_format work in one step
+$format = 'Y-m-d H:i:s';
+$thisFileDate = date($format, filemtime(__FILE__));
+$dateTime  = DateTime::createFromFormat($format, $thisFileDate);
+$MLMD_DATE = $dateTime->format($format);
 
 require_once 'include/Functions.php';
 require_once 'include/Generator.class.php';

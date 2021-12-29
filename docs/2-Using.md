@@ -172,6 +172,7 @@ tables of contents. For example, a third level heading could be numbered `A.2-5)
 can be set in two ways:
 
 - globally for all generated files, using the `-numbering` script argument
+- globally in the main file using the `.numbering` directive
 - file by file using the `.numbering` directive.
 
 The script argument has priority and will make MLMD ignore any file `.numbering` directive. The following

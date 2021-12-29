@@ -60,7 +60,7 @@ directive only applies to the file where it appears.
 ### IV-2.1) Syntax<A id="a45"></A>
 
 ```code
-.numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+.numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]]
 ```
 
 Following are details about each definition part. These are identical as for the command line parameter.

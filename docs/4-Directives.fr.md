@@ -64,7 +64,7 @@ que la directive permet de modifier le schéma pour le fichier où elle apparaî
 ### IV-2.1) Syntaxe<A id="a45"></A>
 
 ```code
-.numbering [<niveau>]:[<préfixe>]:<symbole>[<séparateur>][,...]]
+.numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]]
 ```
 
 Voici une description des parties de la définition de niveau. Elles sont identiques aux

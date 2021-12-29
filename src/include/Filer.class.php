@@ -191,23 +191,23 @@ namespace MultilingualMarkdown {
          */
         private $iteratorIndex = 0;
 
-        public function current()
+        public function current(): mixed
         {
             return $this->relFilenames[$this->iteratorIndex];
         }
-        public function key()
+        public function key(): mixed
         {
             return $this->iteratorIndex;
         }
-        public function next()
+        public function next(): void
         {
             $this->iteratorIndex += 1;
         }
-        public function rewind()
+        public function rewind(): void
         {
             $this->iteratorIndex = 0;
         }
-        public function valid()
+        public function valid(): bool
         {
             return isset($this->relFilenames[$this->iteratorIndex]);
         }

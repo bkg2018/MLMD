@@ -51,33 +51,33 @@ namespace MultilingualMarkdown {
         private $null = null;
 
         // Seekable Iterator interface
-        public function current()
+        public function current(): mixed
         {
             if ($this->curIndex < count($this->allHeadings)) {
                 return $this->allHeadings[$this->curIndex];
             }
             \trigger_error("Invalid current index in headings array", E_USER_ERROR);
         }
-        public function key()
+        public function key(): mixed
         {
             return $this->curIndex;
         }
-        public function next()
+        public function next(): void
         {
             $this->curIndex += 1;
         }
-        public function rewind()
+        public function rewind(): void
         {
             $this->curIndex = 0;
         }
-        public function valid()
+        public function valid(): bool
         {
             if ($this->curIndex < count($this->allHeadings)) {
                 return isset($this->allHeadings[$this->curIndex]);
             }
             return false;
         }
-        public function seek($position)
+        public function seek($position): void
         {
             if (\array_key_exists($position, $this->allHeadings)) {
                 $this->curIndex = $position;
@@ -86,15 +86,15 @@ namespace MultilingualMarkdown {
             }
         }
         // ArrayAccess interface
-        public function offsetExists($index)
+        public function offsetExists($index): bool
         {
             return isset($this->allHeadings[$index]);
         }
-        public function offsetGet($index)
+        public function offsetGet($index): mixed
         {
             return $this->allHeadings[$index];
         }
-        public function offsetSet($index, $value)
+        public function offsetSet($index, $value): void
         {
             if ($index !== null) {
                 $this->allHeadings[$index] = $value;
@@ -102,13 +102,13 @@ namespace MultilingualMarkdown {
                 $this->allHeadings[] = $value;
             }
         }
-        public function offsetUnset($index)
+        public function offsetUnset($index): void
         {
             unset($this->allHeadings[$index]);
             array_splice($this->allHeadings, $index, 1);
         }
         // Coutable interface
-        public function count()
+        public function count(): int
         {
             return count($this->allHeadings);
         }

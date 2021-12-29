@@ -200,6 +200,7 @@ de titres rencontrés dans tous les fichiers sources et dans les sommaires. Par 
 3 peut être numéroté `A.2-5) Utiliser les objets`. La numérotation peut être choisie de deux façons :
 
 - globalement pour tous les fichiers avec l'argument `-numbering`
+- globalement dans le fichier principal avec la directive `.numbering`
 - fichier par fichier avec la directive `.numbering` dans les fichiers sources
 
 L'argument de la ligne de commande a priorité et supplantera les directives `.numbering``

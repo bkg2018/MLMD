@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 1.0.7 / 2021-12-29
+
+- minor doc updates
+- version system changed for src/Version.php
+- compatibility with php 8.1
+- fixed TOC links for unnumbered schemes
+
 ## Version 1.0.5 / 2021-10-02
 
 - minor doc updates

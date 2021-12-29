@@ -45,7 +45,7 @@ texte dans chaque langue sont entourées de directives de début et de fin, tand
 directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
 ou effectuent d'autres tâches..))
 
-![File generation and directives].fr(([Génération des fichiers et directives].))(docs/Images/FileGeneration.png)
+.((![File generation and directives].)).fr((![Génération des fichiers et directives].))(docs/Images/FileGeneration.png)
 
 ## How fast?.fr((Quelle rapidité ?.))
 
