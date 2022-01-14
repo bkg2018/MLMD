@@ -1,0 +1,13 @@
+.languages fr=fr_FR,en=en_UK main=en
+
+.((
+- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then screw again the
+  LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panel{extension}) part for connecting the I2C cable.
+- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in
+  [Assembling Front Panel](06-Assembling Front Panel{extension}), then screw the front panel again.
+.)).fr((
+- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.
+  Reportez-vous à la section [Façade avant](06-Assembling Front Panel{extension}) pour le branchement.
+- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans
+  la section [Façade avant](06-Assembling Front Panel{extension}) puis revissez la façade.
+.))

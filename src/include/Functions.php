@@ -86,7 +86,7 @@ Directives anywhere in the text and in headings:
 - .((           identical to .default((
 - .<language>(( starts a section specific to <language>
 - .))           ends a section
-- .{ .}         encloses escaped text (no variable expansion)
+- .!            encloses escaped text (no variable expansion)
 
 Markdown escape markers are recognized by MLMD and written into output files. The escaped
 text will be written exactly as it appears with no language specific transformation and no
@@ -96,7 +96,7 @@ variable expanding (see below).
   triple back_ticks '```' and double quotes '\"'; The markers are written in output files
 - text can be escaped between Markdown code fences '```' at the beginning of a line;
   the surrounding code fence lines are written in output files
-- text can be escaped between specific MLMD markers '.{' and '.}'; the markers
+- text can be escaped between specific MLMD markers '.!'; the markers
   will not be written in output files
 
 MLMD specific escape markers can be used to surround MLMD directives so they can be

@@ -142,12 +142,14 @@ while ($arg < $argc) {
     $arg += 1;
 }
 $timeStart = microtime(true);
-$generator->processAllFiles();
+$ok = $generator->processAllFiles();
 $timeEnd = microtime(true);
-$dashes  = str_repeat('-', 79);
-$seconds = sprintf("%.02f", $timeEnd - $timeStart);
-echo "$dashes\nTOTAL: {$generator->getProcessedLines()} lines processed in $seconds seconds\n";
-echo "PHP version: ",phpversion(),"\n";
-if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
-    DumpCoverage();
+if ($ok) {
+    $dashes  = str_repeat('-', 79);
+    $seconds = sprintf("%.02f", $timeEnd - $timeStart);
+    echo "$dashes\nTOTAL: {$generator->getProcessedLines()} lines processed in $seconds seconds\n";
+    echo "PHP version: ",phpversion(),"\n";
+    if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
+        DumpCoverage();
+    }
 }

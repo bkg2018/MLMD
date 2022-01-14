@@ -1,0 +1,13 @@
+.languages fr=fr_FR,en=en_UK main=en
+.numbering 1::&I:-,2::1:.,3::1
+.topnumber 0
+.include subdata/secondary.mlmd
+.include subdata/tertiary.mlmd
+
+# .((Main file title.))
+
+Shows how to linkk to included files..fr((Montre comment inclure des liens vers les fichiers inclus..))
+
+- [Link to secondary file.fr((Lien vers le deuxième fichier.))](subdata/secondary{extension})
+
+- [Link to tertiary file.fr((Lien vers le troisième fichier.))](subdata/tertiary{extension})

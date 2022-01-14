@@ -3,7 +3,7 @@
 /**
  * Multilingual Markdown generator - TokenEscaperMLMD class
  *
- * This class represents a token for MLMD escaped text between '.{' and '.}'. This syntax allows MLMD content
+ * This class represents a token for MLMD escaped text between '.!' markers. This syntax allows MLMD content
  * to use any special characters without bothering about variable expansion or directives interpretation.
  * MLMD escaped text may contain normal MD escaping notations as well as MLMD directives or variables between
  * accolades. This is used in MLMD documentation itself to avoid interpretation of directives when the desired
@@ -40,18 +40,20 @@ namespace MultilingualMarkdown {
     
     /**
      * Class for the MLMD escaper token.
-     * Starts with '.{' and runs until '.}' if found. Start and end symbols are not put into the content.
+     * Starts with '.!' and runs until '.!' if found. Start and end symbols are not put into the content.
      */
     class TokenEscaperMLMD extends TokenBaseEscaper
     {
         public function __construct()
         {
-            parent::__construct('.{');
+            parent::__construct('.!');
         }
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = '';
-            $end = '.}';
+            $end = '.!';
+            $wrong = '!';
+            $closed = false;
             $this->skipSelf($input);
             $fromStorage = \get_class($input) == 'MultilingualMarkdown\\Storage';
             do {
@@ -59,6 +61,7 @@ namespace MultilingualMarkdown {
                     $input->getNextChar();// skip end marker
                     $input->getNextChar();// skip end marker
                     $currentChar = $input->getCurrentChar();
+                    $closed = true;
                     break;
                 }
                 if ($input->adjustNextLine()) {
@@ -71,12 +74,18 @@ namespace MultilingualMarkdown {
                 // on $input end (end of line), switch to next line from $filer
                 if ($currentChar == null && $fromStorage) {
                     $line = $filer->getLine();
-                    $input->setInputBuffer($line);
-                    $currentChar = $input->getCurrentChar();
+                    // exit if end of input
+                    IF ($line != null) {
+                        $input->setInputBuffer($line);
+                        $currentChar = $input->getCurrentChar();
+                    }
                 }
             } while ($currentChar != null);
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
+            if (!$closed) {
+                $filer->warning("a '.!' has no matching '.!'");
+            }
         }
     }
 

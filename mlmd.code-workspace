@@ -1,12 +1,15 @@
 {
 	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "..\\Bluety\\docsource"
-		}
-	],
+        {
+            "path": "."
+        },
+        {
+            "path": "../Bluety/docsource"
+        },
+        {
+            "path": "../Bluety/docs"
+        }
+    ],
 	"launch": {
         "php.executablePath": "/usr/local/opt/php/bin/php",
 		"version": "0.2.0",
@@ -89,6 +92,19 @@
 				"program": "${workspaceFolder:MLMD}/src/mlmd.php",
                 "cwd": "${workspaceFolder:docsource}",
                 "args": ["-i", "Bluety.mlmd", "-out","md","-od","docs"],
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"port": 9003
+			},
+			{
+				"name": "SIMPLE TEST",
+				"stopOnEntry": true,
+				"type": "php",
+                "request": "launch",
+                "runtimeExecutable": "php",
+                "runtimeArgs": ["-c", "C:\\php-8.1.1-nts-Win32-vs16-x64\\php.ini"],
+				"program": "${workspaceFolder:MLMD}/src/mlmd.php",
+                "cwd": "${workspaceFolder:MLMD}/simpletest}",
+                "args": ["-i", "wrongblock.mlmd", "-out","md","-od","simpletest"],
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
 				"port": 9003
 			}

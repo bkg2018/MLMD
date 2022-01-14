@@ -69,7 +69,7 @@ namespace MultilingualMarkdown {
     class Lexer
     {
         /** predefined tokens and languages codes directives tokens added by .languages */
-        private $mlmdTokens = [];               // keyword => token, e.g. '.{' => TokenEscaperMLMD
+        private $mlmdTokens = [];               // keyword => token, e.g. '.!' => TokenEscaperMLMD
         private $mlmdTokensLengths = [];        // keyword => token keyword length
         private $tokenMaxLength = 0;
         private $tokenFENCE = null;             // specific handling for ``` at line beginning
@@ -160,7 +160,7 @@ namespace MultilingualMarkdown {
             $this->tokenTRIPLEBACKTICK      = $this->mlmdTokens['```'];
             $this->mlmdTokens['``']         = new TokenEscaperDoubleBacktick();     ///  ``  - MD double backtick escaping, must be checked later than TokenEscaperTripleBacktick
             $this->mlmdTokens['`']          = new TokenEscaperSingleBacktick();     ///  `   - MD single backtick escaping, must be checked later than TokenEscaperDoubleBacktick
-            $this->mlmdTokens['.{']         = new TokenEscaperMLMD();               /// .{.} - MLMD escaping
+            $this->mlmdTokens['.!']         = new TokenEscaperMLMD();               /// .!   - MLMD escaping
 
             // single line directives, derived from TokenBaseSingleLine
             $this->mlmdTokens['.numbering'] = new TokenNumbering();
@@ -1133,6 +1133,14 @@ namespace MultilingualMarkdown {
                 }
             }
             return $result;
+        }
+
+        /**
+         * Tell if .languages directive has been found and preprocessed.
+         */
+        public function isLanguagesSet(): bool
+        {
+            return $this->languageSet;
         }
 
         /**

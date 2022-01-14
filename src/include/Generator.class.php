@@ -266,6 +266,10 @@ namespace MultilingualMarkdown {
                 $this->filer->exploreDirectory(getcwd());
             }
             $this->preProcess();
+            if (!$this->lexer->isLanguagesSet()) {
+                echo "ERROR: no .languages directive, cannot process files.\n";
+                return false;
+            }
             $this->lexer->initSet();
             $this->processedLines = 0;
             foreach ($this->filer as $index => $relFilename) {

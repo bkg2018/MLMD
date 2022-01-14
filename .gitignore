@@ -1,2 +1,11 @@
 workspace.code-workspace
 .vscode/launch.json
+test_formatbug.fr.md
+test_formatbug.md
+Unused/File.class.php
+Unused/Generator.class.old.php
+Unused/roman.php
+Unused/Storage.class.old.php
+Unused/toctest.md
+Unused/TokenEscaperSpace.class.php
+Unused/unused.php

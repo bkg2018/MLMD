@@ -662,7 +662,7 @@ In Markdown syntax, text can also be escaped by surrounding it with single or mu
 back-ticks `.!`.!`, code fences `.!```.!` or double quotes `"`. MLMD will respect these Markdown
 escaping and forward the escaped text with its escape markers into generated files while
 ignoring any variables and directives in it. The difference with MLMD escaping directives is that
-these last directives `.!`will not be written and only the escaped text will.
+these last directives `.!` will not be written and only the escaped text will.
 .fr((En syntaxe Markdown, le texte peut également être échappé en l'entourant d'accents inversés
 multiples `.!`.!`, de barrières de code `.!```.!` ou de guillemets `"`. MLMD respectera ces
 échappements Markdown et écrira le texte échappé avec ses marqueurs dans les fichiers générés

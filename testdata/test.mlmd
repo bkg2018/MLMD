@@ -36,7 +36,7 @@ numbering scheme for file 2 title 3 subtitle 4 is II-3.4
 Example of `single backtick` text.
 Example of ``double backtick`` text.
 Example of ```not a code fence``` but escaped text.
-Example of .{mlmd escaping .fr((this is also escaped.)).}
+Example of .!mlmd escaping .fr((this is also escaped.)).!
 
 ```code
 Code fenced text

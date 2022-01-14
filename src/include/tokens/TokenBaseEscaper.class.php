@@ -8,8 +8,8 @@
  * The text content will be output to files with no variables or directive interpretation.
  *
  * Purely Markdown escape sequences are output with the opening and closing sequence,
- * but there is also the .{.} special escape sequence which is specific to MLMD. This sequence
- * outputs the escaped text without ythe escape markers. See TokenEscaperMLMD for details.
+ * but there is also the .! special escape sequence which is specific to MLMD. This sequence
+ * outputs the escaped text without the escape markers. See TokenEscaperMLMD for details.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -61,12 +61,6 @@ namespace MultilingualMarkdown {
         {
             parent::__construct(TokenType::ESCAPED_TEXT, $marker, true);
         }
-        /**
-         * Tells if a token has a content and should be instanciated.
-        public function hasContent(): bool
-        {
-            return true;
-        }         */
 
         /**
          * Check if content is uniquely composed of spacing characters.

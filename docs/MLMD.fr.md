@@ -1,6 +1,6 @@
 # MLMD - Générateur de Markdown Multilingue<A id="a1"></A>
 
-[README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md)[Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md)
+[README <img src="https://github.com/hampusborgos/country-flags/tree/main/png250px/gb.png">](README.md)[Documentation <img src="https://github.com/hampusborgos/country-flags/tree/main/png250px/gb.png">](docs/MLMD.md)
 
 MLMD génère des fichiers Markdown dans plusieurs langues à partir de fichiers sources
 multilingues encodés en UTF-8 grâce à des directives placées dans les fichiers pour distinguer

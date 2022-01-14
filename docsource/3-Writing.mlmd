@@ -188,13 +188,13 @@ appear with the right number in a global TOC.
 `.topnumber` règle le numéro du titre de niveau 1 dans un fichier. Un bon moyen de l'employer 
 est d'utiliser `.topnumber 0` dans le fichier principal pour supprimer la numérotation de son
 titre de niveau 1, puis d'inclure une directive `.topnumber` dans chaque fichier inclus
-pour indiquer l'ordre dans lequel ils doivent apparaître dans le sommaire global..))
+pour indiquer le numéro avec lequel ils doivent apparaître dans le sommaire global..))
 
 The MLMD documentation uses this scheme:
 .fr((La documentation MLMD utilise ce schéma :.))
 
 - the main `README.mlmd` uses `.topnumber 0` to neutralize its level 1 heading numbering,
-  and use `.include docs/1-Installation.mlmd` to include one file. The `#` heading is followed 
+  and uses `.include docs/1-Installation.mlmd` to include one file. The `#` heading is followed 
   by an introduction and then a `.toc` directive allowing levels 1 to 3 of all headings:
 .fr((- le fichier `README.mlmd` utilise `.topnumber 0` pour neutraliser la numérotation de
 son titre de niveau 1 et utilise `.include docs/1-Installation.mlmd` pour inclure un fichier.
@@ -210,10 +210,10 @@ des titres :.))
   .toc title=Table Of Contents.fr((Sommaire.)) level=1-3
 ```
 
-- the included files use their own `.topnumber` value, which determine their order in the
+- each included file uses its own `.topnumber` value, which determines its order in the
   global TOC:
-.fr((- les fichiers inclus comportent leur propre valeur derrière `.topnumber`, ce qui détermine
-leur ordre dans le sommaire global :.))
+.fr((- chaque fichier inclus comporte sa propre valeur derrière `.topnumber`, ce qui détermine
+son ordre dans le sommaire global :.))
 
 ```code
   .topnumber 1
@@ -225,12 +225,12 @@ Refer to MLMD own documentation for a complete example of MLMD `.include` and `.
 
 ## Headings.fr((Titres.))
 
-MLMD requires `#` prefixed headings and doesn't recognize the alternate syntax for
+MLMD requires `#` prefixed headings and *doesn't recognize the alternate syntax* for
 level 1 and 2 headings, which is available by adding `==` or `--` on the line
 following the heading. The `==`and `--` lines can be used but will not be sufficient
 for a heading to be recognized by MLMD.
 .fr((MLMD reconnaît les symboles `#` en début de ligne comme préfixe indiquant
-un niveau de titre. Il ne reconnaît pas les syntaxes alternatives des niveaux 1 et 2
+un niveau de titre. Il *ne reconnaît pas les syntaxes alternatives* des niveaux 1 et 2
 accessibles en soulignant les titres avec `==` ou `--` sur la ligne suivante. Ces
 syntaxes peuvent être utilisées afin d'apparaître dans les fichiers Markdown générés
 mais elles ne suffiront pas pour que MLMD reconnaisse les titres et les inclue dans
@@ -258,10 +258,10 @@ Celui-ci sera pas reconnu car il ne possède pas de préfixe #
 ```
 .))
 
-The `#` prefix must be followed by at least one space. Closing `#` have no particular effect.
-Markdown conventions allow an empty line after a heading, MLMD doesn't change this but allow
+The `#` prefix must be followed by at least one space, while optional closing `#` has no particular effect.
+Markdown conventions allow an empty line after a heading, MLMD doesn't change this but allows
 more than one empty line, although it will only generate one in final Markdowns.
-.fr((Les préfixes `#` doivent être suivis d'au moins un espace, les éventuels suffixes `#`
+.fr((Les préfixes `#` doivent être suivis d'au moins un espace tandis que les éventuels suffixes `#`
 n'ont pas d'effet particulier..)) Par convention dans un fichier Markdown on peut faire suivre
 les titres d'une ligne vide, MLMD accepte même plusieurs lignes vides mais n'en écrira qu'une
 dans les fichiers générés.
@@ -269,7 +269,7 @@ dans les fichiers générés.
 ## End-of-Lines and End-of-Paragraphs.fr((Fin de ligne et fin de paragraphe.))
 
 By default, except for headings and one-line directives, MLMD sources paragraphs are recognized
-by MLMD as default text paragraphs which goes in all the language specific generated files except
+by MLMD as default text paragraphs which go in all the language specific generated files except
 those with corresponding language-specific parts. End of lines will be reproduced in generated
 files, and empty lines will also make their way to generated files.
 .fr((Par défaut, en dehors des titres et des directives spéciales qui occupent une ligne,
@@ -300,7 +300,7 @@ plus loin, ils ouvrent ou ferment une partie propre à une langue..))
 
 .((
 ```code
-This will be default text going in all languages files by default.
+This will be default text going in all languages files except the french one.
 .fr((This will only go in french language file, which will not feature previous default text..))
 
 This will be default text for all files except french file..fr((This will go into the french
@@ -321,7 +321,7 @@ Normal Markdown conventions generally assume that text lines should not be large
 paragraph can be typed on a single line or not, and use any line length.
 .fr((Par convention Markdown recommande de ne pas dépasser environ 80 caractères par ligne
 toutefois MLMD n'impose pas cette contrainte. Tout le texte de toutes les langues peut
-être saisis sur une seule ligne ou plusieurs et n'importe quelle largeur de ligne convient..))
+être saisi sur une seule ligne ou plusieurs et n'importe quelle largeur de ligne convient..))
 
 Here is an example:.fr((Voici un autre exemple :.))
 
@@ -504,18 +504,18 @@ nombreux exemples de telles structures..))
 
 ## Escaping text.fr((Texte échappé.))
 
-Directives and variables can be neutralized in a text section by surrounding it with the opening
-escape `.{` and the closing escape `.}` directives. The directives won't have effect on generated files,
+Directives and variables can be neutralized in a text section by surrounding it with the `.!` marker.
+The directives in between won't have effect on generated files,
 and variables and other directives will be copied as-is without expansion or interpretation.
 .fr((Les directives et variables peuvent être neutralisées dans le texte en les entourant avec
-le marqueur ouvrant `.{` et le marqueur fermant `.}`. Les directives n'auront aucun effet
+le marqueur `.!`. Les directives à l'intérieur des marqueurs n'auront aucun effet
 sur les fichiers générés, et les variables et les directives seront écrites comme du simple texte
 sans interprétation..))
 
 Example:.fr((Exemple :.))
 
 ```code
-The .{.)).} directive closes a language part.
+The .!.)).! directive closes a language part.
 ```
 
 In this example, the `.))` directive will be considered as simple text and not as a directive.
@@ -531,11 +531,11 @@ ainsi que les barrières de code Markdown. Dans ces parties de texte 'échappée
 directives n'auront pas d'effet et seront recopiées sans interprétation.))
 
 .((
-- .{```.}: code fences surround code text in which directives and variables will not
+- .!```.!: code fences surround code text in which directives and variables will not
   be interpreted.
 - `"`: double quotes around text neutralize directives and variables, e.g. `".(("` will not close
   the current directive.
-- .{`` ` ``.}: back-ticks around text also neutralize directives and variables, e.g. .{`.((`.}
+- .!`` ` ``.!: back-ticks around text also neutralize directives and variables, e.g. .!`.((`.!
   will not open default text part.
 - Quoted and fenced text must be entirely put *inside* enclosing directives (default or language
   directives) as they cannot embed directives.
@@ -547,12 +547,12 @@ directives n'auront pas d'effet et seront recopiées sans interprétation.))
   (see [Markdown syntax about escapes](https://daringfireball.net/projects/markdown/syntax#autoescape))
   and this whole sequence surrounded by MLMD escaping.
 .)).fr((
-- .{```.} : les barrières de code placées sur une ligne isolée entourent du texte
+- .!```.! : les barrières de code placées sur une ligne isolée entourent du texte
   où les variables et directives ne seront pas interprétées.
 - `"` : les guillemets autour du texte neutralisent les directives et variables, par exemple
 `".))"` ne fermera pas le bloc de langue actuel.
-- .{`` ` ``.} : les accents inversés simples, doubles ou triples peuvent entourer du texte
-  échappé, par exemple .{`.((`.} ne commencera pas un bloc de texte par défaut.
+- .!`` ` ``.! : les accents inversés simples, doubles ou triples peuvent entourer du texte
+  échappé, par exemple .!`.((`.! ne commencera pas un bloc de texte par défaut.
 - Le texte échappé d'une langue doit intégralement se trouver à l'intérieur des marqueurs
   d'ouverture et fermeture de langue, puisque ces directives ne seront pas interprétées si
   elles se trouvent à l'intérieur du texte échappé.
@@ -562,7 +562,7 @@ directives n'auront pas d'effet et seront recopiées sans interprétation.))
 - Accent inversé : pour utiliser ce caractère sans générer l'effet d'échappement de texte
   il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour 
   l'échappement](https://daringfireball.net/projects/markdown/syntax#autoescape) et la séquence
-  complète peut être entourée des marqueurs MLmD `.{` et `.}`.
+  complète peut être entourée des marqueurs MLMD `.!`.
 .))
 
 ## Variables
@@ -709,16 +709,14 @@ Here's a summary of text open/close directives:
 - `.ignore((` or `.!((`  starts a text section which will not be put in any generated file.
 - `.<code>((` starts a text section which will be put only in the generated file for language `<code>` which has been declared in the `.languages` directive.
 - `.))` ends a section started by one of the `.((` directives and returns to the previous directive effect.
-- `.{` starts an escaped text section (directives and variables are not interpreted or expanded)
-- `.}` ends an escaped text section
+- `.!` surrounds an escaped text section (directives and variables are not interpreted or expanded)
 .fr((
 - `.all((` commence une section de texte qui ira dans les fichiers de toutes les langues
 - `.default((` ou `.((` commence le texte par défaut qui ira dans les fichiers des langues n'ayant pas une section spécifique.
 - `.ignore((` ou `.!((` commence une section de texte qui ne sera placé dans aucun fichier généré
 - `.<code>((` commence une section de texte spécifique à une langue dont le code a été spécifié dans `.languages`
 - `.))` termine une section de texte ouverte par une des directives `.((` et repasse à la langue précédente
-- `.{` commence une section de texte échappé (pas d'interprétation des variables et directives)
-- `.}` termine une section de texte échappé
+- `.!` entoure une section de texte échappé (pas d'interprétation des variables et directives)
 .))
 
 Directives are not case sensitive: `.fr((` is the same as `.FR((`. Notice that escape text markers 

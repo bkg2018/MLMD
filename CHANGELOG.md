@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Version 1.0.8 / 2022-01-10
+
+- changed escaped text directive markers from .{ .} to .! .! because of syntaxic side effect with {} variables markers
+- fixed end of file bug causing a crash with null assignment
+- doc and comments updates for new .! directive
+- added warnings for unclosed escaped text
+- added warning wen no .languages directive found
+
 ## Version 1.0.7 / 2021-12-29
 
 - minor doc updates

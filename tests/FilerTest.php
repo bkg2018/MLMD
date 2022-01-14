@@ -1,6 +1,6 @@
 <?php
 
-exit(0); // MUST BE REWORKED
+//exit(0); // MUST BE REWORKED
 
 declare(strict_types=1);
 

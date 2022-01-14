@@ -41,7 +41,7 @@ fichiers sources avant de régénérer les fichiers..))
 The `-trace` optional arguments will display a trace of all lines as they are read, as well as
 some more informations. If the generated files are not as expected, the first thing to do is trying
 to follow what's displayed by the trace mode: MLMD displays each line with its number, except for
-code fences (.{```.}) which are jumped over with only the first line displayed.
+code fences (`.!```.!`) which are jumped over with only the first line displayed.
 .fr((Le paramètre `-trace` facultatif affiche une trace des lignes lues dans les fichiers sources.
 Si les lignes générées ne sont pas celles espérées, la première chose à faire est de regarder cette
 trace: MLMD doit affiche chaque ligne avec son numéro, sauf pour les portions de barrière de code

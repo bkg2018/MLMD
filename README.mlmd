@@ -7,10 +7,10 @@
 [Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
-multilingual source files UTF-8 encoded, using directives in the files to distinguish each
+multilingual UTF-8 encoded source files, following directives in the files to distinguish each
 language parts.
 .fr((MLMD génère un ou plusieurs fichiers Markdown dans plusieurs langues à partir d'un ou
-plusieurs fichiers sources encodés en UTF-8, à l'aide de directives dans le texte qui 
+plusieurs fichiers sources encodés en UTF-8, guidé par des directives dans le texte qui 
 délimitent les parties propres à chaque langue..))
 
 ## How?.fr((Comment ?.))
@@ -25,47 +25,46 @@ MLMD requires a PHP interpreter version 7 or more.
 
 ## What?.fr((Quoi ?.))
 
-An MLMD source file is a text file encoded with UTF-8 and using the `.mlmd` extension.
+An MLMD source file is an UTF-8 encoded text file using the `.mlmd` extension.
 The `.base.md` extension is also supported.
 .fr((Un fichier source MLMD est un fichier texte encodé en UTF-8 qui utilise l'extension `.mlmd`.
 L'extension `.base.md` est également acceptée..))
 
-MLMD process the source files for each declared language, and generated Markdown files
+MLMD processes each source file for each declared language, and generates Markdown files
 for each file and each language: *`file.mlmd`* will generate *`file.fr.md`*, *`file.en.md`*
 etc.
 .fr((MLMD traite chaque fichier source pour chaque langue déclarée, et génère les fichiers
 Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* générera *`fichier.fr.md`*,
 *`fichier.en.md`* et ainsi de suite..))
 
-Languages must be declared in at least one of the source files. Parts of the text for each
-language are enclosed between opening and closing directives, while other directives can
-generate tables of contents or heading numbering, add input files and other tasks.
-.fr((Les langues doivent être déclarées dans au moins un des fichiers sources. Les parties de
+Languages must be declared in at least one of the source which are preprocessed before actual
+file generation starts. Parts of the text for each language are enclosed between opening and
+closing directives, while other directives can generate tables of contents or heading numbering,
+add other input files and do various other tasks.
+.fr((Les langues doivent être déclarées dans au moins un des fichiers sources, qui sont examinées
+lors d'un prétraitement avant que démarre la génération des fichiers proprement dite. Les parties de
 texte dans chaque langue sont entourées de directives de début et de fin, tandis que d'autres
-directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
-ou effectuent d'autres tâches..))
+directives génèrent un sommaire, numérotent les titres, ajoutent des fichiers au traitement
+ou effectuent diverses autres tâches..))
 
 .((![File generation and directives].)).fr((![Génération des fichiers et directives].))(docs/Images/FileGeneration.png)
 
 ## How fast?.fr((Quelle rapidité ?.))
 
-Writing language parts is fast and easy. Default text, which is generally the native
-language of the original author, doesn't need any specific directive and is written just
-like normal text, while language specific parts are surrounded by
-simple open/close directive. For example starting english text is done by writing `.en((`, 
-followed by the text and ending with `.))`. Empty lines, code fences, tables, any text and
-Markdown features can be put between these two markers. Headings starting with `#` can also include
-other language parts, or they can be put between markers if the author like 
-it this way.
+Writing language parts is fast and easy. Default text, which is generally the original author's native
+language, doesn't need any specific directive and is written just like normal text, while language
+specific parts are surrounded by simple open/close directive. For example starting english text
+is done by writing `.en((`, followed by the english text which is eventually ended by `.))`. Empty lines,
+code fences, tables, any text and Markdown features can be put between these two markers. Headings starting
+with `#` can also include other language parts, or they can be put between markers like any text.
 .fr((Ecrire des parties dans une langue est rapide et facile. Le texte par défaut qui est
 généralement dans la langue de l'auteur original du texte n'a pas besoin de directives
 particulières, tandis que les parties dans d'autres langues sont entourées de
 simples directives d'ouverture et de fermeture. Par exemple, pour du texte en français on
-écrit la directive d'ouverture `.fr((`, suivie du texte que l'on termine par `.))`. Les
+écrit la directive d'ouverture `.fr((`, suivie du texte en français, que l'on termine par `.))`. Les
 lignes vides, barrières de bloc de code, les tableaux et toutes les fonctionnalités Markdown
-peuvent se situer entre les deux marqueurs. Les titres commençant par `#` peuvent également
-contenir des parties dans différentes langues, ou être entourés par les directives si le rédacteur
-préfère cette manière de procéder..))
+peuvent être utilisés entre les deux marqueurs. Les titres commençant par `#` peuvent également
+contenir des parties dans différentes langues, ou être entourés par les directives comme le texte normal..))
 
 The following example show both ways of writing multilingual headings:
 .fr((L'exemple suivant montre comment écrire un titre multilingue :.))
@@ -84,22 +83,23 @@ documentation en environ 2 secondes sur un Intel i7 à 2GHz, les fichiers étant
 
 ## Why?.fr((Pourquoi ?.))
 
-I designed MLMD because I needed to write a technical documentation  in English and in
+I designed MLMD because I needed to write a technical documentation both in English and
 French for a DIY electronics project. Looking on the Web I found a very efficient
 [Python script from Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
-However after using it a little I found I needed some more features and I wanted to design
+However after using it a while I found I needed some more features and I wanted to design
 a set of directives which would keep the text more readable and easier to type than HTML
-comment tags. I kept most of basic Hong-ryul ideas like ignored text, language declaration
-but also worked the design so directives could be put right into the text and not using the
-HTML syntax. I also designed various output modes to adjust for different HTML or pure Markdown contexts.
+comment tags. I kept most of basic Hong-ryul original ideas like ignored text and language declaration
+but reworked the design so directives could be embedded into the text rather than using the
+HTML comment syntax. I also designed various output modes to adjust for different HTML or pure
+Markdown contexts.
 .fr((J'ai conçu MLMD pour mes besoins alors que je devais rédiger une documentation technique
 en Anglais et en Français pour un projet de kit électronique. En cherchant sur le Web j'ai rapidement
 trouvé un [script Python très efficace de Hong-ryul Jong](https://github.com/ryul1206/multilingual-markdown).
 Toutefois après un peu d'utilisation il me manquait des fonctionnalités et je souhaitais des directives
 qui conserveraient une meilleure lisibilité du texte et plus faciles à saisir que les tags de
 commentaire HTML. J'ai conservé la plupart des idées de départ de Hong-ryul Jong comme le texte
-ignoré et la déclaration des langues mais j'ai aussi retravaillé le design pour que les directives
-puissent être insérées directement dans le texte et n'utilisent pas la syntaxe HTML. J'ai aussi
+ignoré et la déclaration des langues mais j'ai retravaillé le design pour que les directives
+puissent être insérées dans le texte et n'utilisent pas la syntaxe des commentaires HTML. J'ai aussi
 implémenté différents modes de sortie pour pouvoir travailler dans des contextes HTML ou Markdown pur..))
 
 MLMD lets the user write default text when no language specific translation is available, 
@@ -110,33 +110,33 @@ language-independent linking to other files and many other tasks.
 pas encore disponible, de choisir des schémas complexes de numérotation des titres globalement
 ou dans chaque fichier, d'inclure d'autres fichiers au traitement, d'échapper du texte, 
 d'utiliser quelques variables pour créer des liens indépendants de la langue, et bien d'autres 
-possibilités..))
+tâches..))
 
-Special features let the writer separate language parts or stream them as he/ or she likes.
+Special features let the writer separate language parts or stream them as he/she likes.
 .fr((Des fonctionnalités spéciales permettent de séparer les parties des différentes langues
-dans des paragraphes distincts ou de les enchaîner au choix du rédacteur..))
+dans des paragraphes distincts ou de les enchaîner au choix du rédacteur ou de la rédactrice..))
 
 Writing MLMD files is almost as easy as writing Markdown files. MLMD is UTF-8 by nature and
-will accept any language and characters sets in a same file.
+will accept any language and characters sets in source files.
 .fr((Ecrire des fichiers sources MLMD est presque aussi simple que rédiger des fichiers Markdown.
-MLMD se conforme à UTF-8 par nature et s'accordera à tous les jeux de caractères de toutes les
-langues au sein des mêmes fichiers..))
+MLMD se conforme à UTF-8 par nature et acceptera tous les jeux de caractères de toutes les
+langues au sein des fichiers source..))
 
 MLMD is a convenient way of keeping the documentation structure in source files while permitting
 translation by different authors in a unique and shared place. And being text files, the MLMD
 multilingual sources work very well with versioning systems like Git, allowing diff comparisons,
-pull requests and files merging. 
+pull requests and files merging.
 .fr((MLMD est un moyen pratique pour conserver la structure d'une documentation tout en
-permettant sa traduction progressive par des auteurs différents. EN tant que fichiers textes,
-les sources multilingues MLMD se glissent parfaitement dans les outils de gestion de version
+permettant sa traduction progressive par différents auteurs et autrices. En tant que fichiers textes,
+les sources multilingues MLMD se manipulent parfaitement avec les outils de gestion de version
 comme Git, permettant les comparaisons, les pull-requests et la fusion de fichiers..))
 
 ## Documentation
 
-- [Full documentation](docs/MLMD.md) can be found in the `docs` directory.
-.fr((Une [documentation complète](docs/MLMD.fr.md) est disponible dans le répertoire `docs`..))
+- [Full documentation](docs/MLMD.md) for MLMD can be found in the `docs` directory.
+.fr((Une [documentation complète](docs/MLMD.fr.md) de MLMD est disponible dans le répertoire `docs`..))
 
-- The [source fiel for this README](README.mlmd) documentation is the `README.mlmd` file.
+- The [source file for this README](README.mlmd) documentation is the `README.mlmd` file.
 .fr((Le [fichier source de ce README](README.mlmd) se trouve dans le fichier `README.mlmd`..))
 
 - The [full documentation source](docsource/MLMD.mlmd) is written in MLMD itself and can be found
@@ -157,14 +157,13 @@ php src/mlmd.php  -i docsource/MLMD.mlmd -out md -od docs
 ```
 
 .((
-- The `-i` parameter tells MLMD where to find the input file, which will in turn include other files
-in the process.
+- The `-i` parameter tells MLMD where to find the input file, which in turn includes other MLMD source files.
 - The `-out` parameter sets the mixed Markdown/HTML output mode for links and Table Of Contents
 - The `-od` parameter gives a path where to write the generated documentation files. All paths given here are relative to
 the directory from where the script is launched, but absolute paths can also be used.
 .)).fr((
-- Le paramètre `-i` indique à MLMD où trouver le fichier source, qui incluera à son tour d'autres fichiers
-lors de son traitement.
+- Le paramètre `-i` indique à MLMD où trouver le fichier source, qui inclue à son tour d'autres fichiers sources
+MLMD lors de son traitement.
 - Le paramètre `-out` règle le mode de sortie mixte Markdown/HTML pour les liens et les sommaires.
 - Le paramètre `-od` indique un répertoire où écrire les fichiers générés. Les chemins indiqués dans cette commande
 sont relatifs au répertoire d'où MLMD a été démarré, mais on peut utiliser des chemins absolus.
@@ -173,7 +172,7 @@ sont relatifs au répertoire d'où MLMD a été démarré, mais on peut utiliser
 ### Building README.fr((Construction du README.))
 
 Building this README documentation you're currently reading is done with the following command:
-.fr((Ce document README que vous lisez actuellement est construit par la commande suivante :.))
+.fr((Le document README que vous lisez actuellement est construit par la commande suivante :.))
 
 ```code
 php src/mlmd.php -i README.mlmd -out md
@@ -184,7 +183,7 @@ php src/mlmd.php -i README.mlmd -out md
 I hope MLMD will help you to easily maintain multilingual documentations.
 .fr((J'espère que MLMD vous aidera à maintenir facilement vos documentations multilingues..))
 
-In these Covid days, please stay safe and protect others.
+In these Covid days, please stay safe and take care of others.
 .fr((En ces jours de Covid, prenez soin de vous et des autres.))
 
 Francis Piérot

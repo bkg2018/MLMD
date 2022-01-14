@@ -1,0 +1,28 @@
+.topnumber 1
+
+# Installing and wiring.fr((Installation et branchements.))
+
+## Front panel.fr((Façade avant.))
+
+The LCD screen has no predefined function on the RC2014 Pro as it doesn't have an I2C bus, so the LCD related
+instructions only apply to the SC126.
+.fr((L'écran LCD n'a pas de fonction prédéfinie sur un RC2014 Pro car il n'a pas de bus I2C, aussi les instructions
+qui concernent le LCD ne s'appliquent qu'au SC126..))
+
+Connecting is easier if you already connected the LCD screen and power button cables *before* screwing the panel:
+.fr((Les branchements sont facilités si vous avez connecté les câbles de l'écran LCD et du bouton marche/arrêt *avant* de visser la façade :.))
+
+.((
+- If you didn't attach the I2C cable on the LCD screen, unscrew the LCD from the front panel, connect the cable then
+  screw again the LCD screen on the front panel. Refer to the [Assembling Front Panel](06-Assembling Front Panel.{language}.md)
+  part for connecting the I2C cable.
+- If you didn't attach the power button cable, unscrew the front panel, connect the power button as explained in
+  [Assembling Front Panel](06-Assembling Front Panel.{language}.md), then screw the front panel again.
+.)).fr((
+- Si vous n'avez pas déjà fixé le câble I2C sur l'écran LCD, dévissez l'écran de la façade, branchez le câble puis revissez l'écran.
+  Reportez-vous à la section [Façade avant](#façade-avant) pour le branchement.
+- Si vous n'avez pas fixé les câbles sur le bouton d'alimentation, dévissez la façade, effectuez les branchements comme indiqué dans
+  la section [Façade avant](#façade-avant) puis revissez la façade.
+.))
+
+blablabla

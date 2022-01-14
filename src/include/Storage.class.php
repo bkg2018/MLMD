@@ -199,6 +199,9 @@ namespace MultilingualMarkdown {
          */
         public function getCurrentChar(): ?string
         {
+            if (!$this->buffer) {
+                return null;
+            }
             // immediate return if ready
             if ($this->bufferPosition < $this->bufferLength) {
                 return $this->previousChars[0];
