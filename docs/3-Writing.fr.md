@@ -107,7 +107,7 @@ Pour contrôler la numérotation des fichiers principaux et inclus, la directive
 `.topnumber` règle le numéro du titre de niveau 1 dans un fichier. Un bon moyen de l'employer 
 est d'utiliser `.topnumber 0` dans le fichier principal pour supprimer la numérotation de son
 titre de niveau 1, puis d'inclure une directive `.topnumber` dans chaque fichier inclus
-pour indiquer l'ordre dans lequel ils doivent apparaître dans le sommaire global.
+pour indiquer le numéro avec lequel ils doivent apparaître dans le sommaire global.
 
 La documentation MLMD utilise ce schéma :
 
@@ -125,8 +125,8 @@ des titres :
   .toc title=Table Of Contents.fr((Sommaire.)) level=1-3
 ```
 
-- les fichiers inclus comportent leur propre valeur derrière `.topnumber`, ce qui détermine
-leur ordre dans le sommaire global :
+- chaque fichier inclus comporte sa propre valeur derrière `.topnumber`, ce qui détermine
+son ordre dans le sommaire global :
 
 ```code
   .topnumber 1
@@ -138,7 +138,7 @@ La documentation de MLMD illustre l'utilisation des directives `.include` et `.t
 ## III-3) Titres<A id="a27"></A>
 
 MLMD reconnaît les symboles `#` en début de ligne comme préfixe indiquant
-un niveau de titre. Il ne reconnaît pas les syntaxes alternatives des niveaux 1 et 2
+un niveau de titre. Il *ne reconnaît pas les syntaxes alternatives* des niveaux 1 et 2
 accessibles en soulignant les titres avec `==` ou `--` sur la ligne suivante. Ces
 syntaxes peuvent être utilisées afin d'apparaître dans les fichiers Markdown générés
 mais elles ne suffiront pas pour que MLMD reconnaisse les titres et les inclue dans
@@ -152,7 +152,7 @@ Celui-ci sera pas reconnu car il ne possède pas de préfixe #
 -----------------------------------------------
 ```
 
-Les préfixes `#` doivent être suivis d'au moins un espace, les éventuels suffixes `#`
+Les préfixes `#` doivent être suivis d'au moins un espace tandis que les éventuels suffixes `#`
 n'ont pas d'effet particulier. Par convention dans un fichier Markdown on peut faire suivre
 les titres d'une ligne vide, MLMD accepte même plusieurs lignes vides mais n'en écrira qu'une
 dans les fichiers générés.
@@ -184,7 +184,7 @@ fichier français à la place du précédent..))
 
 Par convention Markdown recommande de ne pas dépasser environ 80 caractères par ligne
 toutefois MLMD n'impose pas cette contrainte. Tout le texte de toutes les langues peut
-être saisis sur une seule ligne ou plusieurs et n'importe quelle largeur de ligne convient.
+être saisi sur une seule ligne ou plusieurs et n'importe quelle largeur de ligne convient.
 
 Voici un autre exemple :
 
@@ -316,14 +316,14 @@ nombreux exemples de telles structures.
 ## III-6) Texte échappé<A id="a31"></A>
 
 Les directives et variables peuvent être neutralisées dans le texte en les entourant avec
-le marqueur ouvrant `.{` et le marqueur fermant `.}`. Les directives n'auront aucun effet
+le marqueur `.!`. Les directives à l'intérieur des marqueurs n'auront aucun effet
 sur les fichiers générés, et les variables et les directives seront écrites comme du simple texte
 sans interprétation.
 
 Exemple :
 
 ```code
-The .{.)).} directive closes a language part.
+The .!.)).! directive closes a language part.
 ```
 
 Dans cet exemple, la directive `.))` sera considérée comme du texte et non comme une directive.
@@ -349,7 +349,7 @@ directives n'auront pas d'effet et seront recopiées sans interprétation
 - Accent inversé : pour utiliser ce caractère sans générer l'effet d'échappement de texte
   il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour 
   l'échappement](https://daringfireball.net/projects/markdown/syntax#autoescape) et la séquence
-  complète peut être entourée des marqueurs MLmD `.{` et `.}`.
+  complète peut être entourée des marqueurs MLMD `.!`.
 
 ## III-8) Variables<A id="a33"></A>
 
@@ -439,8 +439,7 @@ Voici un résumé des directives de texte :
 - `.ignore((` ou `.!((` commence une section de texte qui ne sera placé dans aucun fichier généré
 - `.<code>((` commence une section de texte spécifique à une langue dont le code a été spécifié dans `.languages`
 - `.))` termine une section de texte ouverte par une des directives `.((` et repasse à la langue précédente
-- `.{` commence une section de texte échappé (pas d'interprétation des variables et directives)
-- `.}` termine une section de texte échappé
+- `.!` entoure une section de texte échappé (pas d'interprétation des variables et directives)
 
 Les directives ne sont pas sensibles aux minuscules et majuscules : `.fr((` est identique 
 à `.FR((`. Il faut souligner que les marqueurs d'échappement de texte fonctionnent comme des directives

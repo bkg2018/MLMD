@@ -105,7 +105,7 @@ appear with the right number in a global TOC.
 The MLMD documentation uses this scheme:
 
 - the main `README.mlmd` uses `.topnumber 0` to neutralize its level 1 heading numbering,
-  and use `.include docs/1-Installation.mlmd` to include one file. The `#` heading is followed 
+  and uses `.include docs/1-Installation.mlmd` to include one file. The `#` heading is followed 
   by an introduction and then a `.toc` directive allowing levels 1 to 3 of all headings:
 
 ```code
@@ -117,7 +117,7 @@ The MLMD documentation uses this scheme:
   .toc title=Table Of Contents.fr((Sommaire.)) level=1-3
 ```
 
-- the included files use their own `.topnumber` value, which determine their order in the
+- each included file uses its own `.topnumber` value, which determines its order in the
   global TOC:
 
 ```code
@@ -129,7 +129,7 @@ Refer to MLMD own documentation for a complete example of MLMD `.include` and `.
 
 ## III-3) Headings<A id="a27"></A>
 
-MLMD requires `#` prefixed headings and doesn't recognize the alternate syntax for
+MLMD requires `#` prefixed headings and *doesn't recognize the alternate syntax* for
 level 1 and 2 headings, which is available by adding `==` or `--` on the line
 following the heading. The `==`and `--` lines can be used but will not be sufficient
 for a heading to be recognized by MLMD.
@@ -142,8 +142,8 @@ This one won't be found because it doesn't have a # prefix
 ------------------------------------------
 ```
 
-The `#` prefix must be followed by at least one space. Closing `#` have no particular effect.
-Markdown conventions allow an empty line after a heading, MLMD doesn't change this but allow
+The `#` prefix must be followed by at least one space, while optional closing `#` has no particular effect.
+Markdown conventions allow an empty line after a heading, MLMD doesn't change this but allows
 more than one empty line, although it will only generate one in final Markdowns. Par convention dans un fichier Markdown on peut faire suivre
 les titres d'une ligne vide, MLMD accepte même plusieurs lignes vides mais n'en écrira qu'une
 dans les fichiers générés.
@@ -151,7 +151,7 @@ dans les fichiers générés.
 ## III-4) End-of-Lines and End-of-Paragraphs<A id="a28"></A>
 
 By default, except for headings and one-line directives, MLMD sources paragraphs are recognized
-by MLMD as default text paragraphs which goes in all the language specific generated files except
+by MLMD as default text paragraphs which go in all the language specific generated files except
 those with corresponding language-specific parts. End of lines will be reproduced in generated
 files, and empty lines will also make their way to generated files.
 
@@ -168,7 +168,7 @@ Notice: the `.language((` and `.))` markers for language parts used in following
 detailed later, they start or end a language specific part.
 
 ```code
-This will be default text going in all languages files by default.
+This will be default text going in all languages files except the french one.
 .fr((This will only go in french language file, which will not feature previous default text..))
 This will be default text for all files except french file..fr((This will go into the french
 file in place of previous default text..))
@@ -298,14 +298,14 @@ The MLMD documentation contains numerous examples of such structures.
 
 ## III-6) Escaping text<A id="a31"></A>
 
-Directives and variables can be neutralized in a text section by surrounding it with the opening
-escape `.{` and the closing escape `.}` directives. The directives won't have effect on generated files,
+Directives and variables can be neutralized in a text section by surrounding it with the `.!` marker.
+The directives in between won't have effect on generated files,
 and variables and other directives will be copied as-is without expansion or interpretation.
 
 Example:
 
 ```code
-The .{.)).} directive closes a language part.
+The .!.)).! directive closes a language part.
 ```
 
 In this example, the `.))` directive will be considered as simple text and not as a directive.
@@ -417,8 +417,7 @@ Here's a summary of text open/close directives:
 - `.ignore((` or `.!((`  starts a text section which will not be put in any generated file.
 - `.<code>((` starts a text section which will be put only in the generated file for language `<code>` which has been declared in the `.languages` directive.
 - `.))` ends a section started by one of the `.((` directives and returns to the previous directive effect.
-- `.{` starts an escaped text section (directives and variables are not interpreted or expanded)
-- `.}` ends an escaped text section
+- `.!` surrounds an escaped text section (directives and variables are not interpreted or expanded)
 
 Directives are not case sensitive: `.fr((` is the same as `.FR((`. Notice that escape text markers 
 work as opening and closing directives around escaped text, but as they directly derive from Markdown syntax

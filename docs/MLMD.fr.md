@@ -1,6 +1,7 @@
 # MLMD - Générateur de Markdown Multilingue<A id="a1"></A>
 
-[README <img src="https://github.com/hampusborgos/country-flags/tree/main/png250px/gb.png">](README.md)[Documentation <img src="https://github.com/hampusborgos/country-flags/tree/main/png250px/gb.png">](docs/MLMD.md)
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
 
 MLMD génère des fichiers Markdown dans plusieurs langues à partir de fichiers sources
 multilingues encodés en UTF-8 grâce à des directives placées dans les fichiers pour distinguer
@@ -19,7 +20,7 @@ L'utilisateur contrôle les langues, la génération des sommaires et le schéma
 de numérotation des titres par le biais de paramètres de la ligne de commande ou par
 des directives placées dans les fichiers sources.
 
-[Génération des fichiers et directives](Images/FileGeneration.png)
+![Génération des fichiers et directives](Images/FileGeneration.png)
 
 ## Sommaire<A id="toc"></A>
 
@@ -85,7 +86,7 @@ des directives placées dans les fichiers sources.
   - IV-8) [Texte pour une langue : `.<code>((`](<4-Directives.fr.md#a62>)
     - IV-8.1) [Syntaxe](<4-Directives.fr.md#a63>)
     - IV-8.2) [Exemples](<4-Directives.fr.md#a64>)
-  - IV-9) [Texte échappé : `.{` et `.}`](<4-Directives.fr.md#a65>)
+  - IV-9) [Texte échappé : `.!`](<4-Directives.fr.md#a65>)
   - IV-10) [Exemples](<4-Directives.fr.md#a66>)
 - V) [Correction des fichiers sources](<5-Debugging.fr.md#a67>)
   - V-1) [NE CORRIGEZ PAS LES FICHIERS GENERES](<5-Debugging.fr.md#a68>)
@@ -110,4 +111,5 @@ Août-Décembre 2020<br />
 A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 
-[README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md)[Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md)
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />

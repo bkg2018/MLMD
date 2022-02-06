@@ -10,8 +10,8 @@
 
 # .all((MLMD - .))Multilingual Markdown Generator.fr((Générateur de Markdown Multilingue.))
 
-[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md).fr(([README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md).))
-[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual source files UTF-8 encoded, using directives in the files to distinguish each
@@ -42,7 +42,7 @@ headings numbering scheme using either command line parameters or directives in 
 de numérotation des titres par le biais de paramètres de la ligne de commande ou par
 des directives placées dans les fichiers sources..))
 
-![File generation and directives].fr(([Génération des fichiers et directives].))(Images/FileGeneration.png)
+![File generation and directives].fr((![Génération des fichiers et directives].))(Images/FileGeneration.png)
 
 .toc title=Table Of Contents.fr((Sommaire.)) level=1-3
 
@@ -63,5 +63,5 @@ A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 .))
 
-[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md).fr(([README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md).))
-[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />

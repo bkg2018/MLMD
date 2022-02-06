@@ -395,18 +395,18 @@ Now this text is in the `all` section and go in all files.
 This text will only go into the french file because its opening directive has not been closed yet.
 ```
 
-## IV-9) Escaping text: `.{` and `.}`<A id="a65"></A>
+## IV-9) Escaping text: `.!`<A id="a65"></A>
 
-Text can be 'escaped' by surrounding it with `.{` and `.}`.
+Text can be 'escaped' by surrounding it with `.!` directives.
 
 In the escaped text, directives and variables are ignored and text is copied as-is in the
 generated files.
 
 In Markdown syntax, text can also be escaped by surrounding it with single or multiple
-back-ticks `, code fences ``` or double quotes `"`. MLMD will respect these Markdown
+back-ticks `.!``, code fences ````.!` or double quotes `"`. MLMD will respect these Markdown
 escaping and forward the escaped text with its escape markers into generated files while
 ignoring any variables and directives in it. The difference with MLMD escaping directives is that
-these last directives `.{` and `.}` will not be written and only the escaped text will.
+these last directives `.!`will not be written and only the escaped text will.
 
 ## IV-10) Examples<A id="a66"></A>
 

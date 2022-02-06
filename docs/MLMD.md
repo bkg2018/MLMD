@@ -1,7 +1,7 @@
 # MLMD - Multilingual Markdown Generator<A id="a1"></A>
 
-[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md)
-[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md)
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual source files UTF-8 encoded, using directives in the files to distinguish each
@@ -85,7 +85,7 @@ headings numbering scheme using either command line parameters or directives in 
   - IV-8) [Generating for languages: `.<code>((`](<4-Directives.md#a62>)
     - IV-8.1) [Syntax](<4-Directives.md#a63>)
     - IV-8.2) [Examples](<4-Directives.md#a64>)
-  - IV-9) [Escaping text: `.{` and `.}`](<4-Directives.md#a65>)
+  - IV-9) [Escaping text: `.!`](<4-Directives.md#a65>)
   - IV-10) [Examples](<4-Directives.md#a66>)
 - V) [Debugging source files](<5-Debugging.md#a67>)
   - V-1) [DON'T FIX GENERATED FILES](<5-Debugging.md#a68>)
@@ -110,5 +110,5 @@ August-December 2020<br />
 To my father Serge, 1932-2020<br />
 He taught me an engineer works hard at working less.
 
-[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md)
-[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md)
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />

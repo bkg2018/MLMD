@@ -26,7 +26,7 @@ and finally generate files again with MLMD.
 The `-trace` optional arguments will display a trace of all lines as they are read, as well as
 some more informations. If the generated files are not as expected, the first thing to do is trying
 to follow what's displayed by the trace mode: MLMD displays each line with its number, except for
-code fences (```) which are jumped over with only the first line displayed.
+code fences (`.!```.!`) which are jumped over with only the first line displayed.
 
 Make sure every line is read and the code fences are matched with each other: missing an ending fence
 would make the following text disappear from trace until the next code fence or the end of file.

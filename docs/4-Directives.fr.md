@@ -416,18 +416,18 @@ Now this text is in the `all` section and go in all files.
 This text will only go into the french file because its opening directive has not been closed yet.
 ```
 
-## IV-9) Texte échappé : `.{` et `.}`<A id="a65"></A>
+## IV-9) Texte échappé : `.!`<A id="a65"></A>
 
-Le texte peut être 'échappé' en l'entourant des directives `.{` et `.}`.
+Le texte peut être 'échappé' en l'entourant de directives `.!`.
 
 Dans le texte échappé, les directives et variables sont ignorées par MLMD qui
 écrit le texte à l'identique dans les fichiers générés.
 
 En syntaxe Markdown, le texte peut également être échappé en l'entourant d'accents inversés
-multiples `, de barrières de code ``` ou de guillemets `"`. MLMD respectera ces
+multiples `.!``, de barrières de code ````.!` ou de guillemets `"`. MLMD respectera ces
 échappements Markdown et écrira le texte échappé avec ses marqueurs dans les fichiers générés
 tout en ignorant toute variable ou directive qui pourrait s'y trouver. La différence avec les
-directives d'échappement MLMD est que ces directives `.{` et `.}` ne seront pas écrites et seul
+directives d'échappement MLMD est que ces directives `.!` ne seront pas écrites et seul
 le texte échappé ira dans les fichiers générés.
 
 ## IV-10) Exemples<A id="a66"></A>

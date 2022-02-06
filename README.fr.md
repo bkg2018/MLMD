@@ -1,10 +1,13 @@
 # MLMD - Générateur de Markdown Multilingue<A id="a1"></A>
 
-[README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md)[Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md)
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
 
 MLMD génère un ou plusieurs fichiers Markdown dans plusieurs langues à partir d'un ou
-plusieurs fichiers sources encodés en UTF-8, à l'aide de directives dans le texte qui 
+plusieurs fichiers sources encodés en UTF-8, guidé par des directives dans le texte qui 
 délimitent les parties propres à chaque langue.
+
+Les drapeaux de pays dans cette documentaztion sont gracieusemenbt fournis par le site https://www.drapeauxdespays.fr.
 
 ## Comment ?<A id="a2"></A>
 
@@ -22,10 +25,11 @@ MLMD traite chaque fichier source pour chaque langue déclarée, et génère les
 Markdown pour chaque fichier dans chaque langue : *`fichier.mlmd`* générera *`fichier.fr.md`*,
 *`fichier.en.md`* et ainsi de suite.
 
-Les langues doivent être déclarées dans au moins un des fichiers sources. Les parties de
+Les langues doivent être déclarées dans au moins un des fichiers sources, qui sont examinées
+lors d'un prétraitement avant que démarre la génération des fichiers proprement dite. Les parties de
 texte dans chaque langue sont entourées de directives de début et de fin, tandis que d'autres
-directives génère un sommaire, numérotent les titres, ajoutent des fichiers au traitement
-ou effectuent d'autres tâches.
+directives génèrent un sommaire, numérotent les titres, ajoutent des fichiers au traitement
+ou effectuent diverses autres tâches.
 
 ![Génération des fichiers et directives](docs/Images/FileGeneration.png)
 
@@ -35,11 +39,10 @@ Ecrire des parties dans une langue est rapide et facile. Le texte par défaut qu
 généralement dans la langue de l'auteur original du texte n'a pas besoin de directives
 particulières, tandis que les parties dans d'autres langues sont entourées de
 simples directives d'ouverture et de fermeture. Par exemple, pour du texte en français on
-écrit la directive d'ouverture `.fr((`, suivie du texte que l'on termine par `.))`. Les
+écrit la directive d'ouverture `.fr((`, suivie du texte en français, que l'on termine par `.))`. Les
 lignes vides, barrières de bloc de code, les tableaux et toutes les fonctionnalités Markdown
-peuvent se situer entre les deux marqueurs. Les titres commençant par `#` peuvent également
-contenir des parties dans différentes langues, ou être entourés par les directives si le rédacteur
-préfère cette manière de procéder.
+peuvent être utilisés entre les deux marqueurs. Les titres commençant par `#` peuvent également
+contenir des parties dans différentes langues, ou être entourés par les directives comme le texte normal.
 
 L'exemple suivant montre comment écrire un titre multilingue :
 
@@ -60,31 +63,31 @@ trouvé un [script Python très efficace de Hong-ryul Jong](https://github.com/r
 Toutefois après un peu d'utilisation il me manquait des fonctionnalités et je souhaitais des directives
 qui conserveraient une meilleure lisibilité du texte et plus faciles à saisir que les tags de
 commentaire HTML. J'ai conservé la plupart des idées de départ de Hong-ryul Jong comme le texte
-ignoré et la déclaration des langues mais j'ai aussi retravaillé le design pour que les directives
-puissent être insérées directement dans le texte et n'utilisent pas la syntaxe HTML. J'ai aussi
+ignoré et la déclaration des langues mais j'ai retravaillé le design pour que les directives
+puissent être insérées dans le texte et n'utilisent pas la syntaxe des commentaires HTML. J'ai aussi
 implémenté différents modes de sortie pour pouvoir travailler dans des contextes HTML ou Markdown pur.
 
 MLMD permet à l'utilisateur de rédiger du texte par défaut lorsqu'une traduction n'est
 pas encore disponible, de choisir des schémas complexes de numérotation des titres globalement
 ou dans chaque fichier, d'inclure d'autres fichiers au traitement, d'échapper du texte, 
 d'utiliser quelques variables pour créer des liens indépendants de la langue, et bien d'autres 
-possibilités.
+tâches.
 
 Des fonctionnalités spéciales permettent de séparer les parties des différentes langues
-dans des paragraphes distincts ou de les enchaîner au choix du rédacteur.
+dans des paragraphes distincts ou de les enchaîner au choix du rédacteur ou de la rédactrice.
 
 Ecrire des fichiers sources MLMD est presque aussi simple que rédiger des fichiers Markdown.
-MLMD se conforme à UTF-8 par nature et s'accordera à tous les jeux de caractères de toutes les
-langues au sein des mêmes fichiers.
+MLMD se conforme à UTF-8 par nature et acceptera tous les jeux de caractères de toutes les
+langues au sein des fichiers source.
 
 MLMD est un moyen pratique pour conserver la structure d'une documentation tout en
-permettant sa traduction progressive par des auteurs différents. EN tant que fichiers textes,
-les sources multilingues MLMD se glissent parfaitement dans les outils de gestion de version
+permettant sa traduction progressive par différents auteurs et autrices. En tant que fichiers textes,
+les sources multilingues MLMD se manipulent parfaitement avec les outils de gestion de version
 comme Git, permettant les comparaisons, les pull-requests et la fusion de fichiers.
 
 ## Documentation<A id="a6"></A>
 
-Une [documentation complète](docs/MLMD.fr.md) est disponible dans le répertoire `docs`.
+Une [documentation complète](docs/MLMD.fr.md) de MLMD est disponible dans le répertoire `docs`.
 
 Le [fichier source de ce README](README.mlmd) se trouve dans le fichier `README.mlmd`.
 
@@ -101,15 +104,15 @@ La documentation MLMD est construite avec la commande suivante :
 php src/mlmd.php  -i docsource/MLMD.mlmd -out md -od docs
 ```
 
-- Le paramètre `-i` indique à MLMD où trouver le fichier source, qui incluera à son tour d'autres fichiers
-lors de son traitement.
+- Le paramètre `-i` indique à MLMD où trouver le fichier source, qui inclue à son tour d'autres fichiers sources
+MLMD lors de son traitement.
 - Le paramètre `-out` règle le mode de sortie mixte Markdown/HTML pour les liens et les sommaires.
 - Le paramètre `-od` indique un répertoire où écrire les fichiers générés. Les chemins indiqués dans cette commande
 sont relatifs au répertoire d'où MLMD a été démarré, mais on peut utiliser des chemins absolus.
 
 ### Construction du README<A id="a8"></A>
 
-Ce document README que vous lisez actuellement est construit par la commande suivante :
+Le document README que vous lisez actuellement est construit par la commande suivante :
 
 ```code
 php src/mlmd.php -i README.mlmd -out md
@@ -127,4 +130,5 @@ Août-Décembre 2020<br />
 A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 
-[README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md)[Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md)
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />

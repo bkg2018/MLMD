@@ -3,8 +3,8 @@
 
 # .all((MLMD - .))Multilingual Markdown Generator.fr((Générateur de Markdown Multilingue.))
 
-[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md).fr(([README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md).))
-[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
 
 MLMD generates one or more Markdown files for a set of declared languages from one or more
 multilingual UTF-8 encoded source files, following directives in the files to distinguish each
@@ -12,6 +12,9 @@ language parts.
 .fr((MLMD génère un ou plusieurs fichiers Markdown dans plusieurs langues à partir d'un ou
 plusieurs fichiers sources encodés en UTF-8, guidé par des directives dans le texte qui 
 délimitent les parties propres à chaque langue..))
+
+The country flags in this documentation are free for any use and furnished by the https://www.drapeauxdespays.fr site.
+.fr((Les drapeaux de pays dans cette documentaztion sont gracieusemenbt fournis par le site https://www.drapeauxdespays.fr..))
 
 ## How?.fr((Comment ?.))
 
@@ -197,5 +200,5 @@ A mon papa Serge, 1932-2020<br />
 Il m'a appris qu'un ingénieur travaille dur à travailler moins.
 .))
 
-[README <img src="https://www.countryflags.io/fr/flat/16.png">](README.fr.md).fr(([README <img src="https://www.countryflags.io/gb/flat/16.png">](README.md).))
-[Documentation <img src="https://www.countryflags.io/fr/flat/16.png">](docs/MLMD.fr.md).fr(([Documentation <img src="https://www.countryflags.io/gb/flat/16.png">](docs/MLMD.md).))
+<img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
+<img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
