@@ -8,8 +8,7 @@
 		}
 	],
 	"launch": {
-        "php.executablePath": "/usr/local/opt/php/bin/php",
-		"version": "0.2.0",
+ 		"version": "0.2.0",
 		"configurations": [
 
 			{
@@ -96,13 +95,12 @@
 				"name": "SIMPLE TEST",
 				"stopOnEntry": true,
 				"type": "php",
-                "request": "launch",
-                "runtimeExecutable": "php",
-                "runtimeArgs": ["-c", "C:\\php-8.1.1-nts-Win32-vs16-x64\\php.ini"],
-				"program": "${workspaceFolder:MLMD}/src/mlmd.php",
-                "cwd": "${workspaceFolder:MLMD}/simpletest}",
-                "args": ["-i", "wrongblock.mlmd", "-out","md","-od","simpletest"],
-				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"request": "launch",
+				"runtimeExecutable": "php",
+                "program": "${workspaceFolder:MLMD}/src/mlmd.php",
+                "cwd": "${workspaceFolder:MLMD}/simpletest",
+                "args": ["-trace", "-i", "wrongimg.mlmd", "-out","md","-od","wrongimg"],
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "XDEBUG_MODE": "debug,develop", "debug": "1"},
 				"port": 9003
 			}
         ]

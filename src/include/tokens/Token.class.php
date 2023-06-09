@@ -208,7 +208,7 @@ namespace MultilingualMarkdown {
          * Return a summary of the text token content with neutralized control codes
          * and max length of 60 characters.
          */
-        protected function debugText(int $maxLength = 60): string
+        public function debugText(int $maxLength = 60): string
         {
             $result = '';
             if (isset($this->length) && isset($this->content)) {

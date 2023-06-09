@@ -82,5 +82,15 @@ namespace MultilingualMarkdown {
             $lexer->pushLanguage($this->language, $filer);
             return true;
         }
+
+
+        /**
+         * Return a summary of the text token content with neutralized control codes
+         * and max length of 60 characters.
+         */
+        public function debugText(int $maxLength = 60): string
+        {
+            return $this->language;
+        }
     }
 }

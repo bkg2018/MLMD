@@ -42,7 +42,7 @@ namespace MultilingualMarkdown {
      */
     class TokenClose extends TokenBaseInline
     {
-        private $language = ''; // language code from .languages directives
+        private $language = ''; // language code from .languages directives (fr, en etc)
 
         public function __construct(?string $language)
         {
@@ -57,13 +57,14 @@ namespace MultilingualMarkdown {
         {
             $this->skipSelf($input);
             $curLanguage = $lexer->getCurrentLanguage();
-            // self instantiate for current language then store in Lexer
+            // self instantiates for current language then store in Lexer
             if ($curLanguage != null) {
                 $lexer->popLanguage($filer);
                 $token = new TokenClose($curLanguage['code']);
                 $lexer->appendToken($token, $filer);
             } else {
                 //$$ closing default text: maybe we could issue a warning?
+                $lexer->debugEcho(get_class($this) . " closing default text?\n");
             }
             $currentChar = $input->getCurrentChar();
             $lexer->setCurrentChar($currentChar);

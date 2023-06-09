@@ -122,12 +122,21 @@ namespace MultilingualMarkdown {
         private $languageCount = 0;
         /** false after the first non empty text token */
         private $emptyContent = true;
+        /** */
+        private $emptyText = true;
 
         /** shortcuts */
         private $tokenCLOSE = null;
         private $tokenALL = null;
         private $tokenDEFLT = null;
         private $tokenEOL = null;
+        private $tokenNUMBERING = null;
+        private $tokenTOPNUMBER = null;
+        private $tokenLANGUAGES = null;
+        private $tokenINCLUDE = null;
+        private $tokenEND = null;
+        private $tokenSTOP = null;
+
 
         public function __construct()
         {
@@ -423,7 +432,7 @@ namespace MultilingualMarkdown {
             }
             $this->curTokens[] = $token;
             if ($this->trace) {
-                 echo '<TOKEN: ' . \get_class($token) . ">\n";
+                 echo '<TOKEN: ' . \get_class($token). " [{$token->debugText()}]>\n";
             }
         }
 
@@ -759,7 +768,7 @@ namespace MultilingualMarkdown {
                 if ($this->tokenize($lineContent, $filer, true)) {
                     $this->appendTokenEOL($filer);
                 }
-                // DISABLED - to be reworked, a few tokens must be kept ahead current one
+                // TODO: DISABLED - to be reworked, a few tokens must be kept ahead current one
                 // or EOL cancelling won't work as expected
                 // if ((count($this->languageStack) == 0) && ($this->eolCount == 2)) {
                     //$this->output($filer);
@@ -767,9 +776,9 @@ namespace MultilingualMarkdown {
                 //}
                 $lineContent = $filer->getLine();
             }
-            // process anything left
+            // input is finished, process anything left in token buffer
             $this->appendTextToken($filer);
-            // check language stack
+            // check language stack status
             if (count($this->languageStack) > 1) {
                 for ($i = 1; $i < count($this->languageStack); $i += 1) {
                     $filer->warning(
