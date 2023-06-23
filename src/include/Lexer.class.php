@@ -112,8 +112,10 @@ namespace MultilingualMarkdown {
         private $currentText = '';
         /** Current tokens file, will be regularly sent to output when languages stack is empty */
         private $curTokens = [];
-        /** flag for a few prints or warnings control */
-        private $trace = false;
+        /** flag for a few traces while writing outputs */
+        protected $outputTrace = false;
+        /** flag for a few traces while analyzing */
+        protected $trace = false;
         /** default numbering scheme, set by '-numbering' CLI parameter */
         private $defaultNumberingScheme = null;
         /** number of previous successives EOL tokens */
@@ -202,6 +204,18 @@ namespace MultilingualMarkdown {
         public function setTrace(bool $yes)
         {
             $this->trace = $yes;
+        }
+
+        /**
+         * Output trace setting.
+         */
+        public function setOutputTrace(bool $yes)
+        {
+            $this->outputTrace = $yes;
+        }
+        public function isOutputTraced(): bool
+        {
+            return $this->outputTrace;
         }
 
         /**
@@ -819,10 +833,10 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if name exists and stack has been updated, false if not
          */
-        public function pushLanguage(string $name, object &$filer): bool
+        public function pushLanguage(?string $name, object &$filer): bool
         {
             // name must exist as an index
-            if (empty($name)) {
+            if ($name == null || empty($name)) {
                 $name = DEFLT;
             }
             //$key = '.' . $name . '((';
@@ -831,13 +845,12 @@ namespace MultilingualMarkdown {
                 $filer->error("unknown language '$name'");
                 return false;
             }
-            // don't duplicate root (deflt)
-            $stackIt = true;
+            /*//$$ don't duplicate root (deflt)
             if (count($this->languageStack) == 1) {
                 if ($name == $this->languageStack[0]['code']) {
                     return false;
                 }
-            }
+            }*/
             // push new language
             array_push($this->languageStack, ['code' => $name, 'line' => $filer->getCurrentLineNumber()]);
             $this->curLanguage = $name;

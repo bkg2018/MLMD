@@ -46,6 +46,22 @@ namespace MultilingualMarkdown {
             parent::__construct($keyword);
         }
 
+                /**
+         * Process input by skkipping the directive and pushing the language
+         * on the language stack in lexer.
+         */
+        public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
+        {
+            $this->skipSelf($input);
+            if ($lexer->pushLanguage($this->language, $filer)) {
+                $lexer->adjustCloseOpenSequence();
+                $lexer->appendToken($this, $filer);
+            }
+            $currentChar = $input->getCurrentChar();
+            $lexer->setCurrentChar($currentChar);
+        }
+
+
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
             $lexer->pushLanguage(DEFLT, $filer);

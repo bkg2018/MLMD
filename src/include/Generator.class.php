@@ -39,15 +39,12 @@ namespace MultilingualMarkdown {
     require_once 'Heading.class.php';
     require_once 'HeadingArray.class.php';
     require_once 'Utilities.php';
-    if (\getenv('debug')) {
-        require_once 'debugFiler.class.php';
-        require_once 'debugLexer.class.php';
-    } else {
-        require_once 'Filer.class.php';
-        require_once 'Lexer.class.php';
-    }
+    require_once 'DebugFiler.class.php';
+    require_once 'DebugLexer.class.php';
+    require_once 'Filer.class.php';
+    require_once 'Lexer.class.php';
     use MultilingualMarkdown\Lexer;
-    use MultilingualMarkdown\debugLexer;
+    use MultilingualMarkdown\DebugLexer;
 
     /**
      * Generator class.
@@ -71,8 +68,8 @@ namespace MultilingualMarkdown {
         // Initialize handlers and default settings
         public function __construct()
         {
-            $this->filer = /*(getenv("debug") != 0) ? new DebugFiler() : */ new Filer();
-            $this->lexer = /*(getenv("debug") != 0) ? new DebugLexer() : */new Lexer();
+            $this->filer = (getenv("debug") != 0) ? new DebugFiler() : new Filer();
+            $this->lexer = (getenv("debug") != 0) ? new DebugLexer() : new Lexer();
             $this->outputModeName = 'md';
         }
 

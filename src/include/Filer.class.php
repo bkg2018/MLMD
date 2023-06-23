@@ -919,8 +919,11 @@ namespace MultilingualMarkdown {
          * @param bool   $expand    true if variables must be expanded (headings and text)
          *                          false if the don't (escaped text)
          * @param int    $tokenType the type of token sending this output
+         * @param bool   $trace     true to trace the output
+         *
+         * @return bool true if output has been done (false if ignored)
          */
-        public function output(string $text, bool $expand, int $tokenType): bool
+        public function output(string $text, bool $expand, int $tokenType, bool $trace): bool
         {
             if ($this->ignoreLevel > 0) {
                 return false;
@@ -933,6 +936,10 @@ namespace MultilingualMarkdown {
             }
             if (\in_array($tokenType, [TokenType::TEXT, TokenType::ESCAPED_TEXT])) {
                 $this->lastToken = $tokenType;
+            }
+            if ($trace) {
+                $name = TokenType::getName($tokenType);
+                echo "$name: $functionName($text, $expand)\n";
             }
             return $this->$functionName($text, $expand);
         }

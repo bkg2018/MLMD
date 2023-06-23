@@ -1,6 +1,4 @@
 .languages fr,en main=en
 
-This is default test.fr((Voici du texte en français.)).
-
-<img src="Pictures/045.jpg" .((alt="Board front".)).fr((alt="Avant carte".)) style="zoom:50%;" />.))
+This is .((english.)).fr((french.)) text.
 

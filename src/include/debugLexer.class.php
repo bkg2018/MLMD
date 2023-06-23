@@ -48,7 +48,13 @@ namespace MultilingualMarkdown {
 
         public function output(Filer &$filer)
         {
+            echo "$this->dashes\n";
+            echo "OUTPUT\n";
+            echo "$this->dashes\n";
+            $safeTrace = $this->outputTrace;
+            $this->outputTrace = true;
             $result = parent::output($filer);
+            $this->outputTrace = $safeTrace;
             echo "$this->dashes\n";
             return $result;
         }

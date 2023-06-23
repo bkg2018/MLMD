@@ -47,5 +47,21 @@ namespace MultilingualMarkdown {
         public const HEADING                = self::FIRST + 10;
 
         public const LAST                   = self::FIRST + 10; // keep identical to last line above
+
+        public static function getName($index): string {
+            switch ($index) {
+            case self::SINGLE_LINE_DIRECTIVE: return "SINGLE_LINE_DIRECTIVE";
+            case self::OPEN_DIRECTIVE: return "OPEN_DIRECTIVE";
+            case self::CLOSE_DIRECTIVE: return "CLOSE_DIRECTIVE";
+            case self::TEXT: return "TEXT";
+            case self::ESCAPED_TEXT: return "ESCAPED_TEXT";
+            case self::EOL: return "EOL";
+            case self::EMPTY_LINE: return "EMPTY_LINE";
+            case self::SPACE: return "SPACE";
+            case self::END_FILE: return "END_FILE";
+            case self::HEADING: return "HEADING";
+            }
+            return "unknown";
+        }
     }
 }
