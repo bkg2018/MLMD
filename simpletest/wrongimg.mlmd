@@ -1,4 +1,10 @@
 .languages fr,en main=en
 
-This is .((english.)).fr((french.)) text.
+.all((TEXT: .))english.fr((french.)) text.
 
+This is default text.
+And a second default sentence.
+.fr((Voila du texte en français..))
+
+
+<img src="Pictures/045.jpg" alt=.(("Board front".)).fr(("Avant carte".)) style="zoom:50%;" />

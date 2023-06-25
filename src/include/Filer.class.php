@@ -62,7 +62,7 @@ namespace MultilingualMarkdown {
     // MB string functions depending on OS
     $posFunction = 'mb_strpos';
     $cmpFunction = 'strcmp';
-        
+
     class Filer implements Logger, \Iterator
     {
         // Input filenames, files and reading status
@@ -104,7 +104,7 @@ namespace MultilingualMarkdown {
         private $previousEols = [];
 
         // Languages handling (LanguageList class)
-        
+
         /** list of languages, will be set by Lexer via TokenLanguages */
         private $languageList = null;
         /**
@@ -805,7 +805,7 @@ namespace MultilingualMarkdown {
                 if ($this->storage->isMatchingWord($word, $allLengths[$index])) {
                     return $index;
                 }
-            } 
+            }
             return -1;
         }
 
@@ -994,7 +994,7 @@ namespace MultilingualMarkdown {
         {
             return true;
         }
-        
+
         /**
          * Append text to current language output.
          */

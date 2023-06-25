@@ -845,12 +845,13 @@ namespace MultilingualMarkdown {
                 $filer->error("unknown language '$name'");
                 return false;
             }
-            /*//$$ don't duplicate root (deflt)
+            /* don't duplicate root (deflt) */
             if (count($this->languageStack) == 1) {
                 if ($name == $this->languageStack[0]['code']) {
                     return false;
                 }
-            }*/
+            }
+            
             // push new language
             array_push($this->languageStack, ['code' => $name, 'line' => $filer->getCurrentLineNumber()]);
             $this->curLanguage = $name;

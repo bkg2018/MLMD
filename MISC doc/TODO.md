@@ -26,19 +26,30 @@
 
 ## BUG
 
-Ne fonctionne pas :
-
-    Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. 
-    .fr((Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite..))
+Attention le texte en début de paragraphe ne va pas dans les fichiers d'une langue autre que default si des séquences .<code>((  sont présentes dans le paragraphe : il faut utiliser .all(( si on veut que toutes les
+langues reçoivent ce texte. C'est particulièrement évident dans les séquences HTML qu'on place dans le mlmd source, par exemple :
 
     <img src="Pictures/045.jpg" alt=.(("Board front".)).fr(("Avant carte".)) style="zoom:50%;" />
 
-Dans le .fr, le img src est tronqué et le texte français commence à "Avant carte".
+Ici le but est que le préfixe avec le tag <img> soit placé dans toutes les langues mais il ne sera placé
+que dans la langue par défaut, pour avoir l'effet souhaité il faut utiliser la syntaxe suivante :
 
-Fonctionne :
+    .all((<img src="Pictures/045.jpg" alt=.)).(("Board front".)).fr(("Avant carte".)).all(( style="zoom:50%;" />.))
 
-    Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. 
-    .fr((Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite..))
 
-    .((<img src="Pictures/045.jpg" alt="Board front" style="zoom:50%;" />.))
-    .fr((<img src="Pictures/045.jpg" alt="Avant carte" style="zoom:50%;" />.))
+~~Ne fonctionne pas :~~
+
+~~    Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. ~~
+~~    .fr((Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite..))~~
+
+~~    <img src="Pictures/045.jpg" alt=.(("Board front".)).fr(("Avant carte".)) style="zoom:50%;" />~~
+
+~~Dans le .fr, le img src est tronqué et le texte français commence à "Avant carte".~~
+
+~~Fonctionne :~~
+
+~~    Reverse the board to see the **front** side, with the power button opening now appearing on the bottom right. ~~
+~~    .fr((Tournez la carte pour voir l'**avant**, le trou du bouton power étant maintenant en bas à droite..))~~
+
+~~    .((<img src="Pictures/045.jpg" alt="Board front" style="zoom:50%;" />.))~~
+~~    .fr((<img src="Pictures/045.jpg" alt="Avant carte" style="zoom:50%;" />.))~~
