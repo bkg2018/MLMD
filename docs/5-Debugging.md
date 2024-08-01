@@ -26,7 +26,7 @@ and finally generate files again with MLMD.
 The `-trace` optional arguments will display a trace of all lines as they are read, as well as
 some more informations. If the generated files are not as expected, the first thing to do is trying
 to follow what's displayed by the trace mode: MLMD displays each line with its number, except for
-code fences (`.!```.!`) which are jumped over with only the first line displayed.
+code fences (`.!`) which are jumped over with only the first line displayed.
 
 Make sure every line is read and the code fences are matched with each other: missing an ending fence
 would make the following text disappear from trace until the next code fence or the end of file.
@@ -59,7 +59,7 @@ If you find wrong language text in a generated file it generally means the wrong
 directive has been used or a section has not been closed:
 
 - maybe missing an opening parenthesis : `.fr(` will *not* start a french sections
-- maybe wrong code was used: `.enn((' will be unknown if `en` was the intended code
+- maybe wrong code was used: `.enn((` will be unknown if `en` was the intended code
 - maybe the previous closing directive was misspelled: `.)` won't close a sections
 
 As a conclusion, when something looks odd about languages, first check each opening and closing
@@ -76,7 +76,7 @@ Here's a  exemple of wrong ordering:
 `.fr((Texte en français.))Default text`
 
 With this order, first the french file will receive `Texte en français`, then the
-`Default text' will go into *all* language files, including the french file.
+`Default text` will go into *all* language files, including the french file.
 
 To fix this, default must be put first and language specific sections appear later:
 
@@ -124,7 +124,7 @@ If the headings numbering doesn't match what was expected, some possible errors 
 
 - a mistake about the supposed order in which files are processed which changes the level 1 heading number
   of each file and indirectly, the first number of all headings numbering
-- there can be a bug in the  numbering scheme itself, e.G. a missing `:` or `,``
+- there can be a bug in the  numbering scheme itself, e.g. a missing `:` or `,`
 - there can be multiple and inconsistent `.numbering` directives in files
 
 For a best result, all processed files should follow the rules below:

@@ -32,7 +32,7 @@ namespace MultilingualMarkdown {
 
     require_once 'Lexer.class.php';
     use MultilingualMarkdown\Lexer;
-        
+
     /**
      * Debugging version of Lexer class.
      * Sends a separator to standard output after a set of tokens is output.
@@ -40,10 +40,10 @@ namespace MultilingualMarkdown {
     class DebugLexer extends Lexer
     {
         private $dashes;
-        public function __construct()
+        public function __construct(PicturesMgr $pm)
         {
-            parent::__construct();
-            $this->dashes  = str_repeat('-', 60);
+            parent::__construct($pm);
+            $this->dashes = str_repeat('-', 60);
         }
 
         public function output(Filer &$filer)

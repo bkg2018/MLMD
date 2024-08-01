@@ -1,0 +1,4 @@
+.languages fr,en main=en
+.picturesdir pictures
+
+texte blabla .pic((attention.png)) suite du texte

@@ -20,7 +20,7 @@ Here are some use notes.
   - An optional ISO code can be associated to each language code
   - Any text before the first `.languages` directive is ignored
   - Any language declared with code `<code>` has an opening directive `.<code>((`
-  - Any language section must be closed with `.))``
+  - Any language section must be closed with `.))`
   - Any text outside open/close directives is default text
   - Or use `.((` to open a default text section
   - Default text section are written to all language file for which no language specific section exists

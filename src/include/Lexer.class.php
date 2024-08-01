@@ -57,6 +57,8 @@ namespace MultilingualMarkdown {
     require_once('tokens/TokenEscaperFence.class.php');
     require_once('tokens/TokenEscaperDoubleQuote.class.php');
     require_once('tokens/TokenEscaperMLMD.class.php');
+    require_once('tokens/TokenPicturesDir.class.php');
+    require_once('tokens/TokenPicture.class.php');
     // on demand directives
     require_once('tokens/TokenText.class.php');             // text for current language
     require_once('tokens/TokenOpenLanguage.class.php');     // .fr((  .en((  etc created when preprocessing .languages directive
@@ -65,71 +67,17 @@ namespace MultilingualMarkdown {
     require_once('Numbering.class.php');
     // HTML/MD output modes (set in Lexer and in Numbering)
     require_once('OutputModes.class.php');
+    // Pictures manager
+    require_once('PicturesMgr.class.php');
 
     class Lexer
     {
         /** predefined tokens and languages codes directives tokens added by .languages */
-        private $mlmdTokens = [];               // keyword => token, e.g. '.!' => TokenEscaperMLMD
+        private  $mlmdTokens = [];         // keyword => token, e.g. '.!' => TokenEscaperMLMD
         private $mlmdTokensLengths = [];        // keyword => token keyword length
-        private $tokenMaxLength = 0;
-        private $tokenFENCE = null;             // specific handling for ``` at line beginning
-        private $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
-
-        /** LanguageList object handling all available languages codes */
-        private $languageList = null;
-
-        // Preprocessed datas
-
-        /** One HeadingArray for each input file */
-        private $allHeadingsArrays = [];
-        /** Line numbers after languages directive in each file */
-        private $allStartingLines = [];
-        /** Numbering scheme for each file, default is CLI parameter or main file directive */
-        private $allNumberingScheme = [];
-        /** Current numbering for each file */
-        private $allNumberings = [];
-        /** Starting number for level 1 headings for each file (default to 0 = first number in scheme) */
-        private $allTopNumbers = [];
-
-        /** MD/HTML output modes for headings anchors and toc links */
-        private $outputMode = OutputModes::MD;
-
-        // Status and settings
-
-        /** true when at least one language has been set */
-        private $languageSet = false;
-        /** true to wait for .languages directive in each input file */
-        private $waitLanguages = true;
-        /** stack of tokens names for languages switching, including .all, .default and .ignore */
-        private $languageStack = [['code' => DEFLT, 'line' => 0]];
-        /** name of current language code */
-        private $curLanguage = DEFLT;
-        /** number of opened 'ignore', do not output anything when this variable is not 0 */
-        private $ignoreLevel = 0;
-        /** current character, can be changed by token input processing */
-        private $currentChar = '';
-        /** Current text flow, to be stored as a text token before next token */
-        private $currentText = '';
-        /** Current tokens file, will be regularly sent to output when languages stack is empty */
-        private $curTokens = [];
-        /** flag for a few prints or warnings control */
-        private $trace = false;
-        /** default numbering scheme, set by '-numbering' CLI parameter */
-        private $defaultNumberingScheme = null;
-        /** number of previous successives EOL tokens */
-        private $eolCount = 0;
-        /** number of opened languages (handled by countOpenLanguage and countCloseLanguage) */
-        private $languageCount = 0;
-        /** false after the first non empty text token */
-        private $emptyContent = true;
-        /** */
-        private $emptyText = true;
-
-        /** shortcuts */
-        private $tokenCLOSE = null;
-        private $tokenALL = null;
-        private $tokenDEFLT = null;
-        private $tokenEOL = null;
+        private  $tokenMaxLength = 0;
+        private  $tokenFENCE = null;             // specific handling for ``` at line beginning
+        private  $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
         private $tokenNUMBERING = null;
         private $tokenTOPNUMBER = null;
         private $tokenLANGUAGES = null;
@@ -137,10 +85,65 @@ namespace MultilingualMarkdown {
         private $tokenEND = null;
         private $tokenSTOP = null;
 
+        /** LanguageList object handling all available languages codes */
+        private  $languageList = null;
+        /** Pictures manager */
+        private  $picturesMgr = null;
+        // Preprocessed datas
+
+        /** One HeadingArray for each input file */
+        private  $allHeadingsArrays = [];
+        /** Line numbers after languages directive in each file */
+        private  $allStartingLines = [];
+        /** Numbering scheme for each file, default is CLI parameter or main file directive */
+        private  $allNumberingScheme = [];
+        /** Current numbering for each file */
+        private  $allNumberings = [];
+        /** Starting number for level 1 headings for each file (default to 0 = first number in scheme) */
+        private  $allTopNumbers = [];
+
+        /** MD/HTML output modes for headings anchors and toc links */
+        private  $outputMode = OutputModes::MD;
+
+        // Status and settings
+
+        /** true when at least one language has been set */
+        private  $languageSet = false;
+        /** true to wait for .languages directive in each input file */
+        private  $waitLanguages = true;
+        /** stack of tokens names for languages switching, including .all, .default and .ignore */
+        private  $languageStack = [['code' => DEFLT, 'line' => 0]];
+        /** name of current language code */
+        private  $curLanguage = DEFLT;
+        /** number of opened 'ignore', do not output anything when this variable is not 0 */
+        private  $ignoreLevel = 0;
+        /** current character, can be changed by token input processing */
+        private  $currentChar = '';
+        /** Current text flow, to be stored as a text token before next token */
+        private  $currentText = '';
+        /** Current tokens file, will be regularly sent to output when languages stack is empty */
+        private  $curTokens = [];
+        /** flag for a few prints or warnings control */
+        private  $trace = false;
+        /** default numbering scheme, set by '-numbering' CLI parameter */
+        private  $defaultNumberingScheme = null;
+        /** number of previous successives EOL tokens */
+        private  $eolCount = 0;
+        /** number of opened languages (handled by countOpenLanguage and countCloseLanguage) */
+        private  $languageCount = 0;
+        /** false after the first non empty text token */
+        private  $emptyContent = true;
+        /** */
+        private  $emptyText = true;
+
+        /** shortcuts */
+        private  $tokenCLOSE = null;
+        private  $tokenALL = null;
+        private  $tokenDEFLT = null;
+        private  $tokenEOL = null;
 
         public function __construct()
         {
-
             // streamed language directives
             $this->mlmdTokens['.))']        = new TokenClose(null); // for identification
             $this->tokenCLOSE = &$this->mlmdTokens['.))'];
@@ -194,6 +197,14 @@ namespace MultilingualMarkdown {
                 }
                 $this->mlmdTokensLengths[$key] = $len;
             }
+        }
+
+        /**
+         * Send the reference to the pictures manager
+         */
+        public function setPicturesMgr(PicturesMgr $pm)
+        {
+            $this->picturesMgr = $pm;
         }
 
         /**
@@ -288,7 +299,7 @@ namespace MultilingualMarkdown {
             if ($prevToken->isType(TokenType::EOL)) {
                 $this->eolCount -= 1;
             } elseif ($count >= 2) {
-                $this->recalculatePreviousEols();
+                $this->recalculatePreviousEOLs();
             }
             unset($prevToken);
             return true;
@@ -297,7 +308,7 @@ namespace MultilingualMarkdown {
         /**
          * Calculate the number of previous successive EOLs tokens.
          */
-        public function recalculatePreviousEols(): void
+        public function recalculatePreviousEOLs(): void
         {
             $this->eolCount = 0;
             // Go backward in tokens to look for successive EOLs
@@ -404,13 +415,13 @@ namespace MultilingualMarkdown {
                 if ($prevToken->isType([TokenType::TEXT, TokenType::ESCAPED_TEXT])) {
                     if ($prevPrevToken->isType(TokenType::EOL) && $prevToken->isSpacing()) {
                         $this->deleteLastToken();
-                        $this->recalculatePreviousEols();
+                        $this->recalculatePreviousEOLs();
                         $this->appendTokenEOL($filer);
                         return;
                     }
                 }
                 // EOL candidate
-                $this->recalculatePreviousEols();
+                $this->recalculatePreviousEOLs();
                 if ($this->eolCount >= 2) {
                     return; // already an empty line
                 }
@@ -425,10 +436,10 @@ namespace MultilingualMarkdown {
             }
             if ($token->isType(TokenType::CLOSE_DIRECTIVE)) {
                 $this->countCloseLanguage();
-                $this->recalculatePreviousEols();
+                $this->recalculatePreviousEOLs();
             } elseif ($token->isType(TokenType::OPEN_DIRECTIVE)) {
                 $this->countOpenLanguage();
-                $this->recalculatePreviousEols();
+                $this->recalculatePreviousEOLs();
             }
             $this->curTokens[] = $token;
             if ($this->trace) {
@@ -479,8 +490,8 @@ namespace MultilingualMarkdown {
          * If an EOL token immediately follows a 'close' after an EOL, then the enclosed
          * EOL can be deleted :
          *
-         * INPUT stack:  <noneol> <eol> <close> <<future eol>>
-         * OUTPUT stack: <noneol> <close> <<future eol>>
+         * INPUT stack:  <nonEol> <eol> <close> <<future eol>>
+         * OUTPUT stack: <nonEol> <close> <<future eol>>
          */
         public function adjustEolCloseEolSequence(Filer &$filer): void
         {
@@ -535,9 +546,9 @@ namespace MultilingualMarkdown {
             $extract = $input->getCurrentChar() . $input->fetchNextCharacters($this->tokenMaxLength);
             // try direct key matching
             foreach ($this->mlmdTokens as $key => &$token) {
-                $keylen = strlen($key);
+                $keyLen = strlen($key);
                 $match = true;                
-                for ($pos = 0 ; $match && ($pos < $keylen) ; $pos += 1) {
+                for ($pos = 0 ; $match && ($pos < $keyLen) ; $pos += 1) {
                     $match = (mb_substr($extract, $pos, 1) == substr($key, $pos, 1));
                 }
                 if ($match) {
@@ -614,7 +625,7 @@ namespace MultilingualMarkdown {
          * @param bool   $allowOutput flag to allow output in tokenization,
          *                            should be disabled in recursive tokenization (e.g. TokenHeading::processInput)
          *
-         * @return bool true if current line ends, false if it continues from curren state in Filer.
+         * @return bool true if current line ends, false if it continues from current state in Filer.
          */
         public function tokenize(string $text, Filer &$filer, bool $allowOutput): bool
         {
@@ -741,7 +752,7 @@ namespace MultilingualMarkdown {
                         break;
                     }
                     if ($this->tokenSTOP->identifyInBuffer($lineContent, 0)) {
-                        $stop = $filer->getCurrentLineNumber();//for debug purposes put a bkpkt here
+                        $stop = $filer->getCurrentLineNumber(); //for debug purposes put a breakpoint here
                     }
                     if ($this->currentChar === null) {
                         return false;
@@ -759,7 +770,7 @@ namespace MultilingualMarkdown {
                     break;
                 }
                 if ($this->tokenSTOP->identifyInBuffer($lineContent, 0)) {
-                    $filer->warning(".stop directive found");//for debug purposes put a bkpkt here
+                    $filer->warning(".stop directive found"); //for debug purposes put a breakpoint here
                 }
                 $curLineNumber = $filer->getCurrentLineNumber();
                 if ($this->trace) {
@@ -776,9 +787,9 @@ namespace MultilingualMarkdown {
                 //}
                 $lineContent = $filer->getLine();
             }
-            // input is finished, process anything left in token buffer
+            // process anything left
             $this->appendTextToken($filer);
-            // check language stack status
+            // check language stack
             if (count($this->languageStack) > 1) {
                 for ($i = 1; $i < count($this->languageStack); $i += 1) {
                     $filer->warning(
@@ -831,7 +842,7 @@ namespace MultilingualMarkdown {
                 $filer->error("unknown language '$name'");
                 return false;
             }
-            // don't duplicate root (deflt)
+            // don't duplicate root (default)
             $stackIt = true;
             if (count($this->languageStack) == 1) {
                 if ($name == $this->languageStack[0]['code']) {
@@ -958,7 +969,7 @@ namespace MultilingualMarkdown {
             }
             // merge with includes array
             foreach ($subIncludes as $subInclude) {
-                if (!in_array($includes, $subInclude)) {
+                if (!in_array($subInclude, $includes)) {
                     $includes[] = $subInclude;
                 }
             }
@@ -1106,6 +1117,26 @@ namespace MultilingualMarkdown {
                 }
             }
         }
+        /**
+         * Sets te pictures manager root directory.
+         */
+        public function SetPicturesDir(string $directory): void
+        {
+            if ($this->picturesMgr == null) {
+                return;
+            }
+            $this->picturesMgr->setRoot($directory);
+        }
+        /**
+         * Access to a picture path.
+         */
+        public function GetPicturePath(string $picture, ?string $language): ?string
+        {
+            if ($this->picturesMgr) {
+                return $this->picturesMgr->findRelativePath($picture, $language);
+            }
+            return null;
+        }
 
         /**
          * Set languages list from a parameter string.
@@ -1183,7 +1214,6 @@ namespace MultilingualMarkdown {
         {
             return $this->allHeadingsArrays;
         }
-
 
         /**
          * return numbering object for a given file.

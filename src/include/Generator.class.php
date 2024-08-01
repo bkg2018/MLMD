@@ -62,6 +62,7 @@ namespace MultilingualMarkdown {
         // Handling classes instances
         private $filer = null;                  /// Filer instance, input and output files handling
         private $lexer = null;                  /// Lexer instance, transform text into token list
+        private $picturesMgr = null;            /// Pictures directory manager
 
         // Settings
         private $outputModeName = '';           /// from -out command line argument
@@ -71,8 +72,9 @@ namespace MultilingualMarkdown {
         // Initialize handlers and default settings
         public function __construct()
         {
-            $this->filer = /*(getenv("debug") != 0) ? new DebugFiler() : */ new Filer();
             $this->lexer = /*(getenv("debug") != 0) ? new DebugLexer() : */new Lexer();
+            $this->picturesMgr = new PicturesMgr($this->lexer);
+            $this->filer = /*(getenv("debug") != 0) ? new DebugFiler() : */ new Filer($this->picturesMgr);
             $this->outputModeName = 'md';
         }
 

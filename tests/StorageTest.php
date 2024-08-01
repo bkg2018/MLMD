@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown;
 
-use PHPUnit\Framework\TestCase;
+use \PHPUnit\Framework\TestCase;
 use MultilingualMarkdown\Filer;
 use MultilingualMarkdown\Storage;
 

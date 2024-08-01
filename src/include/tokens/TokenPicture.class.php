@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenBaseInline class
+ * Multilingual Markdown generator - TokenPicture class
  *
- * This class represents a token which occurs in the text flow, as opposed to TokenBaseSingleLine
- * which is used for tokens standing alone on one line of text.
+ * This class represents a token for a .pic((<path>)) or .picture((<path>)) directive in text flow.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +19,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_base_inline_class
+ * @package   mlmd_token_language_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -31,34 +30,52 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenBaseKeyworded.class.php';
+    require_once 'TokenBaseInline.class.php';
 
-    use MultilingualMarkdown\TokenBaseKeyworded;
+    use MultilingualMarkdown\TokenBaseInline;
 
     /**
-     * Streaming text directive token.
-     *
-     * The derived tokens are used for directives lying in the text flow, like the open or close
-     * language directives .<code>(( and .)).
-     *
-     * This class is not instantiated by itself but is base for actual directives tokens.
+     * .picture(( directive token.
      */
-    class TokenBaseInline extends TokenBaseKeyworded
+    class TokenPicture extends TokenBaseInline
     {
-        public function __construct(int $type, string $keyword, bool $ignoreCase)
+        private $picture = '';
+
+        public function __construct(string $name)
         {
-            parent::__construct($type, $keyword, $ignoreCase);
+            parent::__construct(TokenType::INLINE_DIRECTIVE, ".{$name}((", true);
         }
 
         /**
-         * Processing input: store in token list, skip over directive and go next character.
+         * Process input by skipping the directive and handling picture path.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->skipSelf($input);
-            $lexer->appendToken($this, $filer);
+            $input->adjustNextLine();
+            $endKeyword = '))';
             $currentChar = $input->getCurrentChar();
+            $prevChars = '';
+            if ($currentChar != null) {
+                do {
+                    $this->picture .= $currentChar;
+                    $currentChar = $input->getNextChar();
+                    $prevChars = $input->fetchPreviousChars(2);
+                } while (($prevChars != $endKeyword) && ($currentChar != null));
+            }
+            $this->picture = mb_strcut($this->picture, 0, -2);
+            $this->length = mb_strlen($this->picture);
+            $lexer->appendToken($this, $filer);
             $lexer->setCurrentChar($currentChar);
+        }
+
+        /**
+         * Output sends the variable {picture:} with the image reference. It will
+         * be expanded (and copied) depending on default or current language.
+         */
+        public function output(Lexer &$lexer, Filer &$filer): bool
+        {
+            return $filer->output('{picture:' . $this->picture . '}', true, $this->type);
         }
     }
 }

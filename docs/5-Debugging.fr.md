@@ -27,7 +27,7 @@ fichiers sources avant de régénérer les fichiers.
 
 Le paramètre `-trace` facultatif affiche une trace des lignes lues dans les fichiers sources.
 Si les lignes générées ne sont pas celles espérées, la première chose à faire est de regarder cette
-trace: MLMD doit affiche chaque ligne avec son numéro, sauf pour les portions de barrière de code
+trace: MLMD doit affiche chaque ligne avec son numéro, sauf pour les portions de barrière de code (`.!`)
 où seule la première ligne est affichée.
 
 Il faut s'assurer que toutes les  lignes sont présentes et que les barrières de code sont
@@ -63,7 +63,7 @@ cela signifie en général que la mauvaise directive d'ouverture a été utilis�
 n'a pas été refermée :
 
 - il manque peut-être une parenthèse ouvrante : `.fr(` ne démarre *pas* une section en français
-- un mauvais code a peut-être été utilisé : `.enn((` n'est pas une directive si le code attendu est `en``
+- un mauvais code a peut-être été utilisé : `.enn((` n'est pas une directive si le code attendu est `en`
 - une directive de fermeture a peut-être été mal écrite : `.)` ne ferme pas la section en cours
 
 En conclusion, lorsque quelque chose ne va pas concernant la langue utilisée, il faut
@@ -132,7 +132,7 @@ possibles :
 
 - une supposition erronée quant à l'ordre de traitement des fichiers sources qui modifie le numéro
   du titre de niveau 1 et, indirectement, le premier nombre de la numérotation de chaque titre
-- il peut y avoir un bug dans la rédaction du schéma de numérotation, par exemple il manque un `:` ou une `,`
+- il peut y avoir un bug dans la rédaction du schéma de numérotation, par exemple il manque un `:` ou `,`
 - il peut y avoir plusieurs directives `.numbering` incompatibles dans les fichiers sources
 
 Pour obtenir un bon résultat, les fichiers traités peuvent respecter les règles suivantes :
@@ -153,7 +153,10 @@ généralement d'une confusion avec le point qui commence la directive de fermet
 de la dernière phrase d'une section, il faut doubler le point. Le premier point termine la phrase,
 le second est celui de la directive de fermeture :
 
-Cette phrase ne se termine pas par un pointCette phrase se termine par un point.
+```code
+.fr((Cette phrase ne se termine pas par un point.))
+.fr((Cette phrase se termine par un point..))
+```code
 
 ## V-10) Orthographe<A id="a77"></A>
 

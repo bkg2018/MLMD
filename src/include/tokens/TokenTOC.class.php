@@ -46,6 +46,8 @@ namespace MultilingualMarkdown {
         private $title = 'Table of Contents';    /// title parameter
         private $start = 2;     /// starting level
         private $end = 4;       /// ending level
+        private $content = '';
+        private $length = 0;
         
         public function __construct()
         {

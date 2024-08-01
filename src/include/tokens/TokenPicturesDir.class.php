@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Multilingual Markdown generator - TokenBaseInline class
+ * Multilingual Markdown generator - TokenPicturesDir class
  *
- * This class represents a token which occurs in the text flow, as opposed to TokenBaseSingleLine
- * which is used for tokens standing alone on one line of text.
+ * This class represents a token for the pictures directory .picturesdir directive.
+ * It sets a root directory in the pictures manager.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -20,7 +20,7 @@
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
  * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * @package   mlmd_token_base_inline_class
+ * @package   mlmd_token_picturesdir_directive_class
  * @author    Francis Piérot <fpierot@free.fr>
  * @copyright 2020 Francis Piérot
  * @license   https://opensource.org/licenses/mit-license.php MIT License
@@ -31,34 +31,32 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
-    require_once 'TokenBaseKeyworded.class.php';
+    require_once 'TokenBaseSingleLine.class.php';
 
-    use MultilingualMarkdown\TokenBaseKeyworded;
+    use MultilingualMarkdown\TokenBaseSingleLine;
 
     /**
-     * Streaming text directive token.
-     *
-     * The derived tokens are used for directives lying in the text flow, like the open or close
-     * language directives .<code>(( and .)).
-     *
-     * This class is not instantiated by itself but is base for actual directives tokens.
+     * .picturesdir(( directive token.
      */
-    class TokenBaseInline extends TokenBaseKeyworded
+    class TokenPicturesDir extends TokenBaseSingleLine
     {
-        public function __construct(int $type, string $keyword, bool $ignoreCase)
+        private  $lexer;
+        private  $directory;
+
+        public function __construct(Lexer $lexer)
         {
-            parent::__construct($type, $keyword, $ignoreCase);
+            $this->lexer = $lexer;
+            parent::__construct(TokenType::SINGLE_LINE_DIRECTIVE, ".picturesdir", true);
         }
 
         /**
-         * Processing input: store in token list, skip over directive and go next character.
+         * Process input by setting the directory into the pictures manager
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->skipSelf($input);
-            $lexer->appendToken($this, $filer);
-            $currentChar = $input->getCurrentChar();
-            $lexer->setCurrentChar($currentChar);
+            $content = trim($input->getLine());
+            $lexer->SetPicturesDir($content);
         }
     }
 }

@@ -5,7 +5,7 @@
  *
  * This class represents a token for an opening language code .<code>(( directive. Each language code
  * must have been declared in the .languages directive. The token for each open language directive
- * is instanciated when Lexer preprocesses the .languages directive.
+ * is instantiated when Lexer pre-processes the .languages directive.
  *
  * Copyright 2020 Francis Piérot
  *
@@ -59,7 +59,7 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Process input by skkipping the directive and pushing the language
+         * Process input by skipping the directive and pushing the language
          * on the language stack in lexer.
          */
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
@@ -81,16 +81,6 @@ namespace MultilingualMarkdown {
         {
             $lexer->pushLanguage($this->language, $filer);
             return true;
-        }
-
-
-        /**
-         * Return a summary of the text token content with neutralized control codes
-         * and max length of 60 characters.
-         */
-        public function debugText(int $maxLength = 60): string
-        {
-            return $this->language;
         }
     }
 }

@@ -41,10 +41,10 @@ fichiers sources avant de régénérer les fichiers..))
 The `-trace` optional arguments will display a trace of all lines as they are read, as well as
 some more informations. If the generated files are not as expected, the first thing to do is trying
 to follow what's displayed by the trace mode: MLMD displays each line with its number, except for
-code fences (`.!```.!`) which are jumped over with only the first line displayed.
+code fences (`.!`) which are jumped over with only the first line displayed.
 .fr((Le paramètre `-trace` facultatif affiche une trace des lignes lues dans les fichiers sources.
 Si les lignes générées ne sont pas celles espérées, la première chose à faire est de regarder cette
-trace: MLMD doit affiche chaque ligne avec son numéro, sauf pour les portions de barrière de code
+trace: MLMD doit affiche chaque ligne avec son numéro, sauf pour les portions de barrière de code (`.!`)
 où seule la première ligne est affichée..))
 
 Make sure every line is read and the code fences are matched with each other: missing an ending fence
@@ -92,11 +92,11 @@ n'a pas été refermée :.))
 
 .((
 - maybe missing an opening parenthesis : `.fr(` will *not* start a french sections
-- maybe wrong code was used: `.enn((' will be unknown if `en` was the intended code
+- maybe wrong code was used: `.enn((` will be unknown if `en` was the intended code
 - maybe the previous closing directive was misspelled: `.)` won't close a sections
 .)).fr((
 - il manque peut-être une parenthèse ouvrante : `.fr(` ne démarre *pas* une section en français
-- un mauvais code a peut-être été utilisé : `.enn((` n'est pas une directive si le code attendu est `en``
+- un mauvais code a peut-être été utilisé : `.enn((` n'est pas une directive si le code attendu est `en`
 - une directive de fermeture a peut-être été mal écrite : `.)` ne ferme pas la section en cours
 .))
 
@@ -120,7 +120,7 @@ Here's a  exemple of wrong ordering:
 `.fr((Texte en français.))Default text`
 
 With this order, first the french file will receive `Texte en français`, then the
-`Default text' will go into *all* language files, including the french file.
+`Default text` will go into *all* language files, including the french file.
 .fr((Avec cet ordre, le fichier français va recevoir `Texte en français`, puis le 
 texte par défaut `Default text` sera envoyé dans tous les fichiers y compris le français..))
 
@@ -190,12 +190,12 @@ possibles :.))
 .((
 - a mistake about the supposed order in which files are processed which changes the level 1 heading number
   of each file and indirectly, the first number of all headings numbering
-- there can be a bug in the  numbering scheme itself, e.G. a missing `:` or `,``
+- there can be a bug in the  numbering scheme itself, e.g. a missing `:` or `,`
 - there can be multiple and inconsistent `.numbering` directives in files
 .)).fr((
 - une supposition erronée quant à l'ordre de traitement des fichiers sources qui modifie le numéro
   du titre de niveau 1 et, indirectement, le premier nombre de la numérotation de chaque titre
-- il peut y avoir un bug dans la rédaction du schéma de numérotation, par exemple il manque un `:` ou une `,`
+- il peut y avoir un bug dans la rédaction du schéma de numérotation, par exemple il manque un `:` ou `,`
 - il peut y avoir plusieurs directives `.numbering` incompatibles dans les fichiers sources
 .))
 
@@ -238,8 +238,10 @@ le second est celui de la directive de fermeture :.))
 .en((This sentence is ended by a period..))
 ```
 .)).fr((
+```code
 .fr((Cette phrase ne se termine pas par un point.))
 .fr((Cette phrase se termine par un point..))
+```code
 .))
 
 ## Spellchecking.fr((Orthographe.))

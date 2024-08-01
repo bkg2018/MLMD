@@ -71,11 +71,11 @@ namespace MultilingualMarkdown {
         // Input filenames, files and reading status
 
         /** Pictures directory manager  */
-        private PicturesMgr $picturesMgr;
+        private $picturesMgr;
         /** Array of all the input files - relative to root dir */
-        private array $allInFilePathes = [];
+        private $allInFilePathes = [];
         /** relative filenames for each filename */
-        private array $relFilenames = [];
+        private $relFilenames = [];
         /** current file name e.g. 'example.mlmd' - relative to root dir */
         private $inFilename = null;
         /** current input file handle */
@@ -197,11 +197,11 @@ namespace MultilingualMarkdown {
          */
         private $iteratorIndex = 0;
 
-        public function current(): mixed
+        public function current(): string
         {
             return $this->relFilenames[$this->iteratorIndex];
         }
-        public function key(): mixed
+        public function key(): int
         {
             return $this->iteratorIndex;
         }

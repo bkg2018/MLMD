@@ -13,6 +13,29 @@
 
 ## EVOLUTIONS at 2020-11-14
 
+### localized pictures
+
+Principle: a directive declares a directory where source pictures will be found, either under
+localized versions in language subdirectories, either in common versions.
+
+Another directive allows placement of pictures. They will be searched for localized or common  versions depending on the first declaration directive.
+
+.pictures_root((<path>.))
+
+Declares `path` as the root directory where to look for source pictures.
+
+Localized pictures in a `code` language can be put in `code` subdirectories, where they will be found in the generated files. The name of each localized directory must be the same `code` as the one declared in the `.languages` directive.
+
+Root and localized directories and pictures will be copied in the generated files directories.
+
+Example: in source files, a directory named `pictures` is holding common pictures, as well as english localized pictures in the `pictures/en` and french localized pictures in `pictures/fr`. This will work only if the source files have a `.languages` directory with declaration for `fr` and `en` language codes.
+
+.picture((<filename.ext>.))
+
+Includes a source picture with the given name. The file will first be searched in the localized `code` subdirectory under the root directory declared by `.pictures_root` and if it is not found there, it will be searched in the root directory.
+
+Example: in the main source MLMD file, `.languages fr, en` declares two languages with `fr` and `en`codes. In the main source file also, `.pictures_root((images.))` declares `/images` under the source files as the root directory for pictures. In a source MLMD file, `.picture((mainmenu.jpg.))` includes a picture. For the french `fr` generated file, it will include `images/fr/mainmenu.jpg` and for the `en` generated file, it will include `images/en/mainmenu.jpg`. If neither can be found, MLMD will look for a file in the root pictures directory, i.e. `images/mainmenu.jpg`. If this file cannot be found, a warning and error message will be displayed.
+
 - smart handling for multiline block structures: lists, quotes so
   translation can be put line by line, currently doesn't work well
 - copy of dependencies (images and other files) in output directory

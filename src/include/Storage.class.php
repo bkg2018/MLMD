@@ -392,9 +392,22 @@ namespace MultilingualMarkdown {
         public function isMatchingWord(string &$word, int $length): bool
         {
             $content  = $this->previousChars[0] . $this->fetchNextCharacters($length - 1);
+            //return (mb_strcmp($content, $word) == 0);
+            return (strcmp($content, $word) == 0);
+        }
+        /**
+         * Check if a given UTF8 string with given length matches incoming input.
+         *
+         * @param string $word   the word to check
+         * @param int    $length the number of UTF-8 characters in word
+         *
+         * @return bool true if the word matches incoming input
+         */
+        public function mb_isMatchingWord(string &$word, int $length): bool
+        {
+            $content  = $this->previousChars[0] . $this->fetchNextCharacters($length - 1);
             return (mb_strcmp($content, $word) == 0);
         }
-
         /**
          * Check if a string from an array matches incoming input.
          * The arrays must be indexed by successive numbers starting at 0

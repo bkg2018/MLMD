@@ -36,7 +36,7 @@ Here are some use notes.
   - An optional ISO code can be associated to each language code
   - Any text before the first `.languages` directive is ignored
   - Any language declared with code `<code>` has an opening directive `.<code>((`
-  - Any language section must be closed with `.))``
+  - Any language section must be closed with `.))`
   - Any text outside open/close directives is default text
   - Or use `.((` to open a default text section
   - Default text section are written to all language file for which no language specific section exists
@@ -67,12 +67,12 @@ Here are some use notes.
   - Markdown styles `===` and `---` for level 1 and 2 are not recognized
 .)).fr((
 - Titres et texte
-  - Les titres doivent avoir un préfixe de style Markdown `#' en début de ligne
+  - Les titres doivent avoir un préfixe de style Markdown `#` en début de ligne
   - Placez le texte par défaut de vos paragraphes et titres avant d'ouvrir les sections spécifiques aux langues
   - Fermez chaque section avec `.))`
   - Utilisez des fins de ligne entre les directives pour séparer visuellement les sections
   - Utilisez les variables dans le texte ou dans des liens spécifiques à une langue ou un fichier
-  - Le style de titres Markdown '===' et '---' pour les niveaux 1 et 2 n'est pas reconnu
+  - Le style de titres Markdown `===` et `---` pour les niveaux 1 et 2 n'est pas reconnu
 .))
 
 .((

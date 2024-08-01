@@ -28,12 +28,12 @@ Voici quelques notes d'usage.
   - On utilise `.!((` pour du texte à n'écrire dans aucun fichier
 
 - Titres et texte
-  - Les titres doivent avoir un préfixe de style Markdown `#' en début de ligne
+  - Les titres doivent avoir un préfixe de style Markdown `#` en début de ligne
   - Placez le texte par défaut de vos paragraphes et titres avant d'ouvrir les sections spécifiques aux langues
   - Fermez chaque section avec `.))`
   - Utilisez des fins de ligne entre les directives pour séparer visuellement les sections
   - Utilisez les variables dans le texte ou dans des liens spécifiques à une langue ou un fichier
-  - Le style de titres Markdown '===' et '---' pour les niveaux 1 et 2 n'est pas reconnu
+  - Le style de titres Markdown `===` et `---` pour les niveaux 1 et 2 n'est pas reconnu
 
 - Sommaire (directive `.toc`)
   - Utilisez `level=1` pour générer un sommaire avec des liens vers chacun des fichiers traités

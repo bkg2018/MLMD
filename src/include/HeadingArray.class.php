@@ -51,14 +51,14 @@ namespace MultilingualMarkdown {
         private $null = null;
 
         // Seekable Iterator interface
-        public function current(): mixed
+        public function current(): Heading
         {
             if ($this->curIndex < count($this->allHeadings)) {
                 return $this->allHeadings[$this->curIndex];
             }
             \trigger_error("Invalid current index in headings array", E_USER_ERROR);
         }
-        public function key(): mixed
+        public function key(): int
         {
             return $this->curIndex;
         }

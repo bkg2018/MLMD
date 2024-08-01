@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "..\\Bluety"
+			"path": "../Desktop/X-07/X07-wiki"
 		}
 	],
 	"launch": {
@@ -15,7 +15,7 @@
 				"name": "Listen for XDebug",
 				"type": "php",
 				"request": "launch",
-				"port": 9000
+				"port": 9003
 			},
 			{
 				"name": "Launch currently open script",
@@ -35,8 +35,19 @@
                 "runtimeExecutable": "php",
 				"program": "${workspaceFolder:MLMD}/src/mlmd.php",
                 "cwd": "${workspaceFolder:MLMD}",
-                "args": ["-i", "README.mlmd", "-out","md","-od","out"],
+                "args": ["-i", "testdata/testpictures.mlmd", "-out","md","-od","testdata/out"],
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
+				"port": 9005
+			},
+			{
+				"name": "Build X07 WIKI",
+				"stopOnEntry": false,
+				"type": "php",
+                "request": "launch",
+                "program": "${workspaceFolder:MLMD}/src/mlmd.php",
+                "cwd": "${workspaceFolder:X07-wiki}",
+                "args": ["-i", "src/Canon X-07.mlmd", "-out","md","-od","md-docs"],
+				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "0"},
 				"port": 9003
 			},
 			{
@@ -63,7 +74,7 @@
                 "cwd": "${workspaceFolder:MLMD}",
                 "args": ["-i", "docsource/MLMD.mlmd", "-out","md","-od","docs"],
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
-				"port": 9003
+				"port": 9005
 			},
 			{
 				"name": "Build MLMD README",
@@ -76,7 +87,7 @@
                 "cwd": "${workspaceFolder:MLMD}",
                 "args": ["-i", "README.mlmd", "-out","md","-od","."],
 				"env": {"XDEBUG_CONFIG": "idekey=VSCODE", "debug": "1"},
-				"port": 9003
+				"port": 9005
 			},
 			{
 				"name": "Build BLUETY doc",
@@ -117,8 +128,11 @@
             "mdpure",
             "pathes",
             "phpscripts",
+            "picturesdir",
+            "preprocesses",
             "systemroot",
-            "topnumber"
+            "topnumber",
+            "TRIPLEBACKTICK"
         ]
     }
 }

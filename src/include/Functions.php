@@ -25,8 +25,10 @@
 
 function displayHelp(): void
 {
+    global $MLMD_VERSION;
+
     echo "
-Multilingual Markdown generator - version " . MLMD_VERSION . "
+Multilingual Markdown generator - version " . $MLMD_VERSION . "
 
 Parameters:
 

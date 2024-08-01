@@ -26,11 +26,17 @@
  * @link      TODO
  */
 
-declare(strict_types=1);
+ declare(strict_types=1);
 
-namespace MultilingualMarkdown {
-
+ namespace MultilingualMarkdown {
+ 
+    if (substr(phpversion(), 0, strrpos(phpversion(), ".")) < "8.4") {
+        require_once 'Filer_8_3.class.php';
+    } else {
     require_once 'Filer.class.php';
+
+    }
+
     use MultilingualMarkdown\Logger;
     use MultilingualMarkdown\languageList;
     use MultilingualMarkdown\Filer;

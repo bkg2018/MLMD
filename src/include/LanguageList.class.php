@@ -43,14 +43,14 @@ namespace MultilingualMarkdown {
 
 
         // Seekable Iterator interface
-        public function current(): mixed
+        public function current(): array
         {
             if ($this->curIndex < count($this->allLanguages)) {
                 return $this->allLanguages[$this->curIndex];
             }
             \trigger_error("Invalid current index in language list", E_USER_ERROR);
         }
-        public function key(): mixed
+        public function key(): int
         {
             return $this->curIndex;
         }
