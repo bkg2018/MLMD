@@ -2,7 +2,6 @@
 .topnumber 0
 
 # .all((MLMD - .))Multilingual Markdown Generator.fr((Générateur de Markdown Multilingue.))
-
 <img src="https://flagcdn.com/256x192/gb.png" width="25" height="19"> : [README](README.md), [Documentation](docs/MLMD.md)<br />
 <img src="https://flagcdn.com/256x192/fr.png" width="25" height="19"> : [README](README.fr.md), [Documentation](docs/MLMD.fr.md)<br />
 

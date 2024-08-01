@@ -75,72 +75,73 @@ namespace MultilingualMarkdown {
         /** predefined tokens and languages codes directives tokens added by .languages */
         private  $mlmdTokens = [];         // keyword => token, e.g. '.!' => TokenEscaperMLMD
         private $mlmdTokensLengths = [];        // keyword => token keyword length
-        private  $tokenMaxLength = 0;
-        private  $tokenFENCE = null;             // specific handling for ``` at line beginning
-        private  $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
+        private $tokenMaxLength = 0;
+        private $tokenFENCE = null;             // specific handling for ``` at line beginning
+        private $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
+
+        /** LanguageList object handling all available languages codes */
+        private $languageList = null;
+
+        // Preprocessed datas
+
+        /** One HeadingArray for each input file */
+        private $allHeadingsArrays = [];
+        /** Line numbers after languages directive in each file */
+        private $allStartingLines = [];
+        /** Numbering scheme for each file, default is CLI parameter or main file directive */
+        private $allNumberingScheme = [];
+        /** Current numbering for each file */
+        private $allNumberings = [];
+        /** Starting number for level 1 headings for each file (default to 0 = first number in scheme) */
+        private $allTopNumbers = [];
+
+        /** MD/HTML output modes for headings anchors and toc links */
+        private $outputMode = OutputModes::MD;
+
+        // Status and settings
+
+        /** true when at least one language has been set */
+        private $languageSet = false;
+        /** true to wait for .languages directive in each input file */
+        private $waitLanguages = true;
+        /** stack of tokens names for languages switching, including .all, .default and .ignore */
+        private $languageStack = [['code' => DEFLT, 'line' => 0]];
+        /** name of current language code */
+        private $curLanguage = DEFLT;
+        /** number of opened 'ignore', do not output anything when this variable is not 0 */
+        private $ignoreLevel = 0;
+        /** current character, can be changed by token input processing */
+        private $currentChar = '';
+        /** Current text flow, to be stored as a text token before next token */
+        private $currentText = '';
+        /** Current tokens file, will be regularly sent to output when languages stack is empty */
+        private $curTokens = [];
+        /** flag for a few traces while writing outputs */
+        protected $outputTrace = false;
+        /** flag for a few traces while analyzing */
+        protected $trace = false;
+        /** default numbering scheme, set by '-numbering' CLI parameter */
+        private $defaultNumberingScheme = null;
+        /** number of previous successives EOL tokens */
+        private $eolCount = 0;
+        /** number of opened languages (handled by countOpenLanguage and countCloseLanguage) */
+        private $languageCount = 0;
+        /** false after the first non empty text token */
+        private $emptyContent = true;
+        /** */
+        private $emptyText = true;
+
+        /** shortcuts */
+        private $tokenCLOSE = null;
+        private $tokenALL = null;
+        private $tokenDEFLT = null;
+        private $tokenEOL = null;
         private $tokenNUMBERING = null;
         private $tokenTOPNUMBER = null;
         private $tokenLANGUAGES = null;
         private $tokenINCLUDE = null;
         private $tokenEND = null;
         private $tokenSTOP = null;
-
-        /** LanguageList object handling all available languages codes */
-        private  $languageList = null;
-        /** Pictures manager */
-        private  $picturesMgr = null;
-        // Preprocessed datas
-
-        /** One HeadingArray for each input file */
-        private  $allHeadingsArrays = [];
-        /** Line numbers after languages directive in each file */
-        private  $allStartingLines = [];
-        /** Numbering scheme for each file, default is CLI parameter or main file directive */
-        private  $allNumberingScheme = [];
-        /** Current numbering for each file */
-        private  $allNumberings = [];
-        /** Starting number for level 1 headings for each file (default to 0 = first number in scheme) */
-        private  $allTopNumbers = [];
-
-        /** MD/HTML output modes for headings anchors and toc links */
-        private  $outputMode = OutputModes::MD;
-
-        // Status and settings
-
-        /** true when at least one language has been set */
-        private  $languageSet = false;
-        /** true to wait for .languages directive in each input file */
-        private  $waitLanguages = true;
-        /** stack of tokens names for languages switching, including .all, .default and .ignore */
-        private  $languageStack = [['code' => DEFLT, 'line' => 0]];
-        /** name of current language code */
-        private  $curLanguage = DEFLT;
-        /** number of opened 'ignore', do not output anything when this variable is not 0 */
-        private  $ignoreLevel = 0;
-        /** current character, can be changed by token input processing */
-        private  $currentChar = '';
-        /** Current text flow, to be stored as a text token before next token */
-        private  $currentText = '';
-        /** Current tokens file, will be regularly sent to output when languages stack is empty */
-        private  $curTokens = [];
-        /** flag for a few prints or warnings control */
-        private  $trace = false;
-        /** default numbering scheme, set by '-numbering' CLI parameter */
-        private  $defaultNumberingScheme = null;
-        /** number of previous successives EOL tokens */
-        private  $eolCount = 0;
-        /** number of opened languages (handled by countOpenLanguage and countCloseLanguage) */
-        private  $languageCount = 0;
-        /** false after the first non empty text token */
-        private  $emptyContent = true;
-        /** */
-        private  $emptyText = true;
-
-        /** shortcuts */
-        private  $tokenCLOSE = null;
-        private  $tokenALL = null;
-        private  $tokenDEFLT = null;
-        private  $tokenEOL = null;
 
         public function __construct()
         {
@@ -213,6 +214,18 @@ namespace MultilingualMarkdown {
         public function setTrace(bool $yes)
         {
             $this->trace = $yes;
+        }
+
+        /**
+         * Output trace setting.
+         */
+        public function setOutputTrace(bool $yes)
+        {
+            $this->outputTrace = $yes;
+        }
+        public function isOutputTraced(): bool
+        {
+            return $this->outputTrace;
         }
 
         /**
@@ -787,9 +800,9 @@ namespace MultilingualMarkdown {
                 //}
                 $lineContent = $filer->getLine();
             }
-            // process anything left
+            // input is finished, process anything left in token buffer
             $this->appendTextToken($filer);
-            // check language stack
+            // check language stack status
             if (count($this->languageStack) > 1) {
                 for ($i = 1; $i < count($this->languageStack); $i += 1) {
                     $filer->warning(
@@ -830,10 +843,10 @@ namespace MultilingualMarkdown {
          *
          * @return bool true if name exists and stack has been updated, false if not
          */
-        public function pushLanguage(string $name, object &$filer): bool
+        public function pushLanguage(?string $name, object &$filer): bool
         {
             // name must exist as an index
-            if (empty($name)) {
+            if ($name == null || empty($name)) {
                 $name = DEFLT;
             }
             //$key = '.' . $name . '((';
@@ -842,13 +855,13 @@ namespace MultilingualMarkdown {
                 $filer->error("unknown language '$name'");
                 return false;
             }
-            // don't duplicate root (default)
-            $stackIt = true;
+            /* don't duplicate root (deflt) */
             if (count($this->languageStack) == 1) {
                 if ($name == $this->languageStack[0]['code']) {
                     return false;
                 }
             }
+            
             // push new language
             array_push($this->languageStack, ['code' => $name, 'line' => $filer->getCurrentLineNumber()]);
             $this->curLanguage = $name;

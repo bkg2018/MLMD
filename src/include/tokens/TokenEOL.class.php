@@ -57,7 +57,7 @@ namespace MultilingualMarkdown {
         public function output(Lexer &$lexer, Filer &$filer): bool
         {
             if ($filer->outputStarted()) {
-                $filer->output("\n", false, $this->type);
+                $filer->output("\n", false, $this->type, $lexer->isOutputTraced());
             }
             return true;
         }

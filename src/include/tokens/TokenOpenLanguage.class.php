@@ -42,7 +42,7 @@ namespace MultilingualMarkdown {
      */
     class TokenOpenLanguage extends TokenBaseInline
     {
-        private $language = ''; // language code from .languages directives
+        protected $language = ''; // language code from .languages directives
 
         public function __construct(string $language)
         {

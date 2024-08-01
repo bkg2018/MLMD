@@ -1,6 +1,10 @@
 .languages fr,en main=en
 
-This is default test.fr((Voici du texte en français.)).
+.all((TEXT: .))english.fr((french.)) text.
 
-<img src="Pictures/045.jpg" .((alt="Board front".)).fr((alt="Avant carte".)) style="zoom:50%;" />.))
+This is default text.
+And a second default sentence.
+.fr((Voila du texte en français..))
 
+
+<img src="Pictures/045.jpg" alt=.(("Board front".)).fr(("Avant carte".)) style="zoom:50%;" />

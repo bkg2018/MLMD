@@ -1,3 +1,5 @@
-Voici du texte en français.
+TEXT: french text.
 
-alt="Avant carte" style="zoom:50%;" />
+Voila du texte en français.
+
+"Avant carte" style="zoom:50%;" />
