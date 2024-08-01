@@ -156,7 +156,7 @@ le second est celui de la directive de fermeture :
 ```code
 .fr((Cette phrase ne se termine pas par un point.))
 .fr((Cette phrase se termine par un point..))
-```code
+```
 
 ## V-10) Orthographe<A id="a77"></A>
 

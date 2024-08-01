@@ -128,9 +128,10 @@ namespace MultilingualMarkdown {
         private $languageCount = 0;
         /** false after the first non empty text token */
         private $emptyContent = true;
-        /** */
+        /** true when current text is empty */
         private $emptyText = true;
-
+        /** reference to the pictures manager given at construction - not owned by Lexer */
+        private $picturesMgr = null;
         /** shortcuts */
         private $tokenCLOSE = null;
         private $tokenALL = null;

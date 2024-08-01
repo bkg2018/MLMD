@@ -41,7 +41,7 @@ namespace MultilingualMarkdown {
     require_once 'Utilities.php';
     require_once 'DebugFiler.class.php';
     require_once 'DebugLexer.class.php';
-    require_once 'Filer.class.php';
+//    require_once 'Filer.class.php';
     require_once 'Lexer.class.php';
     use MultilingualMarkdown\Lexer;
     use MultilingualMarkdown\DebugLexer;
