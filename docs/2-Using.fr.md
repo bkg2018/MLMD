@@ -147,7 +147,7 @@ une excellente compatibilité.
 
 ### II-5.2) Ancres HTML identifiées : `html`<A id="a15"></A>
 
-Les standards récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut ìd`,
+Les standards récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut `id`,
 qui a l'avantage d'être automatiquement connu de Javascript. Dans ce mode, MLMD utilise `id` dans les
 ancres. Il est particulièrement adapté pour une documentation HTML dans un environnement moderne
 dynamique ou scripté.
@@ -203,7 +203,7 @@ de titres rencontrés dans tous les fichiers sources et dans les sommaires. Par 
 - globalement dans le fichier principal avec la directive `.numbering`
 - fichier par fichier avec la directive `.numbering` dans les fichiers sources
 
-L'argument de la ligne de commande a priorité et supplantera les directives `.numbering``
+L'argument de la ligne de commande a priorité et supplantera les directives `.numbering`
 dans les fichiers source. Ce qui suit traite de cet argument, la syntaxe de ses paramètres est identique
 pour la directive qui sera abordée plus loin.
 
@@ -212,7 +212,7 @@ pour la directive qui sera abordée plus loin.
 Le paramètre contient un nombre quelconque de définitions de niveaux séparées par une virgule :
 
 ```code
--numbering [<niveau>]:[<préfixe>]:<symbole>[<séparateur>][,...]]
+-numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]
 ```
 
 Voici une description des parties de la définition de niveau
@@ -241,7 +241,7 @@ d'un tiret '-' puis d'un nombre suivi d'un point pour les titres de niveau 2 et 
 pour les titres de niveau 3 :
 
 ```code
--numbering 1:Chapitre :A-,2::1.,3::1
+-numbering 1:Chapitre :A:-,2::1:.,3::1
 ```
 
 - Les titres de niveau supérieur à 4 ne seront pas numérotés et n'apparaîtront

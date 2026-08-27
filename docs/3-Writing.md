@@ -28,7 +28,7 @@ The following table summarize MLMD directives and source text effects in generat
 | `# title`         | <ul><li>level 1 heading, used as Markdown file title</li><li>may include language specific text parts</li></ul>|
 | `text …`          | <ul><li>default text when no language specific text exists for current part</li><li>easy use for original text before translation</li></ul>|
 | `.fr((text.))`    | <ul><li>language specific text for `fr` code (french)</li><li>the language code must have been declared in `.languages` directive</li><li>`.fr((` opens language and `.))` closes it</li><li>can be followed by other language parts and preceded by default text</li></ul>|
-| `.all(text.))`    | <ul><li>text will unconditionally go in all language files</li></ul>|
+| `.all((text.))`   | <ul><li>text will unconditionally go in all language files</li></ul>|
 | `.!((text.))`     | <ul><li>text is ignored and won’t go in any generated file</li></ul>|  
 
 ## III-1) Source beginning<A id="a23"></A>
@@ -66,10 +66,11 @@ You can see an example of this use in the MLMD main documentation file in `docso
 
 ### III-2.1) Include directive<A id="a25"></A>
 
-The `.include` directive is followed by a relative file name which must be accessible
-from the main file root directory. The file is not necessarily relative to the file
-where the directive lies. It is written after the directive with no special delimiter
-or quote characters around it and it ends the line.
+The `.include` directive is followed by a relative file name, resolved against the directory of
+the file where the `.include` directive itself lies (not the main file's directory - an included
+file including another one uses its own directory as the base for that inner `.include`). The path
+is everything after the directive up to the end of the line, with only leading and trailing
+whitespace trimmed - it can contain spaces, and needs no delimiter or quote characters around it.
 
 MLMD documentation is organized as a main `README.mlmd` file with a main title and
 a global Table of Contents, which includes 5 other files containing the different parts
@@ -149,6 +150,16 @@ Markdown conventions allow an empty line after a heading, MLMD doesn't change th
 more than one empty line, although it will only generate one in final Markdowns. Par convention dans un fichier Markdown on peut faire suivre
 les titres d'une ligne vide, MLMD accepte même plusieurs lignes vides mais n'en écrira qu'une
 dans les fichiers générés.
+
+MLMD tracks heading levels 1 to 9, but standard Markdown (and renderers like GitHub) only recognize
+`#` to `######` (levels 1 to 6) as real headings. A level 7 to 9 heading (`#######` and beyond) will
+still be numbered and included in tables of contents by MLMD, but will render as plain text starting
+with literal `#` characters in the generated Markdown, not as a heading, in any standard viewer. Keep
+heading depth to 6 levels or less unless you know your target renderer supports more.
+
+MLMD also expects headings not to skip more than one level at a time (e.g. a `####` heading directly
+after a `##` heading, with no `###` in between): doing so will print an error, though generation
+still completes and the skipped-to heading is still numbered and included in tables of contents.
 
 ## III-4) End-of-Lines and End-of-Paragraphs<A id="a28"></A>
 
@@ -368,6 +379,9 @@ and variables:
   embedded in doubled back-ticks with spaces
   (see [Markdown syntax about escapes](https://daringfireball.net/projects/markdown/syntax#autoescape))
   and this whole sequence surrounded by MLMD escaping.
+- If a back-tick, double quote or code fence has no matching closing marker before the end of the
+  file, MLMD prints a warning naming the marker and the line where it was opened, instead of
+  silently swallowing the rest of the file as escaped text.
 
 ## III-8) Variables<A id="a34"></A>
 
@@ -391,6 +405,10 @@ depends on the output mode.
 Each variable takes a value at generation time, except for `{main}` which is only converted to a value
 if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as
 `{main}` in the generated files.
+
+`{iso}` behaves the same way for a language declared with no ISO code (e.g. `.languages fr,en` with
+no `=<iso>` part): the text stays as `{iso}` in that language's generated files, and MLMD prints a
+warning naming the language.
 
 ## III-9) Default text<A id="a35"></A>
 
@@ -463,8 +481,11 @@ the markers will appear in the generated files, whereas MLMD directives won't.
 ## III-12) Immediate vs enclosed effect<A id="a38"></A>
 
 The `.languages`, `.numbering`, `.topnumber` and `.toc` directives have an *immediate effect*.
-It implies they generally should be alone on an isolated line, and preferably at the beginning of
-source files. (This is mandatory for `.languages`, because anything preceding it will be ignored by MLMD.)
+They must each start a fresh line - the character right before them must be an end of line, or
+nothing if they are the very first line of the file - preferably at the beginning of source files.
+Anything written after the directive's own parameters, up to the end of that line, is silently
+discarded by MLMD: it is not an error, but that text will never appear in any generated file. This
+rule is identical for all four immediate directives, not stricter for some than others.
 
 The other enclosing directives start with an opening `.<directive>((` marker which *encloses text* until a
 matching `.))` is met, or until another `((` directive is opened.
@@ -483,10 +504,11 @@ themselves also have defaults settings.
 - After the `.languages` directive, MLMD acts as if a `.default((` directive had been met, so any
   text will go into all the languages files except language specific text even before the level 1 heading.
   Notice that text preceding level 1 heading is not Markdown compliant but MLMD will put it in files.
-- The `.default((` or `.((` directive will only have effect on languages which do not have a defined
-  content yet, any previous `.all` text will make `.default` useless. This also means a whole paragraph
-  of default text can be excluded from a language just because part of it was overridden - see
-  [Pitfall: shared text on the same line as a translated value](#a30).
+- The `.default((` or `.((` directive puts text into whichever languages have not received their own
+  language-specific override since the current paragraph started. A previous `.all((` section has no
+  effect on this: it does not make later `.default((` text unavailable to any language. But a whole
+  paragraph of default text can be excluded from a language just because part of that same paragraph
+  was overridden - see [Pitfall: shared text on the same line as a translated value](#a30).
 - The `.toc` directive has default values which generate an table of contents for local headings of
   levels 2 and 3 in the current file. See [TOC](#generating-table-of-content-toc).
 - The table of contents generated in any file always has an implicit anchor named `toc` which can be

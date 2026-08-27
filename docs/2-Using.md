@@ -81,7 +81,7 @@ the main file of all the directory tree and all the links will use paths relativ
 Notice the name casing: `README` is uppercase, while the `.mlmd` extension is lowercase. On Windows,
 case is not significant but the script still searches an uppercase `README`.
 
-If there is no `README.md` file in the starting directory, the `-main` parameter can be used to tell
+If there is no `README.mlmd` file in the starting directory, the `-main` parameter can be used to tell
 the script which source is the main file, and indirectly which directory is the root directory:
 
 ```code
@@ -183,7 +183,7 @@ addresses the script argument, the syntax is identical for the file directive an
 The parameter consists of any number of levels definitions separated by a comma:
 
 ```code
--numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+-numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]
 ```
 
 Following are details about each definition part.
@@ -211,7 +211,7 @@ then add a number followed by a dot `.` for level 2 headings, then add a number 
 level 3 headings:
 
 ```code
--numbering 1:Chapter :A-,2::1.,3::1
+-numbering 1:Chapter :A:-,2::1:.,3::1
 ```
 
 - Levels 4 and above headings will not be numbered and will not appear

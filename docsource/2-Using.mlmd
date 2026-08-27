@@ -132,7 +132,7 @@ fichier. Attention à la casse du nom : `README` est en majuscules tandis que `.
 Sur Windows les majuscules ne sont pas significatives mais MLMD cherchera tout de même `README`
 en majuscules..))
 
-If there is no `README.md` file in the starting directory, the `-main` parameter can be used to tell
+If there is no `README.mlmd` file in the starting directory, the `-main` parameter can be used to tell
 the script which source is the main file, and indirectly which directory is the root directory:
 .fr((S'il n'y a aucun fichier `README.mlmd` dans le répertoire de démarrage, le paramètre `-main`
 peut être utilisé pour indiquer le fichier source principal et, indirectement, le répertoire racine
@@ -231,7 +231,7 @@ Recent standards have replaced the `name` attribute in HTML `<A>` anchors by the
 which has the benefit of automatic interfacing with Javascript. This mode uses the new `id` attribute
 for anchors and `<a href>` links in the TOC and is well suited for HTML documentation in a modern,
 dynamic scripted environment.
-.fr((Les standards récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut ìd`,
+.fr((Les standards récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut `id`,
 qui a l'avantage d'être automatiquement connu de Javascript. Dans ce mode, MLMD utilise `id` dans les
 ancres. Il est particulièrement adapté pour une documentation HTML dans un environnement moderne
 dynamique ou scripté..))
@@ -313,7 +313,7 @@ de titres rencontrés dans tous les fichiers sources et dans les sommaires. Par 
 
 The script argument has priority and will make MLMD ignore any file `.numbering` directive. The following
 addresses the script argument, the syntax is identical for the file directive and is addressed later.
-.fr((L'argument de la ligne de commande a priorité et supplantera les directives `.numbering``
+.fr((L'argument de la ligne de commande a priorité et supplantera les directives `.numbering`
 dans les fichiers source. Ce qui suit traite de cet argument, la syntaxe de ses paramètres est identique
 pour la directive qui sera abordée plus loin..))
 
@@ -324,11 +324,11 @@ The parameter consists of any number of levels definitions separated by a comma:
 
 .((
 ```code
--numbering [<level>]:[<prefix>]:<symbol>[<separator>][,...]]
+-numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]
 ```
 .)).fr((
 ```code
--numbering [<niveau>]:[<préfixe>]:<symbole>[<séparateur>][,...]]
+-numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]
 ```
 .))
 
@@ -379,11 +379,11 @@ pour les titres de niveau 3 :.))
 
 .((
 ```code
--numbering 1:Chapter :A-,2::1.,3::1
+-numbering 1:Chapter :A:-,2::1:.,3::1
 ```
 .)).fr((
 ```code
--numbering 1:Chapitre :A-,2::1.,3::1
+-numbering 1:Chapitre :A:-,2::1:.,3::1
 ```
 .))
 

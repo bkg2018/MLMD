@@ -62,6 +62,14 @@ by adding closing directives `.))` at the right places.
 été fermées et signale la ligne de début de celles qui ne le sont pas. Il est important de bien lire
 les avertissements et de fermer les sections dont le `.))` a été oublié..))
 
+An escaped text section started with `.!` gets the same check: if a `.!` has no matching closing
+`.!` before the end of the file, MLMD will print a warning. Because `.!` uses the same marker to
+open and close, an odd number of `.!` markers anywhere in the file is enough to trigger it.
+.fr((Une section de texte échappé démarrée avec `.!` reçoit la même vérification : si un `.!` n'a pas
+de `.!` fermant correspondant avant la fin du fichier, MLMD affiche un avertissement. Comme `.!`
+utilise le même marqueur pour l'ouverture et la fermeture, un nombre impair de marqueurs `.!` dans le
+fichier suffit à déclencher cet avertissement..))
+
 ## Wrong indentations.fr((Mauvaises indentations.))
 
 MLMD will reproduce space indentation only if it occurs *after*  language opening directives, so if

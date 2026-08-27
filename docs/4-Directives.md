@@ -60,7 +60,7 @@ directive only applies to the file where it appears.
 ### IV-2.1) Syntax<A id="a46"></A>
 
 ```code
-.numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]]
+.numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]
 ```
 
 Following are details about each definition part. These are identical as for the command line parameter.
@@ -118,12 +118,13 @@ The Table of Contents has one link for each accepted heading.
 
 ### IV-4.1) Syntax<A id="a50"></A>
 
-The `.toc` directive must be written alone on its line with its parameters. Most of the time, the TOC
-lies after the file title and some introduction. A default TOC with no parameters will build a table
-of contents for the current file with headings `##` to `###`. (Level 2 to 4 headings.)
+Like every immediate directive, `.toc` must start its own line, and anything after its parameters
+on that line is discarded - see [Immediate vs enclosed effect](3-Writing.md#a38). Most of the time,
+the TOC lies after the file title and some introduction. A default TOC with no parameters will build
+a table of contents for the current file with headings `##` to `###`. (Level 2 to 4 headings.)
 
 ```code
-.TOC [level=[m][-][n]] [title=<title text>] [out=md|html]
+.toc [level=[m][-][n]] [title=<title text>]
 ```
 
 #### IV-4.11) `level` parameter<A id="a51"></A>
@@ -152,7 +153,7 @@ before the table.
 ### IV-4.2) Examples<A id="a53"></A>
 
 ```code
-.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents))"
+.toc level=1-3 title=.fr((Table des matières.)).en((Table Of Contents.))
 ```
 
 This directive generates a TOC using the headings `#` to `##` found in each file. The order
@@ -244,11 +245,14 @@ is automatically written for all languages by MLMD without the need to use direc
 context is restored after this prefix:
 
 ```code
-# .Main Title.fr((Titre principal.))
+# Main Title.fr((Titre principal.))
 ```
 
 This will put `# Main Title` in all the generated files except the `.fr.md` file where the
-generator will put `# Titre Principal`.
+generator will put `# Titre Principal`. If part of a heading must stay identical in every language
+regardless of a translated part next to it (a common need for a title with an invariant prefix, as
+used in this project's own `README.mlmd`), wrap that invariant part in `.all((` instead of leaving
+it as plain default text - see [Pitfall: shared text on the same line as a translated value](3-Writing.md#a30).
 
 For text blocks, the default text can be put right before the language specific sections, or it
 can be explicitly placed into opening default and closing directives to avoid ambiguity. Single
@@ -287,6 +291,10 @@ This directive is ended or suspended by:
 - The `.all((` directive which starts a section for all languages.
 - The `.<code>((` directives which start a language specific section of text.
 - The `.default((` or `.((` directive which starts the default value for a section of text.
+
+> Don't confuse the `.!((` alias used here with the `.!` escape directive (they look almost
+> identical but do opposite things - `.!((text.))` deletes the text, `.!text.!` keeps it verbatim).
+> See [Escaping text](#a66) for details.
 
 ### IV-7.1) Syntax<A id="a61"></A>
 
@@ -404,11 +412,18 @@ Text can be 'escaped' by surrounding it with `.!` directives.
 In the escaped text, directives and variables are ignored and text is copied as-is in the
 generated files.
 
-In Markdown syntax, text can also be escaped by surrounding it with single or multiple
-back-ticks `.!``, code fences ````.!` or double quotes `"`. MLMD will respect these Markdown
-escaping and forward the escaped text with its escape markers into generated files while
-ignoring any variables and directives in it. The difference with MLMD escaping directives is that
-these last directives `.!`will not be written and only the escaped text will.
+In Markdown syntax, text can also be escaped by surrounding it with single or multiple back-ticks,
+code fences, or double quotes. MLMD will respect these Markdown escaping conventions and forward
+the escaped text into generated files while ignoring any variables and directives in it. The
+difference with the MLMD `.!` directive is that `.!` itself will not be written to the output,
+while Markdown's own escape markers (back-ticks, fences, quotes) are kept in the generated text,
+since the Markdown renderer needs them too.
+
+> Don't confuse `.!text.!` (escape) with `.!((text.))` (the short alias for `.ignore((`, described
+> earlier). They look almost identical but do opposite things: `.!text.!` keeps the text, unexpanded
+> and verbatim, in every generated file; `.!((text.))` deletes the text from every generated file.
+> A stray extra `(` or a missing one silently switches between "keep as-is" and "delete" with no
+> warning. When in doubt, prefer writing out `.ignore((` in full instead of the `.!((` alias.
 
 ## IV-10) Examples<A id="a67"></A>
 

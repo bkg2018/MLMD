@@ -40,6 +40,11 @@ A la fin de  chaque fichier source, MLMD vérifie si toutes les sections de lang
 été fermées et signale la ligne de début de celles qui ne le sont pas. Il est important de bien lire
 les avertissements et de fermer les sections dont le `.))` a été oublié.
 
+Une section de texte échappé démarrée avec `.!` reçoit la même vérification : si un `.!` n'a pas
+de `.!` fermant correspondant avant la fin du fichier, MLMD affiche un avertissement. Comme `.!`
+utilise le même marqueur pour l'ouverture et la fermeture, un nombre impair de marqueurs `.!` dans le
+fichier suffit à déclencher cet avertissement.
+
 ## V-4) Mauvaises indentations<A id="a72"></A>
 
 MLMD reproduit les indentations situées *après* les directives d'ouverture de langue, aussi lorsque
