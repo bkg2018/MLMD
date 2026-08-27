@@ -128,6 +128,7 @@ namespace MultilingualMarkdown {
             $this->bufferChars = ($content === null || $content === '') ? [] : mb_str_split($content, 1);
             $this->bufferLength = count($this->bufferChars);
             $this->bufferPosition = 0;
+            $this->curLine = 1;
             if ($this->bufferLength > 0) {
                 // remember first character and simulate a previous EOL
                 $this->previousChars = [$this->bufferChars[0], "\n"];

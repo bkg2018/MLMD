@@ -1,4 +1,4 @@
-# II) How to Use MLMD<A id="a8"></A>
+# II) How to Use MLMD<A id="a7"></A>
 
 MLMD is run by the php interpreter and either receives parameters telling it which source
 files to process, either processes all the source files it finds in the current directory
@@ -6,7 +6,7 @@ from where it has been launched.
 
 Optional parameters tells mlmd where to write generated files, how to number headings or write links.
 
-## II-1) MLMD run parameters<A id="a9"></A>
+## II-1) MLMD run parameters<A id="a8"></A>
 
 The syntax for `mlmd.php` and its arguments is:
 
@@ -26,7 +26,7 @@ The input files can be given to the script with the `-i` parameter, or they can 
 the current directory from where the script is called if no `-i` parameter is given. This is explained
 in [Input files](#input-files--i-argument).
 
-## II-2) Source file paths and names<A id="a10"></A>
+## II-2) Source file paths and names<A id="a9"></A>
 
 The files names for the MLMD source files must end with either `.base.md` or `.mlmd` extension. Files with
 other extensions will be ignored. The `.base.md` extension can be convenient because syntax highlighting
@@ -46,7 +46,7 @@ this root, so that all internal links in generated files can use relative paths.
 
 The various directives are described in [Directives](#directives).
 
-## II-3) Input files: `-i` argument<A id="a11"></A>
+## II-3) Input files: `-i` argument<A id="a10"></A>
 
 To process specific files, use the `-i` parameter followed by the files paths. To process more than one files,
 it is best to have them in a same tree and to start MLMD at the root directory where the main Markdown file lies so
@@ -74,7 +74,7 @@ MLMD will find all the source files. In this case the `-i` argument is not neede
   This syntax will process any file found in the directory tree which ends by `.base.md` or `.mlmd`,
   including those found in sub directories. Other files will be ignored.
 
-## II-4) Main file: `-main` argument<A id="a12"></A>
+## II-4) Main file: `-main` argument<A id="a11"></A>
 
 If a file is named `README.mlmd` in the directory where the script is started, it will be considered
 the main file of all the directory tree and all the links will use paths relative to its directory.
@@ -91,7 +91,7 @@ php ~/phpscripts/mlmd.php -main ./main.mlmd
 The main file is generally the bets place where to put a global table of contents covering
 all the source files. See the `.toc` directive for more informations.
 
-## II-5) Output mode html/htmlold/md/mdpure: `-out` argument<A id="a13"></A>
+## II-5) Output mode html/htmlold/md/mdpure: `-out` argument<A id="a12"></A>
 
 The `-out` parameter selects the HTML or Markdown syntax for the links in the Tables Of Contents.
 
@@ -130,33 +130,33 @@ There is no absolute best method, the choice for the right method is context dep
 another mode it is best to run MLMD on source files changing only the `-out`parameter value and check
 if the result is as expected.
 
-### II-5.1) Named HTML anchors: `htmlold`<A id="a14"></A>
+### II-5.1) Named HTML anchors: `htmlold`<A id="a13"></A>
 
 This mode uses plain old HTML style `<a name="id">` anchors to headings targets and `<a href>` links
 in the TOC. It is best used in vanilla HTML context for existing documentation or system, to keep maximum
 compatibility with possibly old Web browsers.
 
-### II-5.2) Identified HTML anchors: `html`<A id="a15"></A>
+### II-5.2) Identified HTML anchors: `html`<A id="a14"></A>
 
 Recent standards have replaced the `name` attribute in HTML `<A>` anchors by the `id` attribute,
 which has the benefit of automatic interfacing with Javascript. This mode uses the new `id` attribute
 for anchors and `<a href>` links in the TOC and is well suited for HTML documentation in a modern,
 dynamic scripted environment.
 
-### II-5.3) Anchored Markdown: `md`<A id="a16"></A>
+### II-5.3) Anchored Markdown: `md`<A id="a15"></A>
 
 This hybrid mode uses HTML anchors with the `id` attribute and `[]()` Markdown links in the TOC.
 It is appropriate for software or Github documentation and works in a lot of different situations
 where HTML is allowed.
 
-### II-5.4) Pure Markdown: `mdpure`<A id="a17"></A>
+### II-5.4) Pure Markdown: `mdpure`<A id="a16"></A>
 
 This mode generate Markdown `{#}` anchors for headings and uses `[]()` Markdown links in the TOC
 and use no HTML construction at all. It is well suited in pure Markdown contexts or when files are
 automatically checked against Markdown conformity. However Markdown anchors may not work in all
 Markdown processors so if this is a problem, the `md` hybrid mode can be a better choice.
 
-### II-5.5) About non-unique headings<A id="a18"></A>
+### II-5.5) About non-unique headings<A id="a17"></A>
 
 Because of the automatic headings links feature, Markdown convention is generally forbidding identical
 heading texts in a file. However, except for a warning from Markdown lint tools, identical headings are
@@ -165,7 +165,7 @@ identifiers over all the processed files so even identical headings can be targe
 However the user cannot know the MLMD unique identifier before all files are processed, so links in the text
 body cannot easily use the MLMD anchors.
 
-## II-6) Headings numbering: `-numbering`<A id="a19"></A>
+## II-6) Headings numbering: `-numbering`<A id="a18"></A>
 
 The `-numbering` parameter sets a numbering scheme for headings levels over all the generated files and in the
 tables of contents. For example, a third level heading could be numbered `A.2-5) Using objects`. The numbering
@@ -178,7 +178,7 @@ can be set in two ways:
 The script argument has priority and will make MLMD ignore any file `.numbering` directive. The following
 addresses the script argument, the syntax is identical for the file directive and is addressed later.
 
-### II-6.1) Syntax<A id="a20"></A>
+### II-6.1) Syntax<A id="a19"></A>
 
 The parameter consists of any number of levels definitions separated by a comma:
 
@@ -204,7 +204,7 @@ A level N always starts with the defined symbol, then all the following headings
 this symbol until a heading with a level N-1 above will reset the current level N, and continue with the next number
 in the setting for the above level N.
 
-### II-6.2) Example<A id="a21"></A>
+### II-6.2) Example<A id="a20"></A>
 
 This is how to number level 1 headings with the 'A', 'B' etc letters followed by a dash `-`,
 then add a number followed by a dot `.` for level 2 headings, then add a number for

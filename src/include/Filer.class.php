@@ -91,6 +91,12 @@ namespace MultilingualMarkdown {
         private $storage = null;
         /** number of processed lines after end of process() */
         private $processedLines = 0;
+        /**
+         * Content of each input file, keyed by absolute path, captured once during Lexer's
+         * combined discovery+preprocessing scan and reused by openFile() for the real
+         * generation pass - avoids reading and reparsing every file a third time from disk.
+         */
+        private array $cachedFileContent = [];
 
         // Output filenames, files and writing status
 
@@ -380,6 +386,26 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Resolve a path to the same canonical, absolute form addInputFile() stores in
+         * allInFilePathes (and so computeRelativeFilename() will later be able to match).
+         * Exposed so a file discovered mid-scan (e.g. by Lexer's combined discovery+
+         * preprocessing pass) can register it and immediately reuse the exact same path
+         * string for its own bookkeeping (like caching that file's content), instead of a
+         * merely-equivalent-looking path that would silently fail to match later.
+         *
+         * @return string|null the canonical absolute path, or null if the file doesn't exist.
+         */
+        public function resolveInputPath(string $path): ?string
+        {
+            $path = normalizedPath($path);
+            $absolutePath = normalizedPath(realpath($path));
+            if ($absolutePath === false) {
+                return null;
+            }
+            return $absolutePath;
+        }
+
+        /**
          * Add a file to the input files array.
          * This must be done before any processing.
          * The file is checked for existence. The full path is stored, if it cannot be found
@@ -556,9 +582,12 @@ namespace MultilingualMarkdown {
                 return $this->error("cannot open file $filename", __FILE__, __LINE__);
             }
 
-            // prepare storage object
+            // prepare storage object - reuse content cached during the earlier combined
+            // discovery+preprocessing scan if available, to avoid reparsing the file a
+            // third time; fall back to the just-opened file handle otherwise.
             if (!isset($this->storage) || ($this->storage == null)) {
-                $this->storage = new Storage($this->inFile);
+                $cachedContent = $this->getCachedFileContent($filename);
+                $this->storage = ($cachedContent !== null) ? new Storage($cachedContent) : new Storage($this->inFile);
             }
 
             // retain base name with full path but no extension as template and reset line number
@@ -664,16 +693,50 @@ namespace MultilingualMarkdown {
             $this->relFilenames = [];
 
             foreach ($this->allInFilePathes as $index => $filename) {
-                // get relative filename, ignore if not the right root
-                $rootLen = mb_strlen($this->rootDir);
-                $baseDir = mb_substr($filename, 0, $rootLen);
-                if ($baseDir != $this->rootDir) {
-                    $this->error("wrong base dir for file [$filename], should be [$this->rootDir]", __FILE__, __LINE__);
-                    continue;
+                $relFilename = $this->computeRelativeFilename($filename);
+                if ($relFilename !== null) {
+                    $this->relFilenames[$index] = $relFilename;
                 }
-                // relative filename is the index for the work arrays
-                $this->relFilenames[$index] = mb_substr($filename, $rootLen + 1);
             }
+        }
+
+        /**
+         * Compute a file's path relative to the root directory, the same way readyInputs()
+         * does for every known input file - exposed so a file discovered mid-scan (e.g. by
+         * Lexer's combined discovery+preprocessing pass) can get its relative name immediately,
+         * without waiting for a full readyInputs() rebuild.
+         *
+         * @return string|null the relative path, or null (with an error logged) if $filename
+         *                     isn't under the root directory.
+         */
+        public function computeRelativeFilename(string $filename): ?string
+        {
+            $rootLen = mb_strlen($this->rootDir);
+            $baseDir = mb_substr($filename, 0, $rootLen);
+            if ($baseDir != $this->rootDir) {
+                $this->error("wrong base dir for file [$filename], should be [$this->rootDir]", __FILE__, __LINE__);
+                return null;
+            }
+            return mb_substr($filename, $rootLen + 1);
+        }
+
+        /**
+         * Cache a file's full content, captured during Lexer's combined discovery+
+         * preprocessing scan, so the real generation pass can reuse it via openFile()
+         * instead of reading the file from disk a third time.
+         */
+        public function cacheFileContent(string $absolutePath, string $content): void
+        {
+            $this->cachedFileContent[$absolutePath] = $content;
+        }
+
+        /**
+         * Retrieve a file's cached content, or null if it wasn't cached (openFile() falls
+         * back to reading the file from disk in that case).
+         */
+        public function getCachedFileContent(string $absolutePath): ?string
+        {
+            return $this->cachedFileContent[$absolutePath] ?? null;
         }
 
 

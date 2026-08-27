@@ -242,10 +242,11 @@ namespace MultilingualMarkdown {
         public function preProcess(): void
         {
             $this->filer->readyInputs();
-            $this->lexer->preProcessIncludes($this->filer);
-            $this->filer->readyInputs();
             $this->filer->setOutputMode($this->outputModeName, null);
-            $this->lexer->preProcess($this->filer);
+            $this->lexer->discoverAndPreprocess($this->filer);
+            // rebuild relative filenames now that .include discovery may have registered
+            // more input files
+            $this->filer->readyInputs();
         }
 
         //------------------------------------------------------------------------------------------------------

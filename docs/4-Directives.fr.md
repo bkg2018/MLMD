@@ -1,9 +1,9 @@
-# IV) Références des directives<A id="a40"></A>
+# IV) Références des directives<A id="a39"></A>
 
 Dans cette partie de la documentation sont décrites les directives avec
 leur syntaxe, des notes d'utilisation et des exemples
 
-## IV-1) Déclarer les langues: `.languages`<A id="a41"></A>
+## IV-1) Déclarer les langues: `.languages`<A id="a40"></A>
 
 La directive `.languages` déclare les langues utilisables dans les fichiers sources en leur affectant
 un code, un code ISO associé et facultatif, et en indiquant éventuellement le code *main* de la langue
@@ -13,7 +13,7 @@ La langue *principale* a pour seule particularité que les fichiers générés p
 auront l'extension `.md` sans le code de langue par exemple `README.md`, par opposition aux autres
 langues dont les fichiers auront l'extension `.code.md`, par exemple `README.fr.md`.
 
-### IV-1.1) Syntaxe<A id="a42"></A>
+### IV-1.1) Syntaxe<A id="a41"></A>
 
 La directive `.languages` est située seule sur une ligne et est suivie d'une liste de codes
 pour chacune des langues utilisées dans les fichiers sources, chaque code pouvant être associé à un
@@ -33,7 +33,7 @@ source `README.base.md` générera un fichier `README.md` pour la langue princip
 à des environnements qui contrôlent les fichiers Markdown déposés, comme les dépôts Git qui exigent un
 fichier `README.md` en racine du dépôt.
 
-### IV-1.2) Remarques<A id="a43"></A>
+### IV-1.2) Remarques<A id="a42"></A>
 
 - Aucun fichier n'est généré avant qu'une directive `.languages` ait été localisée dans tous les fichiers
 sources. Tout texte précédant cette directive sera ignoré.
@@ -44,7 +44,7 @@ au début de chaque fichier sans effet indésirable. L'ordre peut également êt
 - Après la directive `.languages`, le générateur se place en mode texte par défaut et enverra tout texte à
 toutes les langues jusqu'à ce qu'une directive d'ouverture de langue change cela.
 
-### IV-1.3) Exemple<A id="a44"></A>
+### IV-1.3) Exemple<A id="a43"></A>
 
 ```code
 .languages en=en_US,fr main=en
@@ -53,7 +53,7 @@ toutes les langues jusqu'à ce qu'une directive d'ouverture de langue change cel
 Avec cette directive les fichiers seront générés avec une extension `.md` pour la langue du code
 `en` et `.fr.md` pour la langue `fr`.
 
-## IV-2) Définition d'un schéma de numérotation : `.numbering`<A id="a45"></A>
+## IV-2) Définition d'un schéma de numérotation : `.numbering`<A id="a44"></A>
 
 La directive `.numbering` définit le schéma de numérotation pour le fichier actuel et les sommaires.
 La syntaxe est identique à celle du paramètre `-numbering` de la ligne de commande.
@@ -61,7 +61,7 @@ La syntaxe est identique à celle du paramètre `-numbering` de la ligne de comm
 > ATTENTION : le paramètre de ligne de commande s'applique à tous les fichiers sources, tandis
 que la directive permet de modifier le schéma pour le fichier où elle apparaît.
 
-### IV-2.1) Syntaxe<A id="a46"></A>
+### IV-2.1) Syntaxe<A id="a45"></A>
 
 ```code
 .numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]
@@ -87,7 +87,7 @@ Le premier titre d'un niveau N est numéroté avec le symbole indiqué, les suiv
 incrémentés jusqu'à ce que survienne un titre de niveau supérieur N-1 qui réinitialisera la prochaine séquence de
 niveau N au symbole de départ.
 
-## IV-3) Numéro de titre niveau 1 : `.topnumber`<A id="a47"></A>
+## IV-3) Numéro de titre niveau 1 : `.topnumber`<A id="a46"></A>
 
 La directive `.topnumber` définit le numéro du titre de niveau 1 du fichier actuel au sein du schéma de
 numérotation défini par `.numbering` ou le paramètre `-numbering`de la ligne de commande. Ce numéro peut
@@ -95,7 +95,7 @@ numérotation défini par `.numbering` ou le paramètre `-numbering`de la ligne 
 seul titre de niveau 1. Si la directive `.topnumber` est utilisée dans les fichiers, ils seront traités dans
 l'ordre défini par ces directives.
 
-### IV-3.1) Syntaxe<A id="a48"></A>
+### IV-3.1) Syntaxe<A id="a47"></A>
 
 ```code
 .topnumber <n>
@@ -104,7 +104,7 @@ l'ordre défini par ces directives.
 Le paramètre `n` est n'importe quel nombre entier à partir de 1. Chaque fichier doit avoir un numéro unique,
 car l'utilisation de numéros identiques aura des effets imprévisibles.
 
-## IV-4) Génération de sommaire : `.toc`<A id="a49"></A>
+## IV-4) Génération de sommaire : `.toc`<A id="a48"></A>
 
 La directive `.toc`génère un sommaire à partir des niveaux de titres qui lui sont indiqués. Dans la
 syntaxe Markdown, ces niveaux sont définis par le nombre de caractères `#` en début de ligne : `#` est pour
@@ -124,7 +124,7 @@ Le sommaire insère un lien vers chaque titre de chaque fichier qu'il inclut
   `.numbering`, il sera utilisé pour les titres placés dans le sommaire.
 > Le titre du sommaire est écrit comme un titre de niveau 2 dans les fichiers générés.
 
-### IV-4.1) Syntaxe<A id="a50"></A>
+### IV-4.1) Syntaxe<A id="a49"></A>
 
 Comme toute directive immédiate, `.toc` doit démarrer sa propre ligne, et tout ce qui suit ses
 paramètres sur cette ligne est ignoré - voir [Effets immédiats et englobés](3-Writing.md#a38). La
@@ -135,7 +135,7 @@ aucun paramètre écrira la liste des titres `##` à `###` du fichier en cours (
 .toc [level=[m][-][n]] [title=<texte de titre>]
 ```
 
-#### IV-4.11) Paramètre `level`<A id="a51"></A>
+#### IV-4.11) Paramètre `level`<A id="a50"></A>
 
 Ce paramètre choisit les niveaux des titres qui apparaîtront dans le sommaire.
 
@@ -147,7 +147,7 @@ La syntaxe pour ce paramètre est `level=[m][-][n]` :
 - Si `m-n` est fourni, les niveaux `m` à `n` seront retenus.
 - Si `-n` est fourni, les niveaux 1 à `n` seront retenus.
 
-#### IV-4.12) Paramètre `title`<A id="a52"></A>
+#### IV-4.12) Paramètre `title`<A id="a51"></A>
 
 Ce paramètre est suivi d'un titre qui sera placé comme titre de niveau 2 (`##`))) juste
 avant le sommaire.
@@ -158,7 +158,7 @@ avant le sommaire.
 - Tout ce qui suit `title=` jusqu'à la fin de ligne ou jusqu'au paramètre `level=` est
   utilisé dans le titre.
 
-### IV-4.2) Exemples<A id="a53"></A>
+### IV-4.2) Exemples<A id="a52"></A>
 
 ```code
 .toc level=1-3 title=.fr((Table des matières.)).en((Table Of Contents.))
@@ -171,7 +171,7 @@ les répertoires la première fois, ce qui n'est pas facilement contrôlable.
 
 Le titre des sommaires est `Table Of Contents` par défaut dans toutes les langues.
 
-## IV-5) Texte pour toutes les langues : `.all((`<A id="a54"></A>
+## IV-5) Texte pour toutes les langues : `.all((`<A id="a53"></A>
 
 La directive `.all((` ouvre une section de texte qui sera écrite dans les fichiers de toutes
 les langues déclarées dans `.languages`.
@@ -187,13 +187,13 @@ Par défaut, tout texte en dehors des directives d'ouverture et de fermeture de 
 est considéré comme du texte par défaut écrit dans tous les fichiers des langues qui n'ont pas de
 section spécifique, comme si une directive `.((` était active.
 
-### IV-5.1) Syntaxe<A id="a55"></A>
+### IV-5.1) Syntaxe<A id="a54"></A>
 
 ```code
 .all((
 ```
 
-### IV-5.2) Exemples<A id="a56"></A>
+### IV-5.2) Exemples<A id="a55"></A>
 
 Les directives peuvent être placées seules sur une ligne autour du texte sur lequel elles agissent :
 
@@ -223,7 +223,7 @@ Rappel : par défaut, le texte va dans les fichiers de toutes les langues qui n'
 Ce contexte par défaut est restauré lorsqu'aucune directive d'ouverture n'est plus active, comme c'est le cas
 à la fin du titre exemple ci-dessus après la dernière directive `.))`.
 
-## IV-6) Texte par défaut : `.((` ou `.default((`<A id="a57"></A>
+## IV-6) Texte par défaut : `.((` ou `.default((`<A id="a56"></A>
 
 La directive `.default((` ou `.((` ouvre une section dans laquelle le texte
 ira dans toutes les langues qui n'auront pas de section spécifique à la suite de ce texte
@@ -243,7 +243,7 @@ La raison d'être du texte par défaut est de préparer le texte original du doc
 dans une langue courante comme l'anglais, puis d'ajouter les sections spécifiques à la volée tout en
 disposant du texte original par défaut pour les langues qui n'auront pas encore été traduites.
 
-### IV-6.1) Syntaxe<A id="a58"></A>
+### IV-6.1) Syntaxe<A id="a57"></A>
 
 ```code
 .default((
@@ -255,7 +255,7 @@ ou :
 .((
 ```
 
-### IV-6.2) Exemples<A id="a59"></A>
+### IV-6.2) Exemples<A id="a58"></A>
 
 Les titres sont un cas spécial de texte par défaut car leur préfixe `#` est traité séparément
 par MLMD et écrit dans les fichiers de toutes les langues, puis le contexte par défaut est restauré
@@ -295,7 +295,7 @@ Ceci est la traduction en français.
 .))
 ```
 
-## IV-7) Texte ignoré : `.ignore((` ou `.!((`<A id="a60"></A>
+## IV-7) Texte ignoré : `.ignore((` ou `.!((`<A id="a59"></A>
 
 La directive `.ignore` démarre une section de texte qui ne sera écrite dans
 aucun fichier d'aucune langue. Elle a plusieurs utilités :
@@ -315,13 +315,13 @@ Elle peut être suspendue ou terminée par :
 ressemblent presque mais font l'inverse l'un de l'autre - `.!((texte.))` supprime le texte,
 `.!texte.!` le conserve tel quel). Voir [Texte échappé](#a66) pour plus de détails.
 
-### IV-7.1) Syntaxe<A id="a61"></A>
+### IV-7.1) Syntaxe<A id="a60"></A>
 
 ```code
 .ignore((
 ```
 
-### IV-7.2) Exemple<A id="a62"></A>
+### IV-7.2) Exemple<A id="a61"></A>
 
 La directive peut s'appliquer à des blocs entiers de texte :
 
@@ -338,7 +338,7 @@ Texte à générer .ignore((texte à ignorer.)) suite du texte à générer
 # Titre pour toutes les langues .ignore((text ignoré.)) suite du titre
 ```
 
-## IV-8) Texte pour une langue : `.<code>((`<A id="a63"></A>
+## IV-8) Texte pour une langue : `.<code>((`<A id="a62"></A>
 
 La directive `.<code>` démarre une section de texte destinée uniquement à la langue
 dont le code `<code>` a été déclaré dans la directive `.languages`.
@@ -356,7 +356,7 @@ sections puissent s'enchaîner il est conseillé de fermer la précédente avant
 une nouvelle sans quoi il faudra toutes les fermer à la fin des sections de chaque langue.
 Les exemples ci-après illustrent l'enchaînement de langues.
 
-### IV-8.1) Syntaxe<A id="a64"></A>
+### IV-8.1) Syntaxe<A id="a63"></A>
 
 ```code
 .<code>((
@@ -366,7 +366,7 @@ Dans cette syntaxe, `<code>` est l'un des codes déclarés dans `.languages` au 
 fichiers sources. Les crochets `<` et `>` sont uniquement présents pour la notation et ne
 doivent pas être saisis autour du code.
 
-### IV-8.2) Exemples<A id="a65"></A>
+### IV-8.2) Exemples<A id="a64"></A>
 
 La directive peut entourer du texte ou des titres :
 
@@ -427,7 +427,7 @@ Now this text is in the `all` section and go in all files.
 This text will only go into the french file because its opening directive has not been closed yet.
 ```
 
-## IV-9) Texte échappé : `.!`<A id="a66"></A>
+## IV-9) Texte échappé : `.!`<A id="a65"></A>
 
 Le texte peut être 'échappé' en l'entourant de directives `.!`.
 
@@ -449,6 +449,6 @@ le texte de tous les fichiers générés. Une parenthèse en trop ou manquante f
 silencieusement de « conserver tel quel » à « supprimer », sans aucun avertissement. En cas de
 doute, préférez écrire `.ignore((` en entier plutôt que d'utiliser l'alias `.!((`.
 
-## IV-10) Exemples<A id="a67"></A>
+## IV-10) Exemples<A id="a66"></A>
 
 Le répertoire `Examples` contient divers fichiers sources exemples.

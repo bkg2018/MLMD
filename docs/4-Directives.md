@@ -1,9 +1,9 @@
-# IV) Directives Reference<A id="a40"></A>
+# IV) Directives Reference<A id="a39"></A>
 
 In this part, each directive will be explained in detail with syntax, use notes
 and examples.
 
-## IV-1) Declaring languages: `.languages`<A id="a41"></A>
+## IV-1) Declaring languages: `.languages`<A id="a40"></A>
 
 The `.languages` directive declares the possible languages which can be found in the sources, assign them
 a code and an optional associated ISO code, and optionally tells which code is the *main* language.
@@ -11,7 +11,7 @@ a code and an optional associated ISO code, and optionally tells which code is t
 The *main* language has files generated without the language code suffix, e.g. `README.md` while other
 languages will have the language code suffix, e.g. `README.fr.md`.
 
-### IV-1.1) Syntax<A id="a42"></A>
+### IV-1.1) Syntax<A id="a41"></A>
 
 The `.languages` directive lies alone on a line and is followed by the list of language codes to be
 used in all source files, optionally associated to an ISO code. One code can be declared as the
@@ -30,7 +30,7 @@ the `README.base.md` source file will generate a `README.md` for the main langua
 `README.<code>.md` for other language codes. This is particularly useful with Git deposits which
 require a `README.md` file at the deposit root.
 
-### IV-1.2) Notices<A id="a43"></A>
+### IV-1.2) Notices<A id="a42"></A>
 
 - No file is generated before the `.languages` directive is met: any preceding text will be ignored.
 - The directive has a global effect over all the source files so it can be put in the first processed
@@ -40,7 +40,7 @@ in each source file.
 - After the `.languages` directive, the generator will consider all text as default text
 and send it to all languages files until a language opening directive changes this.
 
-### IV-1.3) Example<A id="a44"></A>
+### IV-1.3) Example<A id="a43"></A>
 
 ```code
 .languages en=en_US,fr main=en
@@ -49,7 +49,7 @@ and send it to all languages files until a language opening directive changes th
 Generated files will be named with a `.md` extension for the `en` language and with `.fr.md` for
 the `fr` language.
 
-## IV-2) Defining a numbering scheme: `.numbering`<A id="a45"></A>
+## IV-2) Defining a numbering scheme: `.numbering`<A id="a44"></A>
 
 The `.numbering` directive defines the numbering scheme for current file headings and TOC lines.
 The syntax is identical to the `-numbering` command line argument.
@@ -57,7 +57,7 @@ The syntax is identical to the `-numbering` command line argument.
 > WARNING: the `-numbering` command line argument has global effect on all files, while the `.numbering`
 directive only applies to the file where it appears.
 
-### IV-2.1) Syntax<A id="a46"></A>
+### IV-2.1) Syntax<A id="a45"></A>
 
 ```code
 .numbering [<level>]:[<prefix>]:<symbol>[:<separator>][,...]
@@ -81,7 +81,7 @@ A level N always starts with the defined symbol, then all the following headings
 this symbol until a heading with a level N-1 above will reset the current level N, and continue with the next number
 in the setting for the above level N.
 
-## IV-3) Numbering level 1 heading: `topnumber`<A id="a47"></A>
+## IV-3) Numbering level 1 heading: `topnumber`<A id="a46"></A>
 
 The `.topnumber` directive defines the starting number for the level 1 heading in the current file for the
 numbering scheme set by `.numbering` or the `-numbering`command line parameter. This 
@@ -89,7 +89,7 @@ can be used to number successive source files in table of contents. Each file ha
 If the `.topnumber` directive is used in files, they will be processed in the order defined by this
 directive.
 
-### IV-3.1) Syntax<A id="a48"></A>
+### IV-3.1) Syntax<A id="a47"></A>
 
 ```code
 .topnumber <n>
@@ -98,7 +98,7 @@ directive.
 The parameter `n` can be any integer number starting at 1. Each file should have a unique number, as using
 identical numbers will have unpredictable effects.
 
-## IV-4) Generating Table Of Content: `.toc`<A id="a49"></A>
+## IV-4) Generating Table Of Content: `.toc`<A id="a48"></A>
 
 The `.toc` directive generates a Table Of Contents using chosen header levels. The header levels are defined
 by the number of `#` prefixes in Markdown syntax: `#` is header level 1 which is unique in a file, `##` is
@@ -116,7 +116,7 @@ The Table of Contents has one link for each accepted heading.
   `.numbering` directive, it will be used for the toc headings.
 > The TOC title is written as a level 2 heading in the generated files.
 
-### IV-4.1) Syntax<A id="a50"></A>
+### IV-4.1) Syntax<A id="a49"></A>
 
 Like every immediate directive, `.toc` must start its own line, and anything after its parameters
 on that line is discarded - see [Immediate vs enclosed effect](3-Writing.md#a38). Most of the time,
@@ -127,7 +127,7 @@ a table of contents for the current file with headings `##` to `###`. (Level 2 t
 .toc [level=[m][-][n]] [title=<title text>]
 ```
 
-#### IV-4.11) `level` parameter<A id="a51"></A>
+#### IV-4.11) `level` parameter<A id="a50"></A>
 
 This parameter sets the heading levels which will appear in the TOC.
 
@@ -140,7 +140,7 @@ Syntax for this parameter is `level=[m][-][n]`:
 - If `m-n` is given, TOC titles will be level `m` to level `n` headings.
 - If `-n` is given, TOC titles will be level 1 to level `n` headings.
 
-#### IV-4.12) `title` parameter<A id="a52"></A>
+#### IV-4.12) `title` parameter<A id="a51"></A>
 
 This parameter is followed by text which will be placed as a level 2 (`##`) heading right
 before the table.
@@ -150,7 +150,7 @@ before the table.
 - Everything that follows `title=` is used as title text until either the end of the line,
   either the `level=`parameter.
 
-### IV-4.2) Examples<A id="a53"></A>
+### IV-4.2) Examples<A id="a52"></A>
 
 ```code
 .toc level=1-3 title=.fr((Table des matières.)).en((Table Of Contents.))
@@ -163,7 +163,7 @@ to for the first time and is not easily controllable.
 
 The table title will be `## Table Of Contents` by default in any language.
 
-## IV-5) Generating for all languages: `.all((`<A id="a54"></A>
+## IV-5) Generating for all languages: `.all((`<A id="a53"></A>
 
 The `.all((` directive starts a section of text which will be put in each of the languages
 files declared in the `.languages` directive.
@@ -179,13 +179,13 @@ By default, any text outside directives and appearing after the `.languages` dir
 is generated as default text in all the languages files with no specific text as if it were
 in a `.((` section.
 
-### IV-5.1) Syntax<A id="a55"></A>
+### IV-5.1) Syntax<A id="a54"></A>
 
 ```code
 .all((
 ```
 
-### IV-5.2) Examples<A id="a56"></A>
+### IV-5.2) Examples<A id="a55"></A>
 
 Directives can always be alone on a line, surrounding the text they act on:
 
@@ -207,7 +207,7 @@ Remember that by default, text goes in all the language files with no specific s
 is resumed when no language specific section is active anymore, as it is at the end of the exemple above after the
 last `.))` directive.
 
-## IV-6) Default text: `.default((` or `.((`<A id="a57"></A>
+## IV-6) Default text: `.default((` or `.((`<A id="a56"></A>
 
 The `.default((`  or `.((` directive starts a default text section which will be put in
 the generated language files for which no specific language section is available after this
@@ -226,7 +226,7 @@ The goal of the `.default((` directive is to prepare the original text and headi
 common language like english, then add language specific sections on the fly while still having
 the default text for languages which are not translated yet.
 
-### IV-6.1) Syntax<A id="a58"></A>
+### IV-6.1) Syntax<A id="a57"></A>
 
 ```code
 .default((
@@ -238,7 +238,7 @@ or:
 .((
 ```
 
-### IV-6.2) Examples<A id="a59"></A>
+### IV-6.2) Examples<A id="a58"></A>
 
 An special use of default text is in headings, because the `#` is handled separately and
 is automatically written for all languages by MLMD without the need to use directives, and the default
@@ -276,7 +276,7 @@ Ceci est la traduction en français.
 .))
 ```
 
-## IV-7) Ignoring text: `.ignore` or `.!((`<A id="a60"></A>
+## IV-7) Ignoring text: `.ignore` or `.!((`<A id="a59"></A>
 
 The `.ignore` directive starts an ignored section of text. Ignored text won't be put in
 any generated file. It is useful for many tasks:
@@ -296,13 +296,13 @@ This directive is ended or suspended by:
 > identical but do opposite things - `.!((text.))` deletes the text, `.!text.!` keeps it verbatim).
 > See [Escaping text](#a66) for details.
 
-### IV-7.1) Syntax<A id="a61"></A>
+### IV-7.1) Syntax<A id="a60"></A>
 
 ```code
 .ignore((
 ```
 
-### IV-7.2) Example<A id="a62"></A>
+### IV-7.2) Example<A id="a61"></A>
 
 The directive can be applied to full blocks of text:
 
@@ -319,7 +319,7 @@ Text to generate .ignore((text to ignore.)) following text to generate
 # Title for all languages .ignore((ignore this.)) title following
 ```
 
-## IV-8) Generating for languages: `.<code>((`<A id="a63"></A>
+## IV-8) Generating for languages: `.<code>((`<A id="a62"></A>
 
 The `.<code>((` directive starts a section of text which will only be put in the generated
 file for the language whose code `<code>` has been declared in the `.languages` directive.
@@ -336,7 +336,7 @@ Language sections must be closed by a matching `.))`. Although sections can be c
 it is recommended to close a section before beginning an other one, else you'll have to
 close all of them at the end of sections. See examples below for language chaining.
 
-### IV-8.1) Syntax<A id="a64"></A>
+### IV-8.1) Syntax<A id="a63"></A>
 
 ```code
 .<code>((
@@ -346,7 +346,7 @@ In this syntax, `<code>` is one of the codes declared after the `.languages` dir
 at the source files start. The angle brackets `<` and `>` are only for notation and not part
 of the code and should not be entered.
 
-### IV-8.2) Examples<A id="a65"></A>
+### IV-8.2) Examples<A id="a64"></A>
 
 The directive can enclose text or headings:
 
@@ -405,7 +405,7 @@ Now this text is in the `all` section and go in all files.
 This text will only go into the french file because its opening directive has not been closed yet.
 ```
 
-## IV-9) Escaping text: `.!`<A id="a66"></A>
+## IV-9) Escaping text: `.!`<A id="a65"></A>
 
 Text can be 'escaped' by surrounding it with `.!` directives.
 
@@ -425,6 +425,6 @@ since the Markdown renderer needs them too.
 > A stray extra `(` or a missing one silently switches between "keep as-is" and "delete" with no
 > warning. When in doubt, prefer writing out `.ignore((` in full instead of the `.!((` alias.
 
-## IV-10) Examples<A id="a67"></A>
+## IV-10) Examples<A id="a66"></A>
 
 The `Examples` directory has a few `mlmd` and `base.md` examples sources.

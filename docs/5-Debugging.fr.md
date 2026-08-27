@@ -1,4 +1,4 @@
-# V) Correction des fichiers sources<A id="a68"></A>
+# V) Correction des fichiers sources<A id="a67"></A>
 
 Les directives MLMD et les paramètres de la ligne de commande forment une sorte
 de langage de programmation avec lequel on rédige les fichiers sources, que l'on compile
@@ -13,7 +13,7 @@ les éviter.
 
 Mais tout d'abord, un conseil important
 
-## V-1) NE CORRIGEZ PAS LES FICHIERS GENERES<A id="a69"></A>
+## V-1) NE CORRIGEZ PAS LES FICHIERS GENERES<A id="a68"></A>
 
 Si vous corrigez des erreurs directement dans les fichiers en français, anglais, polonais, coréen
 ou tout autre langue, vous retrouverez vos erreurs la prochaine fois que vous passerez MLMD sur vos sources.
@@ -23,7 +23,7 @@ Le bon endroit où corriger les erreurs est le fichier source.
 Lisez soigneusement vos fichiers générés, notez les erreurs, puis corrigez les dans les
 fichiers sources avant de régénérer les fichiers.
 
-## V-2) Mode trace : `-trace`<A id="a70"></A>
+## V-2) Mode trace : `-trace`<A id="a69"></A>
 
 Le paramètre `-trace` facultatif affiche une trace des lignes lues dans les fichiers sources.
 Si les lignes générées ne sont pas celles espérées, la première chose à faire est de regarder cette
@@ -34,7 +34,7 @@ Il faut s'assurer que toutes les  lignes sont présentes et que les barrières d
 bien repérées : s'il manque une barrière fermante par exemple, la trace sautera toutes les lignes
 suivant l'ouverture soit jusqu'à la prochaine barrière, soit jusqu'à la fin du fichier.
 
-## V-3) Sections non closes<A id="a71"></A>
+## V-3) Sections non closes<A id="a70"></A>
 
 A la fin de  chaque fichier source, MLMD vérifie si toutes les sections de langue ont bien
 été fermées et signale la ligne de début de celles qui ne le sont pas. Il est important de bien lire
@@ -45,7 +45,7 @@ de `.!` fermant correspondant avant la fin du fichier, MLMD affiche un avertisse
 utilise le même marqueur pour l'ouverture et la fermeture, un nombre impair de marqueurs `.!` dans le
 fichier suffit à déclencher cet avertissement.
 
-## V-4) Mauvaises indentations<A id="a72"></A>
+## V-4) Mauvaises indentations<A id="a71"></A>
 
 MLMD reproduit les indentations situées *après* les directives d'ouverture de langue, aussi lorsque
 l'indentation semble disparaître il faut vérifier si elle est correctement placée. L'exemple suivant :
@@ -61,7 +61,7 @@ générera `text` sans indentation dans le fichier `.fr.md`. Pour conserver les 
 .fr((   Text.))
 ```
 
-## V-5) Langue erronée<A id="a73"></A>
+## V-5) Langue erronée<A id="a72"></A>
 
 Lorsque le texte de la mauvaise langue se retrouve dans un fichier qui ne lui était pas destiné, 
 cela signifie en général que la mauvaise directive d'ouverture a été utilisée ou qu'une section
@@ -74,7 +74,7 @@ n'a pas été refermée :
 En conclusion, lorsque quelque chose ne va pas concernant la langue utilisée, il faut
 vérifier les directives d'ouverture et de fermeture autour du texte concerné.
 
-## V-6) Texte par défaut mal placé<A id="a74"></A>
+## V-6) Texte par défaut mal placé<A id="a73"></A>
 
 Le texte par défaut ne sera pas généré dans les fichiers attendus s'il apparaît
 après les sections spécifiques aux langues plutôt qu'avant elles. Le texte par défaut doit
@@ -94,7 +94,7 @@ langues ensuite :
 
 Cette ligne corrigée aura l'effet désiré : le texte par défaut n'ira pas dans le fichier français.
 
-## V-7) Listes et tableaux Markdown incohérents<A id="a75"></A>
+## V-7) Listes et tableaux Markdown incohérents<A id="a74"></A>
 
 Markdown permet de rédiger facilement des listes à l'aide des préfixes `*` et `-` en début de
 ligne ainsi que des tableaux de lignes. Toutefois avec MLMD écrire chaque ligne de tableau ou élément
@@ -130,7 +130,7 @@ lignes de manière apparemment intempestive.
 Il faut souligner que cette suppression de fin de ligne est un compromis qui a été adopté dans
 MLMD pour faciliter la séparation visuelle des sections de différentes langues.
 
-## V-8) Mauvaise numérotation des titres<A id="a76"></A>
+## V-8) Mauvaise numérotation des titres<A id="a75"></A>
 
 Lorsque la numérotation des titres ne correspond pas à celle attendue, voici quelques erreurs
 possibles :
@@ -151,7 +151,7 @@ en l'absence de celui-ci ils seront ordonnés en fonction de leur place dans leu
 généralement pas celle attendue et pratiquement jamais celle affichée par les systèmes d'exploitation.
 Les meilleurs résultats sont donc obtenus en utilisant `.topnumber` dans les fichiers sources.
 
-## V-9) Disparition de point final<A id="a77"></A>
+## V-9) Disparition de point final<A id="a76"></A>
 
 Si des points terminant des phrases disparaissent dans les fichiers générés, cela provient 
 généralement d'une confusion avec le point qui commence la directive de fermeture d'une section. A la fin
@@ -163,7 +163,7 @@ le second est celui de la directive de fermeture :
 .fr((Cette phrase se termine par un point..))
 ```
 
-## V-10) Orthographe<A id="a78"></A>
+## V-10) Orthographe<A id="a77"></A>
 
 La plupart des éditeurs de texte possèdent des modules de correction orthographique
 qui vérifient à la volée le texte au fur et à mesure de sa saisie Visual Code par exemple

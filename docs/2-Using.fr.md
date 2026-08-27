@@ -1,4 +1,4 @@
-# II) Utilisation de MLMD<A id="a8"></A>
+# II) Utilisation de MLMD<A id="a7"></A>
 
 MLMD est exécuté par l'interpréteur PHP et reçoit des paramètres qui lui indiquent
 les fichiers à traiter ou explore le répertoire actuel et ses sous-répertoires pour localiser
@@ -7,7 +7,7 @@ les fichiers à traiter.
 D'autres paramètres indiquent à MLMD où placer les fichiers générés, comment numéroter les titres
 ou écrire les liens.
 
-## II-1) Paramètres d'exécution MLMD<A id="a9"></A>
+## II-1) Paramètres d'exécution MLMD<A id="a8"></A>
 
 La syntaxe pour `mlmd.php` et ses paramètres est la suivante :
 
@@ -28,7 +28,7 @@ Les fichiers sources peuvent être spécifiés avec le paramètre `-i`, ou bien 
 automatiquement par le script si aucun `-i` n'est spécifié. Cela est décrit dans
 [Fichiers sources](#fichiers-sources-parametre--i)
 
-## II-2) Chemin des fichiers sources<A id="a10"></A>
+## II-2) Chemin des fichiers sources<A id="a9"></A>
 
 .Le noms des fichiers sources MLMD doivent posséder l'extension `.base.md`ou `.mlmd`. Les fichiers
 avec une extension différente seront ignorés par MLMD. L'extension `.base.md` peut être pratique car la
@@ -49,7 +49,7 @@ branche ne sera retenu, et tous les liens et noms de fichiers ou de répertoires
 Les différentes directives sont décrites dans la
 partie [Directives](#directives).
 
-## II-3) Fichiers sources : paramètre `-i`<A id="a11"></A>
+## II-3) Fichiers sources : paramètre `-i`<A id="a10"></A>
 
 Pour traiter des fichiers spécifiques, on utilise le paramètre `-i` suivi d'un chemin de fichier. Pour traiter
 plusieurs fichiers il est préférable de les placer dans un arbre de sous-répertoires et de démarrer MLMD à partir de la racine
@@ -77,7 +77,7 @@ de cet arbre de répertoires afin qu'il trouve de lui-même tous les fichiers so
   Cette syntaxe traite tous les fichiers d'extension `.mlmd` ou `.base.md` trouvés dans le répertoire
   et ses sous-répertoires. Les autres fichiers sont ignorés.
 
-## II-4) Fichier principal : paramètre `-main`<A id="a12"></A>
+## II-4) Fichier principal : paramètre `-main`<A id="a11"></A>
 
 Si un fichier se nomme `README.mlmd`dans le répertoire de démarrage de MLMD, il est considéré
 comme le fichier principal et les chemins et liens générés seront relatifs à l'emplacement de ce
@@ -96,7 +96,7 @@ php ~/phpscripts/mlmd.php -main ./main.mlmd
 Le fichier principal est en général l'endroit le plus approprié pour insérer un sommaire
 global qui couvre tous les fichiers. Voir la directive `.toc` pour plus de détails.
 
-## II-5) Mode de sortie html/htmlold/md/mdpure : paramètre `-out`<A id="a13"></A>
+## II-5) Mode de sortie html/htmlold/md/mdpure : paramètre `-out`<A id="a12"></A>
 
 Le paramètre `-out` choisit la syntaxe HTML ou Markdown pour les liens
 générés dans les sommaires.
@@ -139,26 +139,26 @@ Il n'y a pas de meilleure méthode, chacune est appropriée à un contexte. Pour
 suffit de passer MLMD sur les fichiers en changeant le paramètre `-out` et de vérifier si le résultat
 correspond à ce qui était attendu.
 
-### II-5.1) Ancres HTML nommées : `htmlold`<A id="a14"></A>
+### II-5.1) Ancres HTML nommées : `htmlold`<A id="a13"></A>
 
 Ce mode utilise des ancres de style ancien `<a name="id">` et des liens classiques `<a href>`. Il est
 très approprié dans un contexte HTML standard, pour une documentation ou un système existants afin de maintenir
 une excellente compatibilité.
 
-### II-5.2) Ancres HTML identifiées : `html`<A id="a15"></A>
+### II-5.2) Ancres HTML identifiées : `html`<A id="a14"></A>
 
 Les standards récents ont remplacé l'attribut `name` des ancres HTML `<A>` par l'attribut `id`,
 qui a l'avantage d'être automatiquement connu de Javascript. Dans ce mode, MLMD utilise `id` dans les
 ancres. Il est particulièrement adapté pour une documentation HTML dans un environnement moderne
 dynamique ou scripté.
 
-### II-5.3) Ancres Markdown : `md`<A id="a16"></A>
+### II-5.3) Ancres Markdown : `md`<A id="a15"></A>
 
 Ce mode hybride utilise des ancres HTML avec un attribut `id` mais des liens Markdown `[]()`
 dans le sommaire. Il est approprié aux documentations Github ou de logiciel et fonctionne
 parfaitement dans différentes situations où le HTML est autorisé.
 
-### II-5.4) Markdown pur : `mdpure`<A id="a17"></A>
+### II-5.4) Markdown pur : `mdpure`<A id="a16"></A>
 
 Ce mode génère des ancres Markdown `{#}` dans les titres et des liens Markdown `[]()` dans
 les sommaires et n'emploie aucune construction HTML. Il est très adapté aux contextes Markdown purs
@@ -166,7 +166,7 @@ ou lorsque la conformité des fichiers aux standards Markdown est vérifiée aut
 les ancres Markdown ne fonctionnent pas dans tous les processeurs Markdown (éditeurs ou browsers).
 En cas de problème, le mode hybride `md` peut se révéler un meilleur choix.
 
-### II-5.5) A propos des titres non uniques<A id="a18"></A>
+### II-5.5) A propos des titres non uniques<A id="a17"></A>
 
 En raison des liens automatiques vers les titres, par convention les fichiers Markdown ne doivent
 généralement pas utiliser un même texte de titre plusieurs fois. Toutefois, excepté un warning des outils
@@ -193,7 +193,7 @@ les ancres uniques des titres dans les fichiers générés pour pouvoir les réf
 fichiers sources. Toutefois ceci suppose que les titres ne changeront pas lors de futures mises à jour
 des documents sources et est déconseillé.
 
-## II-6) Numérotation des titres : `-numbering`<A id="a19"></A>
+## II-6) Numérotation des titres : `-numbering`<A id="a18"></A>
 
 Le paramètre `-numbering` indique un schéma de numérotation pour les différents niveaux
 de titres rencontrés dans tous les fichiers sources et dans les sommaires. Par exemple un titre de niveau
@@ -207,7 +207,7 @@ L'argument de la ligne de commande a priorité et supplantera les directives `.n
 dans les fichiers source. Ce qui suit traite de cet argument, la syntaxe de ses paramètres est identique
 pour la directive qui sera abordée plus loin.
 
-### II-6.1) Syntaxe<A id="a20"></A>
+### II-6.1) Syntaxe<A id="a19"></A>
 
 Le paramètre contient un nombre quelconque de définitions de niveaux séparées par une virgule :
 
@@ -234,7 +234,7 @@ Le premier titre d'un niveau N est numéroté avec le symbole indiqué, les suiv
 incrémentés jusqu'à ce que survienne un titre de niveau supérieur N-1 qui réinitialisera la prochaine séquence de
 niveau N au symbole de départ.
 
-### II-6.2) Exemple<A id="a21"></A>
+### II-6.2) Exemple<A id="a20"></A>
 
 Voici comment numéroter les titres de niveau 1 avec les lettres 'A', 'B' etc, suivies
 d'un tiret '-' puis d'un nombre suivi d'un point pour les titres de niveau 2 et d'un nombre
