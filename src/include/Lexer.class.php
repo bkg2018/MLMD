@@ -70,6 +70,12 @@ namespace MultilingualMarkdown {
     // Pictures manager
     require_once('PicturesMgr.class.php');
 
+    use function MultilingualMarkdown\Utilities\{
+        getNextLineTrimmed,
+        resetArray,
+        unsetArrayContent
+    };
+
     class Lexer
     {
         /** predefined tokens and languages codes directives tokens added by .languages */

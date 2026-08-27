@@ -421,6 +421,57 @@ seront les vraies fins de ligne.))
   .fr((Some french text..))
 ```
 
+### Pitfall: shared text on the same line as a translated value.fr((Piège : texte partagé sur la même ligne qu'une valeur traduite.))
+
+A batch of default text is closed by a blank line: text separated from a language-specific section
+by a blank line is safe and will be shared across every language. But within a single paragraph, if
+a language section overrides part of that paragraph, the *entire* paragraph's default text is excluded
+from that language, not just the part actually overridden.
+.fr((Un lot de texte par défaut est refermé par une ligne vide : un texte séparé d'une section de
+langue par une ligne vide est sûr et sera partagé par toutes les langues. Mais à l'intérieur d'un
+même paragraphe, si une section de langue remplace une partie de ce paragraphe, c'est tout le texte
+par défaut du paragraphe qui est exclu de cette langue, pas seulement la partie effectivement
+remplacée..))
+
+This is easy to overlook when a single line mixes text that should genuinely vary by language (a
+translatable value) with text that should stay identical in every language (surrounding Markdown or
+HTML markup):
+.fr((C'est facile à négliger quand une même ligne mélange du texte qui doit réellement varier selon
+la langue (une valeur traduite) avec du texte qui doit rester identique dans toutes les langues
+(balisage Markdown ou HTML environnant) :.))
+
+```code
+<img src="pic.jpg" alt=.(("cat".)).fr(("chat".)) />
+```
+
+Here `<img src="pic.jpg" alt=` and the closing `/>` are on the same line as `"cat"`, so they belong
+to the same paragraph. Because `fr` overrides `"cat"`, the whole paragraph is excluded from the `fr`
+output, including the `<img src="pic.jpg" alt=` prefix - producing invalid HTML, not just a missing
+translation.
+.fr((Ici `<img src="pic.jpg" alt=` et la fermeture `/>` sont sur la même ligne que `"cat"`, donc dans
+le même paragraphe. Comme `fr` remplace `"cat"`, tout le paragraphe est exclu de la sortie `fr`, y
+compris le préfixe `<img src="pic.jpg" alt=` - ce qui produit du HTML invalide, pas seulement une
+traduction manquante..))
+
+If part of a line must appear in every language regardless of what is overridden elsewhere on that
+line, wrap it explicitly in `.all((` instead of leaving it as plain default text:
+.fr((Si une partie de la ligne doit apparaître dans toutes les langues quel que soit ce qui est
+remplacé ailleurs sur cette même ligne, il faut l'entourer explicitement de `.all((` plutôt que de
+la laisser comme simple texte par défaut :.))
+
+```code
+.all((<img src="pic.jpg" alt=.)).(("cat".)).fr(("chat".)).all(( />.))
+```
+
+A blank line between the shared text and the value would also work, but changes the visual layout;
+`.all((` is the fix that keeps everything on one line. MLMD also detects this situation and emits a
+warning naming the language and a preview of the text about to be dropped, so the loss is never
+silent.
+.fr((Une ligne vide entre le texte partagé et la valeur fonctionnerait aussi, mais change la mise en
+page ; `.all((` est le correctif qui garde tout sur une seule ligne. MLMD détecte aussi cette
+situation et émet un avertissement nommant la langue et un aperçu du texte sur le point d'être
+perdu, pour que la perte ne soit jamais silencieuse..))
+
 ## Multi-line blocks (lists, quotes, tables).fr((Blocs multi-lignes (listes, citations, tableaux).))
 
 Because MLMD handles end of lines between language parts and default texte in a special way, some multiple
@@ -760,8 +811,11 @@ ont des paramètres et des réglages par défaut.))
 - After the `.languages` directive, MLMD acts as if a `.default((` directive had been met, so any
   text will go into all the languages files except language specific text even before the level 1 heading.
   Notice that text preceding level 1 heading is not Markdown compliant but MLMD will put it in files.
-- The `.default((` or `.((` directive will only have effect on languages which do not have a defined
-  content yet, any previous `.all` text will make `.default` useless. See []().
+- The `.default((` or `.((` directive puts text into whichever languages have not received their own
+  language-specific override since the current paragraph started. A previous `.all((` section has no
+  effect on this: it does not make later `.default((` text unavailable to any language. But a whole
+  paragraph of default text can be excluded from a language just because part of that same paragraph
+  was overridden - see [Pitfall: shared text on the same line as a translated value](#a30).
 - The `.toc` directive has default values which generate an table of contents for local headings of
   levels 2 and 3 in the current file. See [TOC](#generating-table-of-content-toc).
 - The table of contents generated in any file always has an implicit anchor named `toc` which can be
@@ -774,8 +828,12 @@ ont des paramètres et des réglages par défaut.))
   et inscrira le texte dans tous les fichiers sauf ceux avec une section spécifique, même avant le titre
   de niveau 1. Il faut remarquer que Markdown interdit que du texte apparaisse avant le titre de niveau 1
   mais MLMD l'inscrira quand même dans les fichiers générés.
-- La directive `.default((` ou `.((` termine toute précédente section de texte par défaut ou spécifique
-  à une langue et démarre une nouvelle section de texte par défaut. Voir les détails dans [().]
+- La directive `.default((` ou `.((` place le texte dans toutes les langues qui n'ont pas reçu leur
+  propre remplacement spécifique depuis le début du paragraphe en cours. Une section `.all((`
+  précédente n'a aucun effet là-dessus : elle ne rend pas le texte `.default((` qui suit indisponible
+  pour une langue. Mais un paragraphe entier de texte par défaut peut être exclu d'une langue
+  simplement parce qu'une partie de ce même paragraphe a été remplacée - voir
+  [Piège : texte partagé sur la même ligne qu'une valeur traduite](#a30).
 - La directive `.toc` a des paramètres par défaut pour générer un sommaire local aux titres de niveaux 2 et 3
   du fichier en cours. Voir [TOC](#generating-table-of-content-toc).
 - Tout sommaire généré par un fichier possède une ancre nommée ou identifiée `toc` dans le fichier en cours

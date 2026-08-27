@@ -60,6 +60,13 @@ namespace MultilingualMarkdown {
     use MultilingualMarkdown\Logger;
     use MultilingualMarkdown\languageList;
     use MultilingualMarkdown\PicturesMgr;
+    use function MultilingualMarkdown\Utilities\{
+        isWindows,
+        normalizedPath,
+        getMLMDExtension,
+        exploreDirectory,
+        unsetArrayContent
+    };
 
     // MB string functions depending on OS
     $posFunction = 'mb_strpos';
@@ -123,17 +130,35 @@ namespace MultilingualMarkdown {
         private $curOutput = [];
         /** array of OutputPart for default text */
         private $curDefault = [];
+        /**
+         * Per-language code, true if a language-specific section has written real
+         * content for that language since the current $curDefault batch started
+         * accumulating. Used by fillEmptyOutputs() to decide, per language and per
+         * batch of pending default text, whether that text still belongs to it -
+         * see fillEmptyOutputs() for the invariant this enforces.
+         */
+        private $curDefaultOverridden = [];
         /** language codes will be added by setLanguage */
         private $languageFunction = [];
         /** output mode for anchors and links (mdpure etc) */
         private $outputMode = OutputModes::MD;
+        /** true when -trace is active: enables diagnostics too noisy for normal runs */
+        private $trace = false;
+
+        /**
+         * Trace control accessor.
+         */
+        public function setTrace(bool $yes): void
+        {
+            $this->trace = $yes;
+        }
 
         /**
          * Initialize string function names.
          */
         public function __construct(PicturesMgr $pm)
         {
-            if (\isWindows()) {
+            if (isWindows()) {
                 global $posFunction, $cmpFunction;
                 $posFunction = 'mb_stripos' ;
                 $cmpFunction = 'strcasecmp';
@@ -292,7 +317,7 @@ namespace MultilingualMarkdown {
         {
             global $posFunction;
             // try to find this file name in registered files
-            $mainExtension = \getMLMDExtension($name);
+            $mainExtension = getMLMDExtension($name);
             if ($mainExtension === null) {
                 $this->error("wrong extension for main MLMD file, should be '.base.md' or '.mlmd'");
                 return false;
@@ -537,7 +562,7 @@ namespace MultilingualMarkdown {
             }
 
             // retain base name with full path but no extension as template and reset line number
-            $extension = \getMLMDExtension($filename);
+            $extension = getMLMDExtension($filename);
             if ($this->outRootDir == null) {
                 $this->outFilenameTemplate = mb_substr($filename, 0, -mb_strlen($extension));
             } else {
@@ -692,6 +717,7 @@ namespace MultilingualMarkdown {
                 $this->curOutput[$code] = []; // each [$code] is an array where each [i] is an OutputPart
                 $this->languageFunction[$code] = 'outputCurrent';
                 $this->pendingEols[$code] = 0;
+                $this->curDefaultOverridden[$code] = false;
             }
             $this->curDefault = []; // each [i] is an OutputPart
             $this->languageList = $languageList;
@@ -901,15 +927,22 @@ namespace MultilingualMarkdown {
             return true;
         }
         /**
-         * Append default parts to empty language outputs.
+         * Append default parts to language outputs which have not been overridden.
+         *
+         * Per-paragraph invariant: a given batch of pending default text ($curDefault) goes to
+         * language X unless X has received its own language-specific content (tracked by
+         * $curDefaultOverridden[X], set in outputCurrent()) since THIS batch started accumulating.
+         * This must not be conflated with "$curOutput[X] is currently empty": $curOutput[X] can be
+         * non-empty just because earlier, already-resolved content is still waiting to be written to
+         * disk, which says nothing about whether X is eligible for the CURRENT default batch.
          */
         private function fillEmptyOutputs(): void
         {
             if (count($this->curDefault) > 0) {
                 foreach ($this->languageList as $index => $array) {
                     $code = $array['code'] ?? null;
-                    // no output for this code yet?
-                    if ((count($this->curOutput[$code]) == 0) /*&& ($this->pendingEols[$code] == 0)*/) {
+                    // no language-specific override for this code since this batch started?
+                    if (!($this->curDefaultOverridden[$code] ?? false)) {
                         // copy the default text
                         foreach ($this->curDefault as $part) {
                             $this->outputLanguage($part->text, $code, $part->expand);
@@ -990,7 +1023,16 @@ namespace MultilingualMarkdown {
             if (!$empty) {
                 $this->flushOutput();
             }
-            // 2) add to default buffer
+            // 2) starting a fresh batch of default text? reset per-language override
+            // eligibility so a stale override from an earlier, already-resolved batch
+            // cannot suppress this new one (see fillEmptyOutputs()).
+            if (count($this->curDefault) == 0) {
+                foreach ($this->languageList as $index => $array) {
+                    $code = $array['code'] ?? null;
+                    $this->curDefaultOverridden[$code] = false;
+                }
+            }
+            // 3) add to default buffer
             $this->curDefault[] = new OutputPart($text, $expand);
             array_values($this->curDefault);
             return true;
@@ -1006,9 +1048,39 @@ namespace MultilingualMarkdown {
 
         /**
          * Append text to current language output.
+         * This is a genuine language-specific section writing real content for
+         * $curLanguage, so it makes $curLanguage ineligible for the currently
+         * pending default text batch, if any (see fillEmptyOutputs()).
          */
         public function outputCurrent(string $text, bool $expand): bool
         {
+            // Warn once per batch (trace mode only: this is expected, intentional behavior
+            // for the common "default paragraph, then a full translated paragraph" pattern,
+            // so it would be pure noise on every normal run of a real multi-paragraph
+            // project - see docs/3-Writing.md, "Pitfall: shared text on the same line as a
+            // translated value"). If default text is already pending and this is the first
+            // language-specific content for $curLanguage since that batch started, the whole
+            // pending batch (not just the part meant to vary) is about to be excluded from
+            // $curLanguage's output. This is only surprising when the batch also contains
+            // text that was meant to be shared across languages (e.g. surrounding markup)
+            // rather than a translatable value - wrap shared/invariant text in .all((...))
+            // so it isn't caught up in the exclusion.
+            if ($this->trace && count($this->curDefault) > 0 && !($this->curDefaultOverridden[$this->curLanguage] ?? false)) {
+                $preview = '';
+                foreach ($this->curDefault as $part) {
+                    $preview .= $part->text;
+                }
+                $preview = trim(preg_replace('/\s+/', ' ', $preview));
+                if (mb_strlen($preview) > 40) {
+                    $preview = mb_substr($preview, 0, 40) . '...';
+                }
+                $this->warning(
+                    "default text \"$preview\" will not appear in language '{$this->curLanguage}' output because a "
+                    . "'.{$this->curLanguage}((' section follows it; wrap shared/invariant text in '.all((...))' if "
+                    . "it should appear in every language"
+                );
+            }
+            $this->curDefaultOverridden[$this->curLanguage] = true;
             return $this->outputLanguage($text, $this->curLanguage, $expand);
         }
 
@@ -1078,11 +1150,11 @@ namespace MultilingualMarkdown {
         public function expand(string $text, string $language): string
         {
             $relFilename = $this->current();
-            $baseExtension = \getMLMDExtension($relFilename);
+            $baseExtension = getMLMDExtension($relFilename);
             $basename = mb_substr($relFilename, 0, - mb_strlen($baseExtension));
             $extension = $this->languageList->isMain($language) ? '.md' : ".{$language}.md";
             $result = str_replace('{file}', $basename . $extension, $text);
-            $result = str_replace('{filename}', $basename, $text);
+            $result = str_replace('{filename}', $basename, $result);
             $result = str_replace('{extension}', $extension, $result);
             if ($this->mainFilename !== null) {
                 $result = str_replace('{main}', $this->mainFilename . $extension, $result);

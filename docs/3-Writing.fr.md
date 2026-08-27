@@ -146,8 +146,10 @@ le schéma de numérotation ou les sommaires.
 
 ```code
 # Ce titre sera reconnu par MLMD
+
 Celui-ci sera pas reconnu car il ne possède pas de préfixe #
 ============================================================
+
 ## Celui-ci sera reconnu grâce à son préfixe ##
 -----------------------------------------------
 ```
@@ -178,6 +180,7 @@ plus loin, ils ouvrent ou ferment une partie propre à une langue.
 ```code
 Ceci est du texte par défaut qui ira dans tous les fichiers sauf le français.
 .fr((Ceci est du texte qui ira dans le fichier français à la place du texte précédent..))
+
 Ce texte ira dans tous les fichiers sauf le français..fr((Ce texte ira dans le
 fichier français à la place du précédent..))
 ```
@@ -192,6 +195,7 @@ Voici un autre exemple :
 .((default text.))
 .fr((texte français.))
 .en((english text.))
+
 Some other text....fr((Autre texte....))
 ```
 
@@ -214,6 +218,7 @@ est équivalente au bloc précédent et générera le même texte dans les même
 
 ```code
 .((default text.)).fr((french text.)).en((english text.))
+
 Some other text....fr((Autre texte....))
 ```
 
@@ -253,7 +258,41 @@ seront les vraies fins de ligne
   .fr((Some french text..))
 ```
 
-## III-5) Blocs multi-lignes (listes, citations, tableaux)<A id="a30"></A>
+### III-4.2) Piège : texte partagé sur la même ligne qu'une valeur traduite<A id="a30"></A>
+
+Un lot de texte par défaut est refermé par une ligne vide : un texte séparé d'une section de
+langue par une ligne vide est sûr et sera partagé par toutes les langues. Mais à l'intérieur d'un
+même paragraphe, si une section de langue remplace une partie de ce paragraphe, c'est tout le texte
+par défaut du paragraphe qui est exclu de cette langue, pas seulement la partie effectivement
+remplacée.
+
+C'est facile à négliger quand une même ligne mélange du texte qui doit réellement varier selon
+la langue (une valeur traduite) avec du texte qui doit rester identique dans toutes les langues
+(balisage Markdown ou HTML environnant) :
+
+```code
+<img src="pic.jpg" alt=.(("cat".)).fr(("chat".)) />
+```
+
+Ici `<img src="pic.jpg" alt=` et la fermeture `/>` sont sur la même ligne que `"cat"`, donc dans
+le même paragraphe. Comme `fr` remplace `"cat"`, tout le paragraphe est exclu de la sortie `fr`, y
+compris le préfixe `<img src="pic.jpg" alt=` - ce qui produit du HTML invalide, pas seulement une
+traduction manquante.
+
+Si une partie de la ligne doit apparaître dans toutes les langues quel que soit ce qui est
+remplacé ailleurs sur cette même ligne, il faut l'entourer explicitement de `.all((` plutôt que de
+la laisser comme simple texte par défaut :
+
+```code
+.all((<img src="pic.jpg" alt=.)).(("cat".)).fr(("chat".)).all(( />.))
+```
+
+Une ligne vide entre le texte partagé et la valeur fonctionnerait aussi, mais change la mise en
+page ; `.all((` est le correctif qui garde tout sur une seule ligne. MLMD détecte aussi cette
+situation et émet un avertissement nommant la langue et un aperçu du texte sur le point d'être
+perdu, pour que la perte ne soit jamais silencieuse.
+
+## III-5) Blocs multi-lignes (listes, citations, tableaux)<A id="a31"></A>
 
 En raison de la façon dont MLMD traite les fins de ligne entre les parties traduites et le texte par
 défaut, les blocs à lignes multiples ne doivent pas  être traduits ligne par ligne mais plutôt par bloc
@@ -313,7 +352,7 @@ Toutes les parties de ces blocs doivent être conservées groupées et traduites
 intégralité pour conserver leurs fins de lignes. La documentation de MLMD contient de
 nombreux exemples de telles structures.
 
-## III-6) Texte échappé<A id="a31"></A>
+## III-6) Texte échappé<A id="a32"></A>
 
 Les directives et variables peuvent être neutralisées dans le texte en les entourant avec
 le marqueur `.!`. Les directives à l'intérieur des marqueurs n'auront aucun effet
@@ -328,7 +367,7 @@ The .!.)).! directive closes a language part.
 
 Dans cet exemple, la directive `.))` sera considérée comme du texte et non comme une directive.
 
-## III-7) Texte en citation et barrières de code<A id="a32"></A>
+## III-7) Texte en citation et barrières de code<A id="a33"></A>
 
 MLMD copie telles quelles les parties de texte entourées de guillemets et accent inversé
 ainsi que les barrières de code Markdown. Dans ces parties de texte 'échappées', les variables et
@@ -351,7 +390,7 @@ directives n'auront pas d'effet et seront recopiées sans interprétation
   l'échappement](https://daringfireball.net/projects/markdown/syntax#autoescape) et la séquence
   complète peut être entourée des marqueurs MLMD `.!`.
 
-## III-8) Variables<A id="a33"></A>
+## III-8) Variables<A id="a34"></A>
 
 MLMD connaît quelques *variables*. Ces variables peuvent être placées n'importe où dans le texte,
 les titres ou les liens dans les fichiers sources et prendront lors de la génération une valeur
@@ -375,7 +414,7 @@ Toutes les variables prennent une valeur lors de la génération des fichiers, s
 ignorée si le paramètre `-main` n'a pas été spécifié dans la ligne de commande. Si le fichier principal
 n'a pas été défini le texte reste `{main}` dans les fichiers générés.
 
-## III-9) Texte par défaut<A id="a34"></A>
+## III-9) Texte par défaut<A id="a35"></A>
 
 MLMD accepte du texte par défaut à n'importe quel endroit des fichiers sources : dans les tires, les
 liens, les tables des matières, les directives ou le corps de texte. Le texte par défaut est utilisé pour
@@ -384,7 +423,7 @@ toutes les langues qui n'ont pas de section de texte dédiée.
 En dehors des blocs délimités par les directives d'ouverture et de fermeture de langue, tout texte est
 considéré comme du texte par défaut. Ceci est décrit dans la directive `.default((`.
 
-## III-10) Comment éviter les ambiguïtés<A id="a35"></A>
+## III-10) Comment éviter les ambiguïtés<A id="a36"></A>
 
 Pour éviter les effets indésirables liés aux fins de ligne ou aux listes numérotées ou non,
 il y a une structure qui peut séparer dans ambiguïté les blocs de texte par défaut ou spécifiques.
@@ -411,7 +450,7 @@ Bien que les directives d'ouverture et fermeture pour le texte par défaut soien
 facultatives, cette structuration avec des directives explicites sur des lignes séparées est un
 moyen simple de s'assurer que le texte généré sera celui attendu.
 
-## III-11) Directives<A id="a36"></A>
+## III-11) Directives<A id="a37"></A>
 
 Les actions sur les fichiers et le texte générés pour chaque langue sont indiquées dans des
 *directives*  placées dans les fichiers sources. Les directives MLMD commencent toujours par un
@@ -446,7 +485,7 @@ Les directives ne sont pas sensibles aux minuscules et majuscules : `.fr((` est 
 mais comme ils dérivent de la syntaxe Markdown ils seront présents dans les fichiers générés alors que
 les directives MLMD ne le seront pas.
 
-## III-12) Effets immédiats et englobés<A id="a37"></A>
+## III-12) Effets immédiats et englobés<A id="a38"></A>
 
  Les directives `.languages`, `.numbering`, `.topnumber` et `.toc` ont un effet *immédiat*. Cela
 signifie qu'elles doivent généralement se situer sur une ligne isolée et de préference en début de
@@ -459,7 +498,7 @@ ensuite d'une fermeture `.))` ou d'une autre directive d'ouverture.
 directive ouvrante `.<code>((` suspend la directive englobante actuelle, et la directive fermante
 `.))` la restaurera.
 
-## III-13) Valeurs et effets par défaut<A id="a38"></A>
+## III-13) Valeurs et effets par défaut<A id="a39"></A>
 
 Les directives seront détaillées par la suite mais il faut noter que les directives et les scripts
 ont des paramètres et des réglages par défaut
@@ -472,7 +511,9 @@ ont des paramètres et des réglages par défaut
   de niveau 1. Il faut remarquer que Markdown interdit que du texte apparaisse avant le titre de niveau 1
   mais MLMD l'inscrira quand même dans les fichiers générés.
 - La directive `.default((` ou `.((` termine toute précédente section de texte par défaut ou spécifique
-  à une langue et démarre une nouvelle section de texte par défaut. Voir les détails dans [().]
+  à une langue et démarre une nouvelle section de texte par défaut. Ceci implique aussi qu'un paragraphe
+  entier de texte par défaut peut être exclu d'une langue simplement parce qu'une partie en a été
+  remplacée - voir [Piège : texte partagé sur la même ligne qu'une valeur traduite](#a30).
 - La directive `.toc` a des paramètres par défaut pour générer un sommaire local aux titres de niveaux 2 et 3
   du fichier en cours. Voir [TOC](#generating-table-of-content-toc).
 - Tout sommaire généré par un fichier possède une ancre nommée ou identifiée `toc` dans le fichier en cours

@@ -30,12 +30,7 @@
 
  namespace MultilingualMarkdown {
  
-    if (substr(phpversion(), 0, strrpos(phpversion(), ".")) < "8.4") {
-        require_once 'Filer_8_3.class.php';
-    } else {
     require_once 'Filer.class.php';
-
-    }
 
     use MultilingualMarkdown\Logger;
     use MultilingualMarkdown\languageList;

@@ -23,13 +23,20 @@
  * @link      TODO
  */
 
- // create code coverage if env variable 'coverage' is not 0 and xdebug has been loaded
+if (version_compare(PHP_VERSION, '8.4.0', '<')) {
+    echo "ERROR: MLMD requires PHP 8.4 or later, running ", phpversion(), "\n";
+    exit(1);
+}
+
+// create code coverage if env variable 'coverage' is not 0 and xdebug has been loaded
 if (function_exists('xdebug_start_code_coverage') && getenv('coverage')) {
     xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 }
 
 require_once 'include/Version.php';
+require_once 'include/Utilities.php';
 use function MultilingualMarkdown\GetVersion;
+use function MultilingualMarkdown\Utilities\DumpCoverage;
 $MLMD_VERSION = GetVersion();
 // CAn't seem to get date_crea_from_format work in one step
 $format = 'Y-m-d H:i:s';
@@ -71,7 +78,8 @@ $allParams = [
     '-od'           => ['function' => 'setOutputDirectory',   'type' => 'string'],  // set the root output directory (else files go into input directory)
     '-trace'        => ['function' => ':setTrace',            'type' => '-'],
     '-h'            => ['function' => ':displayHelp',         'type' => '-'],       // (global function) display help
-    '-v'            => ['function' => ':displayVersion',      'type' => '-']        // display MLMD translator version
+    '-v'            => ['function' => ':setTrace',            'type' => '-'],       // verbose mode (alias for -trace)
+    '-V'            => ['function' => ':displayVersion',      'type' => '-']        // display MLMD translator version and exit
 ];
 $arg = 1;
 while ($arg < $argc) {
@@ -83,7 +91,7 @@ while ($arg < $argc) {
         $def = $allParams[$key];
         $function = $def['function'];
         $type = $def['type'];
-        $ok = (mb_strtolower($argv[$arg]) == $key);
+        $ok = true;
         if ($ok) {
             if ($arg > $argc - 1) {
                 echo "WARNING: Missing value for parameter $key\n";

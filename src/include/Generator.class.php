@@ -81,6 +81,7 @@ namespace MultilingualMarkdown {
         public function setTrace(bool $yes)
         {
             $this->lexer->setTrace($yes);
+            $this->filer->setTrace($yes);
         }
 
         /**

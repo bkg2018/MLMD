@@ -23,8 +23,8 @@
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  * @link      TODO
  */
-
 declare(strict_types=1);
+namespace MultilingualMarkdown\Utilities;
 
 //MARK: Global Utility functions
 
@@ -90,16 +90,13 @@ function normalizedPath($path)
  */
 function getMLMDExtension(string $filename): ?string
 {
-    $extension = ".base.md";
-    $pos = mb_stripos($filename, $extension, 0);
-    if ($pos === false) {
-        $extension = ".mlmd";
-        $pos = mb_stripos($filename, $extension, 0);
-        if ($pos === false) {
-            return null;
+    $extensions = [".base.md", ".mlmd"];
+    foreach ($extensions as $extension) {
+        if (mb_stripos($filename, $extension, 0) !== false) {
+            return $extension;
         }
     }
-    return $extension;
+    return null;
 }
 
 /**
@@ -143,9 +140,9 @@ function getNextLineTrimmed($file, int &$lineNumber): ?string
     if ($newLine === false) {
         return null;
     }
-    $newLine = rtrim($newLine, " \t\n\r") . "\n";
-    $lineNumber += 1;
-    return $newLine;
+    
+    $lineNumber++;
+    return rtrim($newLine, " \t\n\r") . "\n";
 }
 
 /**
@@ -190,9 +187,9 @@ function DumpCoverage()
             $prefix = '   ';
             if (array_key_exists($lineNumber, $coverage)) {
                 switch ($coverage[$lineNumber]) {
-                    case 1: $prefix = '[*]'; break;
-                    case -1:$prefix = '[ ]'; break;
-                    case -2:$prefix = ' - '; break;
+                    case CoverageStatus::COVERED: $prefix = '[*]'; break;
+                    case CoverageStatus::UNCOVERED: $prefix = '[ ]'; break;
+                    case CoverageStatus::DEAD_CODE: $prefix = ' - '; break;
                     default: break;
                 }
             }
@@ -203,4 +200,11 @@ function DumpCoverage()
         fclose($inFile);
         fclose($outFile);
     }
+}
+
+class CoverageStatus
+{
+    public const COVERED = 1;
+    public const UNCOVERED = -1;
+    public const DEAD_CODE = -2;
 }

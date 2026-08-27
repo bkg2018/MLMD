@@ -136,8 +136,10 @@ for a heading to be recognized by MLMD.
 
 ```code
 # This heading will be found by MLMD
+
 This one won't be found because it doesn't have a # prefix
 ==========================================================
+
 ## This one will be found by its ## prefix
 ------------------------------------------
 ```
@@ -170,6 +172,7 @@ detailed later, they start or end a language specific part.
 ```code
 This will be default text going in all languages files except the french one.
 .fr((This will only go in french language file, which will not feature previous default text..))
+
 This will be default text for all files except french file..fr((This will go into the french
 file in place of previous default text..))
 ```
@@ -184,6 +187,7 @@ Here is an example:
 .((default text.))
 .fr((texte français.))
 .en((english text.))
+
 Some other text....fr((Autre texte....))
 ```
 
@@ -202,6 +206,7 @@ identical to the previous example and both will generate the same text in the sa
 
 ```code
 .((default text.)).fr((french text.)).en((english text.))
+
 Some other text....fr((Autre texte....))
 ```
 
@@ -238,7 +243,39 @@ both techniques on large parts of text, or it would be unclear where the actual 
   .fr((Some french text..))
 ```
 
-## III-5) Multi-line blocks (lists, quotes, tables)<A id="a30"></A>
+### III-4.2) Pitfall: shared text on the same line as a translated value<A id="a30"></A>
+
+A batch of default text is closed by a blank line: text separated from a language-specific section
+by a blank line is safe and will be shared across every language. But within a single paragraph, if
+a language section overrides part of that paragraph, the *entire* paragraph's default text is excluded
+from that language, not just the part actually overridden.
+
+This is easy to overlook when a single line mixes text that should genuinely vary by language (a
+translatable value) with text that should stay identical in every language (surrounding Markdown or
+HTML markup):
+
+```code
+<img src="pic.jpg" alt=.(("cat".)).fr(("chat".)) />
+```
+
+Here `<img src="pic.jpg" alt=` and the closing `/>` are on the same line as `"cat"`, so they belong
+to the same paragraph. Because `fr` overrides `"cat"`, the whole paragraph is excluded from the `fr`
+output, including the `<img src="pic.jpg" alt=` prefix - producing invalid HTML, not just a missing
+translation.
+
+If part of a line must appear in every language regardless of what is overridden elsewhere on that
+line, wrap it explicitly in `.all((` instead of leaving it as plain default text:
+
+```code
+.all((<img src="pic.jpg" alt=.)).(("cat".)).fr(("chat".)).all(( />.))
+```
+
+A blank line between the shared text and the value would also work, but changes the visual layout;
+`.all((` is the fix that keeps everything on one line. MLMD also detects this situation and emits a
+warning naming the language and a preview of the text about to be dropped, so the loss is never
+silent.
+
+## III-5) Multi-line blocks (lists, quotes, tables)<A id="a31"></A>
 
 Because MLMD handles end of lines between language parts and default texte in a special way, some multiple
 lines structures in markdown can not currently be translated line by line but rather block by block.
@@ -296,7 +333,7 @@ The same principle applies to other multi lines blocks:
 All parts of these blocks must be treated as consistent blocks and be translated as a whole.
 The MLMD documentation contains numerous examples of such structures.
 
-## III-6) Escaping text<A id="a31"></A>
+## III-6) Escaping text<A id="a32"></A>
 
 Directives and variables can be neutralized in a text section by surrounding it with the `.!` marker.
 The directives in between won't have effect on generated files,
@@ -310,7 +347,7 @@ The .!.)).! directive closes a language part.
 
 In this example, the `.))` directive will be considered as simple text and not as a directive.
 
-## III-7) Quoted text and code fences<A id="a32"></A>
+## III-7) Quoted text and code fences<A id="a33"></A>
 
 MLMD roughly copies the parts of text which are surrounded by *back-ticks* (reversed quote),
 *double quotes* and *code fences*. In these parts of text, MLMD doesn't interpret directives
@@ -332,7 +369,7 @@ and variables:
   (see [Markdown syntax about escapes](https://daringfireball.net/projects/markdown/syntax#autoescape))
   and this whole sequence surrounded by MLMD escaping.
 
-## III-8) Variables<A id="a33"></A>
+## III-8) Variables<A id="a34"></A>
 
 MLMD recognizes a few *variables*. These variables can be put anywhere in headings, links or text in the 
 sources and will take a language specific value in the generated files.
@@ -355,7 +392,7 @@ Each variable takes a value at generation time, except for `{main}` which is onl
 if a `-main` argument has been passed to MLMD. If no `-main` file is defined, the text will stay as
 `{main}` in the generated files.
 
-## III-9) Default text<A id="a34"></A>
+## III-9) Default text<A id="a35"></A>
 
 MLMD accepts default text in any part of the source: headings, table of contents title, normal text etc.
 The default text is used by MLMD when no language directive has been used to specify the language specific
@@ -364,7 +401,7 @@ text.
 When not bounded by opening and closing language directives, text is always considered as default text.
 This feature is detailed in the directive `.default((` later.
 
-## III-10) Avoiding ambiguities<A id="a35"></A>
+## III-10) Avoiding ambiguities<A id="a36"></A>
 
 To avoid undesirable effects with end of lines, unordered or numbered lists and indented text,
 a practical structure can be used for both the default text blocks and the language specific blocks.
@@ -389,7 +426,7 @@ Although the default opening and closing directives are in fact optional, this s
 with explicit directives on separate lines is an easy way to make sure the generated text
 will be as expected.
 
-## III-11) Directives<A id="a36"></A>
+## III-11) Directives<A id="a37"></A>
 
 Actions for generating the language specific files are set by *directives* in the sources. MLMD
 directives always start with a dot `.` except for escape text markers - see previous details
@@ -423,7 +460,7 @@ Directives are not case sensitive: `.fr((` is the same as `.FR((`. Notice that e
 work as opening and closing directives around escaped text, but as they directly derive from Markdown syntax
 the markers will appear in the generated files, whereas MLMD directives won't.
 
-## III-12) Immediate vs enclosed effect<A id="a37"></A>
+## III-12) Immediate vs enclosed effect<A id="a38"></A>
 
 The `.languages`, `.numbering`, `.topnumber` and `.toc` directives have an *immediate effect*.
 It implies they generally should be alone on an isolated line, and preferably at the beginning of
@@ -435,7 +472,7 @@ matching `.))` is met, or until another `((` directive is opened.
 > Although this is not very useful, enclosing directives can be embedded: each `.<code>((` opening
 will suspend any current opened directive effect, and the matching `.))` closing will resume it.
 
-## III-13) Default directives values and effects<A id="a38"></A>
+## III-13) Default directives values and effects<A id="a39"></A>
 
 Details will follow but it must be mentioned that the script has some defaults and that directives
 themselves also have defaults settings.
@@ -447,7 +484,9 @@ themselves also have defaults settings.
   text will go into all the languages files except language specific text even before the level 1 heading.
   Notice that text preceding level 1 heading is not Markdown compliant but MLMD will put it in files.
 - The `.default((` or `.((` directive will only have effect on languages which do not have a defined
-  content yet, any previous `.all` text will make `.default` useless. See []().
+  content yet, any previous `.all` text will make `.default` useless. This also means a whole paragraph
+  of default text can be excluded from a language just because part of it was overridden - see
+  [Pitfall: shared text on the same line as a translated value](#a30).
 - The `.toc` directive has default values which generate an table of contents for local headings of
   levels 2 and 3 in the current file. See [TOC](#generating-table-of-content-toc).
 - The table of contents generated in any file always has an implicit anchor named `toc` which can be

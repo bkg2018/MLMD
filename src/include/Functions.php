@@ -119,6 +119,7 @@ When not between escape markers, the following variables are expanded in each ge
 - {iso} expands to the ISO code associated to current language
 
 \n";
+    exit(0);
 }
 
 /**
@@ -128,6 +129,7 @@ function displayVersion(): void
 {
     global $MLMD_VERSION, $MLMD_DATE;
     echo "MLMD MultiLingual MarkDown Generator\nVersion $MLMD_VERSION - $MLMD_DATE\n";
+    exit(0);
 }
 
 /**

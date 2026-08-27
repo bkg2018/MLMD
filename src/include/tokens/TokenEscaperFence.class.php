@@ -89,11 +89,17 @@ namespace MultilingualMarkdown {
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = $input->getLine(); // <```code> starting marker
+            $firstLine = $filer->getCurrentLineNumber(); // remember opening line for error reporting
             do {
                 $thisLine = $filer->getLine();
-                if ($thisLine != null) {
-                    $this->content .= "\n" . $thisLine;
+                if ($thisLine === null) {
+                    // EOF reached before a closing fence: getLine() would keep returning null forever
+                    // and identifyInBuffer(null, 0) is always false, so without this guard the loop
+                    // below never terminates. Report and stop instead of spinning.
+                    $filer->error('Code fence (```) unable to find closing code fence', $filer->current(), $firstLine);
+                    break;
                 }
+                $this->content .= "\n" . $thisLine;
             } while (!$this->identifyInBuffer($thisLine, 0));
             // In the lines below I take care to modify $this->content before
             // appending $this to lexer, but it may be possible to add the token first

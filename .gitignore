@@ -9,4 +9,7 @@ Unused/Storage.class.old.php
 Unused/toctest.md
 Unused/TokenEscaperSpace.class.php
 Unused/unused.php
-vendor/*
+simpletest/wrongimg.mlmd.log
+.vscode
+vendor
+composer.lock

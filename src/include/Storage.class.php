@@ -43,6 +43,8 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
+    use function MultilingualMarkdown\Utilities\mb_strcmp;
+
     class Storage
     {
         /** current line content */
