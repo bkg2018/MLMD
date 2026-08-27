@@ -81,6 +81,15 @@ namespace MultilingualMarkdown {
         /** predefined tokens and languages codes directives tokens added by .languages */
         private  $mlmdTokens = [];         // keyword => token, e.g. '.!' => TokenEscaperMLMD
         private $mlmdTokensLengths = [];        // keyword => token keyword length
+        /**
+         * Same tokens as $mlmdTokens, grouped by the first character of their keyword and
+         * keeping their relative order (important: some tokens sharing a first character must
+         * be tried longest-keyword-first, e.g. backtick escapers). Every registered token's
+         * keyword starts with '.', '`', '"' or "\n" - never a plain letter - so almost every
+         * ordinary text character has no candidate at all here. Used by fetchToken() to avoid
+         * calling identify() on every registered token (~30) at every single character position.
+         */
+        private $mlmdTokensByFirstChar = [];
         private $tokenMaxLength = 0;
         private $tokenFENCE = null;             // specific handling for ``` at line beginning
         private $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
@@ -205,6 +214,20 @@ namespace MultilingualMarkdown {
                 }
                 $this->mlmdTokensLengths[$key] = $len;
             }
+            $this->rebuildFirstCharDispatch();
+        }
+
+        /**
+         * (Re)build $mlmdTokensByFirstChar from $mlmdTokens. Must be called again whenever
+         * $mlmdTokens changes (e.g. when a language open token is added by .languages).
+         */
+        private function rebuildFirstCharDispatch(): void
+        {
+            $this->mlmdTokensByFirstChar = [];
+            foreach ($this->mlmdTokens as $token) {
+                $firstChar = mb_substr($token->getKeyword(), 0, 1);
+                $this->mlmdTokensByFirstChar[$firstChar][] = $token;
+            }
         }
 
         /**
@@ -314,7 +337,6 @@ namespace MultilingualMarkdown {
 
             // delete token
             array_pop($this->curTokens);
-            array_values($this->curTokens);
             $count -= 1;
             if ($prevToken->isType(TokenType::EOL)) {
                 $this->eolCount -= 1;
@@ -553,7 +575,21 @@ namespace MultilingualMarkdown {
          */
         public function fetchToken(object $input): ?Token
         {
-            foreach ($this->mlmdTokens as $token) {
+            // Only try tokens whose keyword actually starts with the current character
+            // (every registered keyword starts with '.', '`', '"' or "\n" - never a plain
+            // letter - so this skips the whole candidate list for almost all ordinary text).
+            // Relative order within same-first-character tokens is preserved from $mlmdTokens
+            // (see rebuildFirstCharDispatch()), which matters e.g. for backtick escapers that
+            // must be tried longest-keyword-first.
+            $currentChar = $input->getCurrentChar();
+            if ($currentChar === null) {
+                return null;
+            }
+            $candidates = $this->mlmdTokensByFirstChar[$currentChar] ?? null;
+            if ($candidates === null) {
+                return null;
+            }
+            foreach ($candidates as $token) {
                 if ($token->identify($input)) {
                     if ($token->isType(TokenType::ESCAPED_TEXT)) {
                         return $token->newInstance();
@@ -561,36 +597,6 @@ namespace MultilingualMarkdown {
                     return $token;
                 }
             }
-
-            /*
-            $extract = $input->getCurrentChar() . $input->fetchNextCharacters($this->tokenMaxLength);
-            // try direct key matching
-            foreach ($this->mlmdTokens as $key => &$token) {
-                $keyLen = strlen($key);
-                $match = true;                
-                for ($pos = 0 ; $match && ($pos < $keyLen) ; $pos += 1) {
-                    $match = (mb_substr($extract, $pos, 1) == substr($key, $pos, 1));
-                }
-                if ($match) {
-                    // make sure the token accepts identification
-                    if ($token->identify($input)) {
-                        // Escaped text tokens have a content so they must be instantiated
-                        if ($token->isType(TokenType::ESCAPED_TEXT)) {
-                            return $token->newInstance();
-                        }
-                        // for others, use Lexer's own token instance
-                        return $token;
-                    }
-                }
-            }
-            // code fence cannot be identified by direct matching, let token check itself
-            if ($this->tokenFENCE->identify($input)) {
-                return $this->tokenFENCE->newInstance();
-            }
-            if ($this->tokenTRIPLEBACKTICK->identify($input)) {
-                return $this->tokenTRIPLEBACKTICK;
-            }
-            */
             return null;
         }
 
@@ -1185,6 +1191,7 @@ namespace MultilingualMarkdown {
                         if ($this->mlmdTokensLengths[$key] > $this->tokenMaxLength) {
                             $this->tokenMaxLength = $this->mlmdTokensLengths[$key];
                         }
+                        $this->rebuildFirstCharDispatch();
                     }
                 }
                 $this->languageSet = isset($index);

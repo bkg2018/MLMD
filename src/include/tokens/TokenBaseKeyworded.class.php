@@ -61,6 +61,15 @@ namespace MultilingualMarkdown {
         }
 
         /**
+         * Return this token's identifying keyword, e.g. for building a dispatch
+         * table keyed by first character.
+         */
+        public function getKeyword(): string
+        {
+            return $this->keyword;
+        }
+
+        /**
             * Identify self against an UTF-8 buffer and position.
             *
             * The token knows its UTF-8 identifier / symbols and checks if the

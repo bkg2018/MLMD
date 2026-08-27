@@ -1034,7 +1034,6 @@ namespace MultilingualMarkdown {
             }
             // 3) add to default buffer
             $this->curDefault[] = new OutputPart($text, $expand);
-            array_values($this->curDefault);
             return true;
         }
 
