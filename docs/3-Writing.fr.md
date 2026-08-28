@@ -1,4 +1,4 @@
-# III) Rédaction des fichiers sources<A id="a22"></A>
+# III) Rédaction des fichiers sources<A id="a21"></A>
 
 Les fichiers source doivent posséder une extension `.base.md` ou `.mlmd`. Leur contenu
 est du texte encodé en UTF-8 avec des fins de ligne Windows ou Linux/macOS. MLMD est
@@ -30,11 +30,11 @@ les fichiers générés.
 | `# titre`         | <ul><li>titre de niveau 1 utilisé comme titre de fichier Markdown</li><li>peut inclure des parties pour autres langues</li></ul>|
 | `texte …`          | <ul><li>texte par défaut pour les langues sans partie spécifique</li><li>utilisation facile pour le texte original avant traduction</li></ul>|
 | `.fr((texte.))`    | <ul><li>texte pour la langue de code `fr` (français)</li><li>le code doit avoir été déclaré dans la directive `.languages`</li><li>`.fr((` ouvre la langue `.))` la referme</li><li>peut être suivi d'autres langues et précédé de texte par défaut</li></ul>|
-| `.all(texte.))`    | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
+| `.all((texte.))`   | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
 | `.!((texte.))`     | <ul><li>le texte sera ignoré et n'ira dans aucun fichier d'aucune langue</li></ul>|
   
 
-## III-1) Début de fichier source<A id="a23"></A>
+## III-1) Début de fichier source<A id="a22"></A>
 
 MLMD ne génère aucun texte dans aucun fichier tant qu'il n'a pas rencontré au moins une directive
 `.languages` déclarant les codes de langue utilisés. C'est une contrainte globale à l'ensemble
@@ -57,7 +57,7 @@ des fichiers sources traités mais ce n'est pas obligatoire.
   la directive `.languages` et le titre de niveau 1 `#`. Le `.numbering` sera ignoré si
   un paramètre `-numbering` a été fourni à la ligne de commande.
 
-## III-2) Inclusion de fichiers sources<A id="a24"></A>
+## III-2) Inclusion de fichiers sources<A id="a23"></A>
 
 Tout fichier indiqué dans un paramètre `-i` de la ligne de commande ou résultant
 de l'exploration du répertoire de démarrage peut ajouter d'autres fichiers à la liste de ceux
@@ -70,13 +70,14 @@ simple et propre avec un sommaire global.
 
 Cet usage est illustré dans le fichier principal de la documentation MLMD `docsource/MLMD.mlmd`.
 
-### III-2.1) Directive d'inclusion<A id="a25"></A>
+### III-2.1) Directive d'inclusion<A id="a24"></A>
 
-La directive `.include` est suivie d'un nom relatif de fichier qui doit être accessible
-à partir du répertoire du fichier principal. Le fichier inclus n'est pas forcément relatif
-à celui où se trouve la directive mais plutôt au fichier principal, par exemple indiqué par
-le paramètre `-main` de la ligne de commande. Le nom suit la directive sans délimiteur
-particulier ou guillemets autours de lui.
+La directive `.include` est suivie d'un nom de fichier relatif, résolu par rapport au
+répertoire du fichier où se trouve la directive `.include` elle-même (pas le répertoire du fichier
+principal - un fichier inclus qui en inclut un autre utilise son propre répertoire comme base pour
+cette inclusion interne). Le chemin est tout ce qui suit la directive jusqu'à la fin de la ligne,
+seuls les espaces en début et fin sont retirés - il peut contenir des espaces, et n'a besoin
+d'aucun délimiteur ou guillemet autour de lui.
 
 La documentation MLMD est organisée en un fichier principal `README.mlmd` avec un titre
 principal et un sommaire global, qui inclut 5 autres fichiers contenant les parties de la
@@ -101,7 +102,7 @@ Le sommaire global contiendra tous les titres de fichiers de niveau 1 à 3 y com
 ceux des fichiers indiqués dans les directives `.include`, bien qu'ils ne soient pas
 listés dans les paramètres `-i` de la ligne de commande.
 
-### III-2.2) Numérotation des fichiers<A id="a26"></A>
+### III-2.2) Numérotation des fichiers<A id="a25"></A>
 
 Pour contrôler la numérotation des fichiers principaux et inclus, la directive
 `.topnumber` règle le numéro du titre de niveau 1 dans un fichier. Un bon moyen de l'employer 
@@ -135,7 +136,7 @@ son ordre dans le sommaire global :
 
 La documentation de MLMD illustre l'utilisation des directives `.include` et `.topnumber`.
 
-## III-3) Titres<A id="a27"></A>
+## III-3) Titres<A id="a26"></A>
 
 MLMD reconnaît les symboles `#` en début de ligne comme préfixe indiquant
 un niveau de titre. Il *ne reconnaît pas les syntaxes alternatives* des niveaux 1 et 2
@@ -146,8 +147,10 @@ le schéma de numérotation ou les sommaires.
 
 ```code
 # Ce titre sera reconnu par MLMD
+
 Celui-ci sera pas reconnu car il ne possède pas de préfixe #
 ============================================================
+
 ## Celui-ci sera reconnu grâce à son préfixe ##
 -----------------------------------------------
 ```
@@ -157,7 +160,19 @@ n'ont pas d'effet particulier. Par convention dans un fichier Markdown on peut f
 les titres d'une ligne vide, MLMD accepte même plusieurs lignes vides mais n'en écrira qu'une
 dans les fichiers générés.
 
-## III-4) Fin de ligne et fin de paragraphe<A id="a28"></A>
+MLMD suit les niveaux de titre de 1 à 9, mais Markdown standard (et les moteurs de rendu comme
+GitHub) ne reconnaissent que `#` à `######` (niveaux 1 à 6) comme de vrais titres. Un titre de niveau
+7 à 9 (`#######` et au-delà) sera bien numéroté et inclus dans les sommaires par MLMD, mais s'affichera
+comme du texte brut commençant par des caractères `#` littéraux dans le Markdown généré, pas comme un
+titre, dans n'importe quel visualiseur standard. Limitez la profondeur des titres à 6 niveaux sauf si
+vous savez que votre moteur de rendu cible en supporte davantage.
+
+MLMD s'attend également à ce que les titres ne sautent pas plus d'un niveau à la fois (par
+exemple un titre `####` directement après un titre `##`, sans `###` entre les deux) : cela affichera
+une erreur, mais la génération se termine tout de même et le titre concerné est quand même numéroté
+et inclus dans les sommaires.
+
+## III-4) Fin de ligne et fin de paragraphe<A id="a27"></A>
 
 Par défaut, en dehors des titres et des directives spéciales qui occupent une ligne,
 MLMD interprète les paragraphes des fichiers sources comme du texte par défaut qui va dans tous
@@ -178,6 +193,7 @@ plus loin, ils ouvrent ou ferment une partie propre à une langue.
 ```code
 Ceci est du texte par défaut qui ira dans tous les fichiers sauf le français.
 .fr((Ceci est du texte qui ira dans le fichier français à la place du texte précédent..))
+
 Ce texte ira dans tous les fichiers sauf le français..fr((Ce texte ira dans le
 fichier français à la place du précédent..))
 ```
@@ -192,6 +208,7 @@ Voici un autre exemple :
 .((default text.))
 .fr((texte français.))
 .en((english text.))
+
 Some other text....fr((Autre texte....))
 ```
 
@@ -214,6 +231,7 @@ est équivalente au bloc précédent et générera le même texte dans les même
 
 ```code
 .((default text.)).fr((french text.)).en((english text.))
+
 Some other text....fr((Autre texte....))
 ```
 
@@ -222,7 +240,7 @@ sources avec un effet identique. En général, les parties importantes de texte 
 peuvent être placées dans des paragraphes séparés par une simple fin de ligne, tandis que les
 petites parties de texte pourront être rédigées dans les lignes d'un même bloc.
 
-### III-4.1) Notes<A id="a29"></A>
+### III-4.1) Notes<A id="a28"></A>
 
 Bien que la syntaxe Markdown impose une limite de ligne à 80 caractères, les visualiseurs ou
 éditeurs de fichiers Markdown ainsi que les browsers Internet ne se préoccupent pas de cette limite
@@ -252,6 +270,40 @@ seront les vraies fins de ligne
 ```code
   .fr((Some french text..))
 ```
+
+### III-4.2) Piège : texte partagé sur la même ligne qu'une valeur traduite<A id="a29"></A>
+
+Un lot de texte par défaut est refermé par une ligne vide : un texte séparé d'une section de
+langue par une ligne vide est sûr et sera partagé par toutes les langues. Mais à l'intérieur d'un
+même paragraphe, si une section de langue remplace une partie de ce paragraphe, c'est tout le texte
+par défaut du paragraphe qui est exclu de cette langue, pas seulement la partie effectivement
+remplacée.
+
+C'est facile à négliger quand une même ligne mélange du texte qui doit réellement varier selon
+la langue (une valeur traduite) avec du texte qui doit rester identique dans toutes les langues
+(balisage Markdown ou HTML environnant) :
+
+```code
+<img src="pic.jpg" alt=.(("cat".)).fr(("chat".)) />
+```
+
+Ici `<img src="pic.jpg" alt=` et la fermeture `/>` sont sur la même ligne que `"cat"`, donc dans
+le même paragraphe. Comme `fr` remplace `"cat"`, tout le paragraphe est exclu de la sortie `fr`, y
+compris le préfixe `<img src="pic.jpg" alt=` - ce qui produit du HTML invalide, pas seulement une
+traduction manquante.
+
+Si une partie de la ligne doit apparaître dans toutes les langues quel que soit ce qui est
+remplacé ailleurs sur cette même ligne, il faut l'entourer explicitement de `.all((` plutôt que de
+la laisser comme simple texte par défaut :
+
+```code
+.all((<img src="pic.jpg" alt=.)).(("cat".)).fr(("chat".)).all(( />.))
+```
+
+Une ligne vide entre le texte partagé et la valeur fonctionnerait aussi, mais change la mise en
+page ; `.all((` est le correctif qui garde tout sur une seule ligne. MLMD détecte aussi cette
+situation et émet un avertissement nommant la langue et un aperçu du texte sur le point d'être
+perdu, pour que la perte ne soit jamais silencieuse.
 
 ## III-5) Blocs multi-lignes (listes, citations, tableaux)<A id="a30"></A>
 
@@ -347,9 +399,13 @@ directives n'auront pas d'effet et seront recopiées sans interprétation
   l'apostrophe est utilisé dans de nombreuses langues dans d'autres buts que pour entourer
   du texte.
 - Accent inversé : pour utiliser ce caractère sans générer l'effet d'échappement de texte
-  il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour 
+  il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour
   l'échappement](https://daringfireball.net/projects/markdown/syntax#autoescape) et la séquence
   complète peut être entourée des marqueurs MLMD `.!`.
+- Si un accent inversé, un guillemet ou une barrière de code n'a pas de marqueur de fermeture
+  correspondant avant la fin du fichier, MLMD affiche un avertissement nommant le marqueur et la
+  ligne où il a été ouvert, au lieu d'avaler silencieusement le reste du fichier comme texte
+  échappé.
 
 ## III-8) Variables<A id="a33"></A>
 
@@ -374,6 +430,10 @@ identifiée `toc`. Le style de l'ancre dépend du mode de sortie.
 Toutes les variables prennent une valeur lors de la génération des fichiers, sauf `{main}` qui est
 ignorée si le paramètre `-main` n'a pas été spécifié dans la ligne de commande. Si le fichier principal
 n'a pas été défini le texte reste `{main}` dans les fichiers générés.
+
+`{iso}` se comporte de la même façon pour une langue déclarée sans code ISO (par exemple
+`.languages fr,en` sans partie `=<iso>`) : le texte reste `{iso}` dans les fichiers générés pour
+cette langue, et MLMD affiche un avertissement nommant la langue.
 
 ## III-9) Texte par défaut<A id="a34"></A>
 
@@ -448,9 +508,13 @@ les directives MLMD ne le seront pas.
 
 ## III-12) Effets immédiats et englobés<A id="a37"></A>
 
- Les directives `.languages`, `.numbering`, `.topnumber` et `.toc` ont un effet *immédiat*. Cela
-signifie qu'elles doivent généralement se situer sur une ligne isolée et de préference en début de
-fichier source. Ceci est obligatoire pour `.languages`, car tout ce qui la précède est ignoré par MLMD
+Les directives `.languages`, `.numbering`, `.topnumber` et `.toc` ont un effet *immédiat*.
+Chacune doit démarrer une ligne - le caractère qui la précède doit être une fin de ligne, ou rien
+s'il s'agit de la toute première ligne du fichier - de préférence en début de fichier source. Tout
+ce qui est écrit après les paramètres de la directive, jusqu'à la fin de cette ligne, est
+silencieusement ignoré par MLMD : ce n'est pas une erreur, mais ce texte n'apparaîtra jamais dans
+aucun fichier généré. Cette règle est identique pour les quatre directives immédiates, elle n'est
+pas plus stricte pour certaines que pour d'autres.
 
 Les autres directives englobantes commencent par une ouverture comme `.((`, suivie de texte et
 ensuite d'une fermeture `.))` ou d'une autre directive d'ouverture.
@@ -471,8 +535,12 @@ ont des paramètres et des réglages par défaut
   et inscrira le texte dans tous les fichiers sauf ceux avec une section spécifique, même avant le titre
   de niveau 1. Il faut remarquer que Markdown interdit que du texte apparaisse avant le titre de niveau 1
   mais MLMD l'inscrira quand même dans les fichiers générés.
-- La directive `.default((` ou `.((` termine toute précédente section de texte par défaut ou spécifique
-  à une langue et démarre une nouvelle section de texte par défaut. Voir les détails dans [().]
+- La directive `.default((` ou `.((` place le texte dans toutes les langues qui n'ont pas reçu leur
+  propre remplacement spécifique depuis le début du paragraphe en cours. Une section `.all((`
+  précédente n'a aucun effet là-dessus : elle ne rend pas le texte `.default((` qui suit indisponible
+  pour une langue. Mais un paragraphe entier de texte par défaut peut être exclu d'une langue
+  simplement parce qu'une partie de ce même paragraphe a été remplacée - voir
+  [Piège : texte partagé sur la même ligne qu'une valeur traduite](#a30).
 - La directive `.toc` a des paramètres par défaut pour générer un sommaire local aux titres de niveaux 2 et 3
   du fichier en cours. Voir [TOC](#generating-table-of-content-toc).
 - Tout sommaire généré par un fichier possède une ancre nommée ou identifiée `toc` dans le fichier en cours

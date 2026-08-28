@@ -1,9 +1,9 @@
-# I) Installation<A id="a2"></A>
+# I) Installation<A id="a1"></A>
 
 MLMD est constitué d'un script principal `mlmd.php` et de dépendances. Le script et ses
 dépendances peuvent être placés dans n'importe quel répertoire accessible à l'utilisateur.
 
-## I-1) Version PHP<A id="a3"></A>
+## I-1) Version PHP<A id="a2"></A>
 
 MLMD a été testé avec PHP 7.3, 7.4 et 8.0 CLI. La version 7.2 minimale est requise.
 
@@ -28,7 +28,7 @@ la commande `php --ini`.
 PHP 7.2 peut fonctionner mais n'a pas été testé. L'extension MultiByte (mbstring) est utilisée
 et doit être activée dans PHP.INI.
 
-## I-2) Emplacement de MLMD<A id="a4"></A>
+## I-2) Emplacement de MLMD<A id="a3"></A>
 
 Le script et ses dépendances doivent se situer dans un répertoire accessible à l'utilisateur, par exemple :
 
@@ -37,7 +37,7 @@ Le script et ses dépendances doivent se situer dans un répertoire accessible �
 
 Les paramètres du script sont décrits dans la partie [Utilisation de MLMD](#utilisation-de-mlmd)
 
-## I-3) Utilisation d'un alias pour lancer MLMD<A id="a5"></A>
+## I-3) Utilisation d'un alias pour lancer MLMD<A id="a4"></A>
 
 Ce qui suit est facultatif mais permet d'utiliser le script MLMD comme s'il était une commande
 du système d'exploitation. Sans les alias, le script doit être exécuté en tapant `php <chemin>/mlmd.php`
@@ -46,7 +46,7 @@ avec le chemin où ont été stockés le script et ses dépendances.
 Les commandes indiquées ci-après doivent être adaptées pour le répertoire où se situe
 le script.
 
-### I-3.1) Linux / macOS / OS X<A id="a6"></A>
+### I-3.1) Linux / macOS / OS X<A id="a5"></A>
 
 - La commande suivante peut être placée dans le script de démarrage
 du shell (en général `~/.bashrc`, `~/.zshrc` etc) :
@@ -55,7 +55,7 @@ du shell (en général `~/.bashrc`, `~/.zshrc` etc) :
 alias mlmd=php ~/phpscripts/mlmd.php
 ```
 
-### I-3.2) Windows 10<A id="a7"></A>
+### I-3.2) Windows 10<A id="a6"></A>
 
 - Un fichier texte doit être créé - par exemple avec le Bloc Note - contenant la ligne suivante :
 

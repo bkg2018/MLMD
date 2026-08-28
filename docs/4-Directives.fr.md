@@ -64,7 +64,7 @@ que la directive permet de modifier le schéma pour le fichier où elle apparaî
 ### IV-2.1) Syntaxe<A id="a45"></A>
 
 ```code
-.numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]]
+.numbering [<niveau>]:[<préfixe>]:<symbole>[:<séparateur>][,...]
 ```
 
 Voici une description des parties de la définition de niveau. Elles sont identiques aux
@@ -126,12 +126,13 @@ Le sommaire insère un lien vers chaque titre de chaque fichier qu'il inclut
 
 ### IV-4.1) Syntaxe<A id="a49"></A>
 
-La directive `.toc` doit être écrite sur une ligne isolée avec ses paramètres. La plupart du
-temps elle se situe après le titre du fichier et une introduction. Un sommaire sans
+Comme toute directive immédiate, `.toc` doit démarrer sa propre ligne, et tout ce qui suit ses
+paramètres sur cette ligne est ignoré - voir [Effets immédiats et englobés](3-Writing.md#a38). La
+plupart du temps elle se situe après le titre du fichier et une introduction. Un sommaire sans
 aucun paramètre écrira la liste des titres `##` à `###` du fichier en cours (niveaux 2 à 4).
 
 ```code
-.TOC [level=[m][-][n]] [title=<texte de titre>] [out=md|html]
+.toc [level=[m][-][n]] [title=<texte de titre>]
 ```
 
 #### IV-4.11) Paramètre `level`<A id="a50"></A>
@@ -160,7 +161,7 @@ avant le sommaire.
 ### IV-4.2) Exemples<A id="a52"></A>
 
 ```code
-.TOC level=1-3 title=2,".fr((Table des matières.)).en((Table Of Contents))"
+.toc level=1-3 title=.fr((Table des matières.)).en((Table Of Contents.))
 ```
 
 Cette directive place une table des matières à partir des niveaux `#` à `##` des titres
@@ -261,11 +262,15 @@ par MLMD et écrit dans les fichiers de toutes les langues, puis le contexte par
 pour le texte qui suit le préfixe :
 
 ```code
-# .Main Title.fr((Titre principal.))
+# Main Title.fr((Titre principal.))
 ```
 
 Ceci placera `# Main title` dans tous les fichiers générés sauf le fichier français `.fr.md`
-qui recevra `# Titre principal`.
+qui recevra `# Titre principal`. Si une partie d'un titre doit rester identique dans toutes les
+langues malgré une partie traduite juste à côté (un besoin courant pour un titre avec un préfixe
+invariant, comme utilisé dans le `README.mlmd` de ce projet), il faut entourer cette partie
+invariante de `.all((` plutôt que de la laisser comme simple texte par défaut - voir
+[Piège : texte partagé sur la même ligne qu'une valeur traduite](3-Writing.md#a30).
 
 Pour les blocs de texte, le texte par défaut peut être placé juste avant les sections
 spécifiques aux langues lui correspondant, ou il peut être placé explicitement entre les directives
@@ -305,6 +310,10 @@ Elle peut être suspendue ou terminée par :
 - Une directive `.all((` qui démarre du texte pour toutes les langues.
 - Une directive `.<code>((` qui démarre le texte spécifique à une langue.
 - Une directive `.((` ou `.default((` qui démarre du texte par défaut.
+
+> Ne confondez pas l'alias `.!((` utilisé ici avec la directive d'échappement `.!` (ils se
+ressemblent presque mais font l'inverse l'un de l'autre - `.!((texte.))` supprime le texte,
+`.!texte.!` le conserve tel quel). Voir [Texte échappé](#a66) pour plus de détails.
 
 ### IV-7.1) Syntaxe<A id="a60"></A>
 
@@ -364,6 +373,7 @@ La directive peut entourer du texte ou des titres :
 ```code
 .en((
 Text for English language only.
+
 ## Heading for English generated file
 .))
 ```
@@ -372,6 +382,7 @@ Elle peut également intervenir à l'intérieur du texte ou des titres :
 
 ```code
 .fr((Texte pour le fichier en Français.)).en((text for the English file.))
+
 # .fr((Titre en Français.)).en((English Title.))
 ```
 
@@ -424,11 +435,19 @@ Dans le texte échappé, les directives et variables sont ignorées par MLMD qui
 écrit le texte à l'identique dans les fichiers générés.
 
 En syntaxe Markdown, le texte peut également être échappé en l'entourant d'accents inversés
-multiples `.!``, de barrières de code ````.!` ou de guillemets `"`. MLMD respectera ces
-échappements Markdown et écrira le texte échappé avec ses marqueurs dans les fichiers générés
-tout en ignorant toute variable ou directive qui pourrait s'y trouver. La différence avec les
-directives d'échappement MLMD est que ces directives `.!` ne seront pas écrites et seul
-le texte échappé ira dans les fichiers générés.
+simples ou multiples, de barrières de code ou de guillemets. MLMD respectera ces conventions
+d'échappement Markdown et écrira le texte échappé dans les fichiers générés tout en ignorant toute
+variable ou directive qui pourrait s'y trouver. La différence avec la directive MLMD `.!` est que
+`.!` elle-même ne sera pas écrite dans le résultat, alors que les marqueurs d'échappement Markdown
+(accents inversés, barrières, guillemets) sont conservés dans le texte généré, car le moteur de
+rendu Markdown en a lui aussi besoin.
+
+> Ne confondez pas `.!texte.!` (échappement) avec `.!((texte.))` (l'alias court de `.ignore((`,
+décrit plus haut). Ils se ressemblent presque mais font l'inverse l'un de l'autre : `.!texte.!`
+conserve le texte tel quel, non interprété, dans tous les fichiers générés ; `.!((texte.))` supprime
+le texte de tous les fichiers générés. Une parenthèse en trop ou manquante fait basculer
+silencieusement de « conserver tel quel » à « supprimer », sans aucun avertissement. En cas de
+doute, préférez écrire `.ignore((` en entier plutôt que d'utiliser l'alias `.!((`.
 
 ## IV-10) Exemples<A id="a66"></A>
 

@@ -37,6 +37,10 @@ At the end of each source file, MLMD will check if all language sections have be
 display the starting line of any non-closed sections. Make sure you read these warnings and fix them
 by adding closing directives `.))` at the right places.
 
+An escaped text section started with `.!` gets the same check: if a `.!` has no matching closing
+`.!` before the end of the file, MLMD will print a warning. Because `.!` uses the same marker to
+open and close, an odd number of `.!` markers anywhere in the file is enough to trigger it.
+
 ## V-4) Wrong indentations<A id="a71"></A>
 
 MLMD will reproduce space indentation only if it occurs *after*  language opening directives, so if

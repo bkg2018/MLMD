@@ -51,7 +51,7 @@ les fichiers générés..))
 | `# title`         | <ul><li>level 1 heading, used as Markdown file title</li><li>may include language specific text parts</li></ul>|
 | `text …`          | <ul><li>default text when no language specific text exists for current part</li><li>easy use for original text before translation</li></ul>|
 | `.fr((text.))`    | <ul><li>language specific text for `fr` code (french)</li><li>the language code must have been declared in `.languages` directive</li><li>`.fr((` opens language and `.))` closes it</li><li>can be followed by other language parts and preceded by default text</li></ul>|
-| `.all(text.))`    | <ul><li>text will unconditionally go in all language files</li></ul>|
+| `.all((text.))`   | <ul><li>text will unconditionally go in all language files</li></ul>|
 | `.!((text.))`     | <ul><li>text is ignored and won’t go in any generated file</li></ul>|
 .)).fr((
 | Directive / texte | Effet dans les fichiers générés |
@@ -63,7 +63,7 @@ les fichiers générés..))
 | `# titre`         | <ul><li>titre de niveau 1 utilisé comme titre de fichier Markdown</li><li>peut inclure des parties pour autres langues</li></ul>|
 | `texte …`          | <ul><li>texte par défaut pour les langues sans partie spécifique</li><li>utilisation facile pour le texte original avant traduction</li></ul>|
 | `.fr((texte.))`    | <ul><li>texte pour la langue de code `fr` (français)</li><li>le code doit avoir été déclaré dans la directive `.languages`</li><li>`.fr((` ouvre la langue `.))` la referme</li><li>peut être suivi d'autres langues et précédé de texte par défaut</li></ul>|
-| `.all(texte.))`    | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
+| `.all((texte.))`   | <ul><li>le texte ira inconditionnellement dans les fichiers de toutes les langues</li></ul>|
 | `.!((texte.))`     | <ul><li>le texte sera ignoré et n'ira dans aucun fichier d'aucune langue</li></ul>|
 .))  
 
@@ -134,15 +134,17 @@ You can see an example of this use in the MLMD main documentation file in `docso
 
 ### Include directive.fr((Directive d'inclusion.))
 
-The `.include` directive is followed by a relative file name which must be accessible
-from the main file root directory. The file is not necessarily relative to the file
-where the directive lies. It is written after the directive with no special delimiter
-or quote characters around it and it ends the line.
-.fr((La directive `.include` est suivie d'un nom relatif de fichier qui doit être accessible
-à partir du répertoire du fichier principal. Le fichier inclus n'est pas forcément relatif
-à celui où se trouve la directive mais plutôt au fichier principal, par exemple indiqué par
-le paramètre `-main` de la ligne de commande. Le nom suit la directive sans délimiteur
-particulier ou guillemets autours de lui..))
+The `.include` directive is followed by a relative file name, resolved against the directory of
+the file where the `.include` directive itself lies (not the main file's directory - an included
+file including another one uses its own directory as the base for that inner `.include`). The path
+is everything after the directive up to the end of the line, with only leading and trailing
+whitespace trimmed - it can contain spaces, and needs no delimiter or quote characters around it.
+.fr((La directive `.include` est suivie d'un nom de fichier relatif, résolu par rapport au
+répertoire du fichier où se trouve la directive `.include` elle-même (pas le répertoire du fichier
+principal - un fichier inclus qui en inclut un autre utilise son propre répertoire comme base pour
+cette inclusion interne). Le chemin est tout ce qui suit la directive jusqu'à la fin de la ligne,
+seuls les espaces en début et fin sont retirés - il peut contenir des espaces, et n'a besoin
+d'aucun délimiteur ou guillemet autour de lui..))
 
 MLMD documentation is organized as a main `README.mlmd` file with a main title and
 a global Table of Contents, which includes 5 other files containing the different parts
@@ -265,6 +267,26 @@ more than one empty line, although it will only generate one in final Markdowns.
 n'ont pas d'effet particulier..)) Par convention dans un fichier Markdown on peut faire suivre
 les titres d'une ligne vide, MLMD accepte même plusieurs lignes vides mais n'en écrira qu'une
 dans les fichiers générés.
+
+MLMD tracks heading levels 1 to 9, but standard Markdown (and renderers like GitHub) only recognize
+`#` to `######` (levels 1 to 6) as real headings. A level 7 to 9 heading (`#######` and beyond) will
+still be numbered and included in tables of contents by MLMD, but will render as plain text starting
+with literal `#` characters in the generated Markdown, not as a heading, in any standard viewer. Keep
+heading depth to 6 levels or less unless you know your target renderer supports more.
+.fr((MLMD suit les niveaux de titre de 1 à 9, mais Markdown standard (et les moteurs de rendu comme
+GitHub) ne reconnaissent que `#` à `######` (niveaux 1 à 6) comme de vrais titres. Un titre de niveau
+7 à 9 (`#######` et au-delà) sera bien numéroté et inclus dans les sommaires par MLMD, mais s'affichera
+comme du texte brut commençant par des caractères `#` littéraux dans le Markdown généré, pas comme un
+titre, dans n'importe quel visualiseur standard. Limitez la profondeur des titres à 6 niveaux sauf si
+vous savez que votre moteur de rendu cible en supporte davantage..))
+
+MLMD also expects headings not to skip more than one level at a time (e.g. a `####` heading directly
+after a `##` heading, with no `###` in between): doing so will print an error, though generation
+still completes and the skipped-to heading is still numbered and included in tables of contents.
+.fr((MLMD s'attend également à ce que les titres ne sautent pas plus d'un niveau à la fois (par
+exemple un titre `####` directement après un titre `##`, sans `###` entre les deux) : cela affichera
+une erreur, mais la génération se termine tout de même et le titre concerné est quand même numéroté
+et inclus dans les sommaires..))
 
 ## End-of-Lines and End-of-Paragraphs.fr((Fin de ligne et fin de paragraphe.))
 
@@ -421,6 +443,57 @@ seront les vraies fins de ligne.))
   .fr((Some french text..))
 ```
 
+### Pitfall: shared text on the same line as a translated value.fr((Piège : texte partagé sur la même ligne qu'une valeur traduite.))
+
+A batch of default text is closed by a blank line: text separated from a language-specific section
+by a blank line is safe and will be shared across every language. But within a single paragraph, if
+a language section overrides part of that paragraph, the *entire* paragraph's default text is excluded
+from that language, not just the part actually overridden.
+.fr((Un lot de texte par défaut est refermé par une ligne vide : un texte séparé d'une section de
+langue par une ligne vide est sûr et sera partagé par toutes les langues. Mais à l'intérieur d'un
+même paragraphe, si une section de langue remplace une partie de ce paragraphe, c'est tout le texte
+par défaut du paragraphe qui est exclu de cette langue, pas seulement la partie effectivement
+remplacée..))
+
+This is easy to overlook when a single line mixes text that should genuinely vary by language (a
+translatable value) with text that should stay identical in every language (surrounding Markdown or
+HTML markup):
+.fr((C'est facile à négliger quand une même ligne mélange du texte qui doit réellement varier selon
+la langue (une valeur traduite) avec du texte qui doit rester identique dans toutes les langues
+(balisage Markdown ou HTML environnant) :.))
+
+```code
+<img src="pic.jpg" alt=.(("cat".)).fr(("chat".)) />
+```
+
+Here `<img src="pic.jpg" alt=` and the closing `/>` are on the same line as `"cat"`, so they belong
+to the same paragraph. Because `fr` overrides `"cat"`, the whole paragraph is excluded from the `fr`
+output, including the `<img src="pic.jpg" alt=` prefix - producing invalid HTML, not just a missing
+translation.
+.fr((Ici `<img src="pic.jpg" alt=` et la fermeture `/>` sont sur la même ligne que `"cat"`, donc dans
+le même paragraphe. Comme `fr` remplace `"cat"`, tout le paragraphe est exclu de la sortie `fr`, y
+compris le préfixe `<img src="pic.jpg" alt=` - ce qui produit du HTML invalide, pas seulement une
+traduction manquante..))
+
+If part of a line must appear in every language regardless of what is overridden elsewhere on that
+line, wrap it explicitly in `.all((` instead of leaving it as plain default text:
+.fr((Si une partie de la ligne doit apparaître dans toutes les langues quel que soit ce qui est
+remplacé ailleurs sur cette même ligne, il faut l'entourer explicitement de `.all((` plutôt que de
+la laisser comme simple texte par défaut :.))
+
+```code
+.all((<img src="pic.jpg" alt=.)).(("cat".)).fr(("chat".)).all(( />.))
+```
+
+A blank line between the shared text and the value would also work, but changes the visual layout;
+`.all((` is the fix that keeps everything on one line. MLMD also detects this situation and emits a
+warning naming the language and a preview of the text about to be dropped, so the loss is never
+silent.
+.fr((Une ligne vide entre le texte partagé et la valeur fonctionnerait aussi, mais change la mise en
+page ; `.all((` est le correctif qui garde tout sur une seule ligne. MLMD détecte aussi cette
+situation et émet un avertissement nommant la langue et un aperçu du texte sur le point d'être
+perdu, pour que la perte ne soit jamais silencieuse..))
+
 ## Multi-line blocks (lists, quotes, tables).fr((Blocs multi-lignes (listes, citations, tableaux).))
 
 Because MLMD handles end of lines between language parts and default texte in a special way, some multiple
@@ -546,6 +619,9 @@ directives n'auront pas d'effet et seront recopiées sans interprétation.))
   embedded in doubled back-ticks with spaces
   (see [Markdown syntax about escapes](https://daringfireball.net/projects/markdown/syntax#autoescape))
   and this whole sequence surrounded by MLMD escaping.
+- If a back-tick, double quote or code fence has no matching closing marker before the end of the
+  file, MLMD prints a warning naming the marker and the line where it was opened, instead of
+  silently swallowing the rest of the file as escaped text.
 .)).fr((
 - .!```.! : les barrières de code placées sur une ligne isolée entourent du texte
   où les variables et directives ne seront pas interprétées.
@@ -560,9 +636,13 @@ directives n'auront pas d'effet et seront recopiées sans interprétation.))
   l'apostrophe est utilisé dans de nombreuses langues dans d'autres buts que pour entourer
   du texte.
 - Accent inversé : pour utiliser ce caractère sans générer l'effet d'échappement de texte
-  il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour 
+  il peut être entouré de double-accent inversé et d'espaces (voir [la syntaxe Markdown pour
   l'échappement](https://daringfireball.net/projects/markdown/syntax#autoescape) et la séquence
   complète peut être entourée des marqueurs MLMD `.!`.
+- Si un accent inversé, un guillemet ou une barrière de code n'a pas de marqueur de fermeture
+  correspondant avant la fin du fichier, MLMD affiche un avertissement nommant le marqueur et la
+  ligne où il a été ouvert, au lieu d'avaler silencieusement le reste du fichier comme texte
+  échappé.
 .))
 
 ## Variables
@@ -608,6 +688,13 @@ if a `-main` argument has been passed to MLMD. If no `-main` file is defined, th
 .fr((Toutes les variables prennent une valeur lors de la génération des fichiers, sauf `{main}` qui est
 ignorée si le paramètre `-main` n'a pas été spécifié dans la ligne de commande. Si le fichier principal
 n'a pas été défini le texte reste `{main}` dans les fichiers générés..))
+
+`{iso}` behaves the same way for a language declared with no ISO code (e.g. `.languages fr,en` with
+no `=<iso>` part): the text stays as `{iso}` in that language's generated files, and MLMD prints a
+warning naming the language.
+.fr((`{iso}` se comporte de la même façon pour une langue déclarée sans code ISO (par exemple
+`.languages fr,en` sans partie `=<iso>`) : le texte reste `{iso}` dans les fichiers générés pour
+cette langue, et MLMD affiche un avertissement nommant la langue..))
 
 ## Default text.fr((Texte par défaut.))
 
@@ -730,11 +817,18 @@ les directives MLMD ne le seront pas..))
 ## Immediate vs enclosed effect.fr((Effets immédiats et englobés.))
 
 The `.languages`, `.numbering`, `.topnumber` and `.toc` directives have an *immediate effect*.
-It implies they generally should be alone on an isolated line, and preferably at the beginning of
-source files. (This is mandatory for `.languages`, because anything preceding it will be ignored by MLMD.)
-.fr(( Les directives `.languages`, `.numbering`, `.topnumber` et `.toc` ont un effet *immédiat*. Cela
-signifie qu'elles doivent généralement se situer sur une ligne isolée et de préference en début de
-fichier source. Ceci est obligatoire pour `.languages`, car tout ce qui la précède est ignoré par MLMD.))
+They must each start a fresh line - the character right before them must be an end of line, or
+nothing if they are the very first line of the file - preferably at the beginning of source files.
+Anything written after the directive's own parameters, up to the end of that line, is silently
+discarded by MLMD: it is not an error, but that text will never appear in any generated file. This
+rule is identical for all four immediate directives, not stricter for some than others.
+.fr((Les directives `.languages`, `.numbering`, `.topnumber` et `.toc` ont un effet *immédiat*.
+Chacune doit démarrer une ligne - le caractère qui la précède doit être une fin de ligne, ou rien
+s'il s'agit de la toute première ligne du fichier - de préférence en début de fichier source. Tout
+ce qui est écrit après les paramètres de la directive, jusqu'à la fin de cette ligne, est
+silencieusement ignoré par MLMD : ce n'est pas une erreur, mais ce texte n'apparaîtra jamais dans
+aucun fichier généré. Cette règle est identique pour les quatre directives immédiates, elle n'est
+pas plus stricte pour certaines que pour d'autres..))
 
 The other enclosing directives start with an opening `.<directive>((` marker which *encloses text* until a
 matching `.))` is met, or until another `((` directive is opened.
@@ -760,8 +854,11 @@ ont des paramètres et des réglages par défaut.))
 - After the `.languages` directive, MLMD acts as if a `.default((` directive had been met, so any
   text will go into all the languages files except language specific text even before the level 1 heading.
   Notice that text preceding level 1 heading is not Markdown compliant but MLMD will put it in files.
-- The `.default((` or `.((` directive will only have effect on languages which do not have a defined
-  content yet, any previous `.all` text will make `.default` useless. See []().
+- The `.default((` or `.((` directive puts text into whichever languages have not received their own
+  language-specific override since the current paragraph started. A previous `.all((` section has no
+  effect on this: it does not make later `.default((` text unavailable to any language. But a whole
+  paragraph of default text can be excluded from a language just because part of that same paragraph
+  was overridden - see [Pitfall: shared text on the same line as a translated value](#a30).
 - The `.toc` directive has default values which generate an table of contents for local headings of
   levels 2 and 3 in the current file. See [TOC](#generating-table-of-content-toc).
 - The table of contents generated in any file always has an implicit anchor named `toc` which can be
@@ -774,8 +871,12 @@ ont des paramètres et des réglages par défaut.))
   et inscrira le texte dans tous les fichiers sauf ceux avec une section spécifique, même avant le titre
   de niveau 1. Il faut remarquer que Markdown interdit que du texte apparaisse avant le titre de niveau 1
   mais MLMD l'inscrira quand même dans les fichiers générés.
-- La directive `.default((` ou `.((` termine toute précédente section de texte par défaut ou spécifique
-  à une langue et démarre une nouvelle section de texte par défaut. Voir les détails dans [().]
+- La directive `.default((` ou `.((` place le texte dans toutes les langues qui n'ont pas reçu leur
+  propre remplacement spécifique depuis le début du paragraphe en cours. Une section `.all((`
+  précédente n'a aucun effet là-dessus : elle ne rend pas le texte `.default((` qui suit indisponible
+  pour une langue. Mais un paragraphe entier de texte par défaut peut être exclu d'une langue
+  simplement parce qu'une partie de ce même paragraphe a été remplacée - voir
+  [Piège : texte partagé sur la même ligne qu'une valeur traduite](#a30).
 - La directive `.toc` a des paramètres par défaut pour générer un sommaire local aux titres de niveaux 2 et 3
   du fichier en cours. Voir [TOC](#generating-table-of-content-toc).
 - Tout sommaire généré par un fichier possède une ancre nommée ou identifiée `toc` dans le fichier en cours

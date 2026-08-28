@@ -146,6 +146,12 @@ namespace MultilingualMarkdown {
                 $allFiles = [];
                 foreach ($allHeadingsArrays as $relFilename => $headingsArray) {
                     $topNumber = $lexer->getTopNumber($relFilename);//0 if none
+                    // Files default to top number 1 unless a .topnumber directive sets a distinct
+                    // value, so two files sharing the same top number collide on this array key:
+                    // without a warning the earlier file silently disappears from the generated TOC.
+                    if (array_key_exists($topNumber, $allFiles)) {
+                        $filer->error("File '$relFilename' has the same top number ($topNumber) as file '{$allFiles[$topNumber]}': it will be dropped from the TOC. Use .topnumber to give each file a distinct value.", $relFilename, $filer->getCurrentLineNumber());
+                    }
                     $allFiles[$topNumber] = $relFilename;
                 }
                 ksort($allFiles);

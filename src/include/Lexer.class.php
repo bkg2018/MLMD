@@ -70,11 +70,25 @@ namespace MultilingualMarkdown {
     // Pictures manager
     require_once('PicturesMgr.class.php');
 
+    use function MultilingualMarkdown\Utilities\{
+        resetArray,
+        unsetArrayContent
+    };
+
     class Lexer
     {
         /** predefined tokens and languages codes directives tokens added by .languages */
         private  $mlmdTokens = [];         // keyword => token, e.g. '.!' => TokenEscaperMLMD
         private $mlmdTokensLengths = [];        // keyword => token keyword length
+        /**
+         * Same tokens as $mlmdTokens, grouped by the first character of their keyword and
+         * keeping their relative order (important: some tokens sharing a first character must
+         * be tried longest-keyword-first, e.g. backtick escapers). Every registered token's
+         * keyword starts with '.', '`', '"' or "\n" - never a plain letter - so almost every
+         * ordinary text character has no candidate at all here. Used by fetchToken() to avoid
+         * calling identify() on every registered token (~30) at every single character position.
+         */
+        private $mlmdTokensByFirstChar = [];
         private $tokenMaxLength = 0;
         private $tokenFENCE = null;             // specific handling for ``` at line beginning
         private $tokenTRIPLEBACKTICK = null;    // specific handling for ``` in text stream
@@ -94,6 +108,14 @@ namespace MultilingualMarkdown {
         private $allNumberings = [];
         /** Starting number for level 1 headings for each file (default to 0 = first number in scheme) */
         private $allTopNumbers = [];
+        /**
+         * True once .languages has been found by the combined discovery+preprocessing scan
+         * (scanFile()), in file-scan order. Distinct from $languageSet, which tracks the same
+         * thing per-file during the real generation pass.
+         */
+        private $scanLanguageFound = false;
+        /** First .numbering scheme found by the combined scan, used as fallback for files with none */
+        private $scanDefaultNumberingScheme = null;
 
         /** MD/HTML output modes for headings anchors and toc links */
         private $outputMode = OutputModes::MD;
@@ -198,6 +220,20 @@ namespace MultilingualMarkdown {
                     $this->tokenMaxLength = $len;
                 }
                 $this->mlmdTokensLengths[$key] = $len;
+            }
+            $this->rebuildFirstCharDispatch();
+        }
+
+        /**
+         * (Re)build $mlmdTokensByFirstChar from $mlmdTokens. Must be called again whenever
+         * $mlmdTokens changes (e.g. when a language open token is added by .languages).
+         */
+        private function rebuildFirstCharDispatch(): void
+        {
+            $this->mlmdTokensByFirstChar = [];
+            foreach ($this->mlmdTokens as $token) {
+                $firstChar = mb_substr($token->getKeyword(), 0, 1);
+                $this->mlmdTokensByFirstChar[$firstChar][] = $token;
             }
         }
 
@@ -308,7 +344,6 @@ namespace MultilingualMarkdown {
 
             // delete token
             array_pop($this->curTokens);
-            array_values($this->curTokens);
             $count -= 1;
             if ($prevToken->isType(TokenType::EOL)) {
                 $this->eolCount -= 1;
@@ -547,7 +582,21 @@ namespace MultilingualMarkdown {
          */
         public function fetchToken(object $input): ?Token
         {
-            foreach ($this->mlmdTokens as $token) {
+            // Only try tokens whose keyword actually starts with the current character
+            // (every registered keyword starts with '.', '`', '"' or "\n" - never a plain
+            // letter - so this skips the whole candidate list for almost all ordinary text).
+            // Relative order within same-first-character tokens is preserved from $mlmdTokens
+            // (see rebuildFirstCharDispatch()), which matters e.g. for backtick escapers that
+            // must be tried longest-keyword-first.
+            $currentChar = $input->getCurrentChar();
+            if ($currentChar === null) {
+                return null;
+            }
+            $candidates = $this->mlmdTokensByFirstChar[$currentChar] ?? null;
+            if ($candidates === null) {
+                return null;
+            }
+            foreach ($candidates as $token) {
                 if ($token->identify($input)) {
                     if ($token->isType(TokenType::ESCAPED_TEXT)) {
                         return $token->newInstance();
@@ -555,36 +604,6 @@ namespace MultilingualMarkdown {
                     return $token;
                 }
             }
-
-            /*
-            $extract = $input->getCurrentChar() . $input->fetchNextCharacters($this->tokenMaxLength);
-            // try direct key matching
-            foreach ($this->mlmdTokens as $key => &$token) {
-                $keyLen = strlen($key);
-                $match = true;                
-                for ($pos = 0 ; $match && ($pos < $keyLen) ; $pos += 1) {
-                    $match = (mb_substr($extract, $pos, 1) == substr($key, $pos, 1));
-                }
-                if ($match) {
-                    // make sure the token accepts identification
-                    if ($token->identify($input)) {
-                        // Escaped text tokens have a content so they must be instantiated
-                        if ($token->isType(TokenType::ESCAPED_TEXT)) {
-                            return $token->newInstance();
-                        }
-                        // for others, use Lexer's own token instance
-                        return $token;
-                    }
-                }
-            }
-            // code fence cannot be identified by direct matching, let token check itself
-            if ($this->tokenFENCE->identify($input)) {
-                return $this->tokenFENCE->newInstance();
-            }
-            if ($this->tokenTRIPLEBACKTICK->identify($input)) {
-                return $this->tokenTRIPLEBACKTICK;
-            }
-            */
             return null;
         }
 
@@ -925,200 +944,49 @@ namespace MultilingualMarkdown {
         }
 
         /**
-         * Return an array with the list of included files found in a given file.
+         * Combined discovery and preprocessing pass: reads every input file exactly once,
+         * finding .include directives (recursing into newly discovered files immediately),
+         * .languages, headings, .topnumber and .numbering, and caches each file's content
+         * for the real generation pass to reuse via Filer::openFile(). Replaces what used to
+         * be three separate reads per file (recursive include discovery, then a separate
+         * preprocessing scan, then the real pass) with one combined scan plus a cache hit.
+         *
+         * Note: because included files are now processed as soon as they're discovered
+         * rather than after a full, separate discovery pass, headings (and their <A id="aXX">
+         * anchors) end up numbered in file-discovery order (depth-first through .include
+         * chains) rather than the previous "all originally-specified files, then all included
+         * files afterward" order. This does not affect the visible per-file numbering scheme
+         * (Numbering), only the internal anchor id sequence.
          */
-        public function getIncludedFiles(string $filename, Filer &$filer): ?array
-        {
-            $includes = [];            
-            $path = pathinfo($filename, PATHINFO_DIRNAME);
-            $file = fopen($filename, 'rb');
-            if ($file === false) {
-                $filer->error("could not open [$filename]", __FILE__, __LINE__);
-                return null;
-            }
-            $curLineNumber =  1;
-            do {
-                $text = getNextLineTrimmed($file, $curLineNumber);
-                if (!$text) {
-                    break;
-                }
-                if ($this->tokenEND->identifyInBuffer($text, 0)) {
-                    break;
-                }
-                if ($this->tokenSTOP->identifyInBuffer($text, 0)) {
-                    echo "STOP directive found in Lexer::preProcessIncludes loop\n";
-                }
-                if ($this->tokenFENCE->identifyInBuffer($text, 0)) {
-                    $firstLine = $curLineNumber;
-                    do {
-                        $text = getNextLineTrimmed($file, $curLineNumber);
-                    } while ($text !== null && !$this->tokenFENCE->identifyInBuffer($text, 0));
-                    if ($text === null) {
-                        $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
-                        break;
-                    }
-                }
-                if ($this->tokenINCLUDE->identifyInBuffer($text, 0)) {
-                    $lineEnd = trim(mb_substr($text, $this->tokenINCLUDE->getLength()));
-                    $filePath = $path . '/' . $lineEnd;
-                    if (file_exists($filePath)) {
-                        if (!in_array($filePath, $includes)) {
-                            $includes[] = $filePath;
-                        }
-                    } else {
-                        $filer->error("included file not found $lineEnd in $path");
-                    }
-                }
-            } while (!feof($file));
-            fclose($file);
-            // recurse inclusion in included files
-            $subIncludes = [];
-            foreach ($includes as $file) {
-                $array = $this->getIncludedFiles($file, $filer);
-                foreach ($array as $subFile) {
-                    if (!in_array($subFile, $subIncludes)) {
-                        $subIncludes[] = $subFile;
-                    }
-                }
-            }
-            // merge with includes array
-            foreach ($subIncludes as $subInclude) {
-                if (!in_array($subInclude, $includes)) {
-                    $includes[] = $subInclude;
-                }
-            }
-            return $includes;
-        }
-
-        /**
-         * Look for included files in all input files.
-         */
-        public function preProcessIncludes(Filer &$filer): void
-        {
-            $includes = [];
-            foreach ($filer as $index => $relFilename) {
-                $subIncludes = $this->getIncludedFiles($filer->getInputFile($index), $filer);
-                foreach ($subIncludes as $subInclude) {
-                    if (!in_array($subInclude, $includes)) {
-                        $includes[] = $subInclude;
-                    }
-                }
-            }
-            foreach ($includes as $subFile) {
-                $filer->addInputFile($subFile);
-            }
-        }
-
-        /**
-         * Ready all headings, numberings and languages by reading
-         * only related directives from all input files.
-         */
-        public function preProcess(object $filer): void
+        public function discoverAndPreprocess(Filer &$filer): void
         {
             resetArray($this->allHeadingsArrays);
             resetArray($this->allNumberings);
-            Heading::init();// reset global headings numbering to 0
-            $languageSet = false; // remember if the .languages directive has been read
-            $defaultNumberingScheme = $this->defaultNumberingScheme; // start with CLI parameter scheme if any
-            // explore each input file ($filer is iterable and returns relative filenames and index)
+            Heading::init(); // reset global headings numbering to 0
+            $this->scanLanguageFound = false;
+            $this->scanDefaultNumberingScheme = $this->defaultNumberingScheme; // start with CLI parameter scheme if any
+            $visited = [];
+            // explore each originally-specified input file; scanFile() recurses into .include chains
             foreach ($filer as $index => $relFilename) {
                 $filename = $filer->getInputFile($index); // full file path
                 if ($filename == null) {
                     continue;
                 }
-                $file = fopen($filename, 'rb');
-                if ($file === false) {
-                    $filer->error("could not open [$filename]", __FILE__, __LINE__);
-                    continue;
-                }
-                $headingsArray = new HeadingArray($relFilename);
-                $curLineNumber = 0;
-                $this->allTopNumbers[$relFilename] = 1;
-                // loop on each line
-                do {
-                    $text = getNextLineTrimmed($file, $curLineNumber);
-                    if (!$text) {
-                        break;
-                    }
-                    // handle .end and .stop directive first
-                    if ($this->tokenEND->identifyInBuffer($text, 0)) {
-                        break;
-                    }
-                    if ($this->tokenSTOP->identifyInBuffer($text, 0)) {
-                        echo "STOP directive found in Lexer::preProcess loop\n";
-                    }
-                    // handle .languages directive before anything else
-                    if ($this->tokenLANGUAGES->identifyInBuffer($text, 0)) {
-                        $languageParams = trim(mb_substr($text, $this->tokenLANGUAGES->getLength()));
-                        $this->setLanguagesFrom($languageParams, $filer);
-                        $languageSet = true;
-                        // remember line number for languages directive
-                        $this->allStartingLines[$relFilename] = $curLineNumber + 1;
-                        continue;
-                    }
-                    // ignore any line before the .languages directive
-                    if ($languageSet === false) {
-                        continue;
-                    }
-                    // handle code fences
-                    if ($this->tokenFENCE->identifyInBuffer($text, 0)) {
-                        $firstLine = $curLineNumber;
-                        do {
-                            $text = getNextLineTrimmed($file, $curLineNumber);
-                        } while ($text !== null && !$this->tokenFENCE->identifyInBuffer($text, 0));
-                        if ($text === null) {
-                            $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
-                        }
-                        if ($this->trace) {
-                            $filer->warning("Code fence found at lines $firstLine-$curLineNumber");
-                        }
-                    }
-                    // handle .topnumber directive
-                    if ($this->tokenTOPNUMBER->identifyInBuffer($text, 0)) {
-                        $this->allTopNumbers[$relFilename] = (int)(mb_substr($text, $this->tokenTOPNUMBER->getLength()));
-                        if ($this->allNumberings[$relFilename] ?? false) {
-                            $this->allNumberings[$relFilename]->setLevelNumber(1, $this->allTopNumbers[$relFilename]);
-                        }
-                    }
-                    // handle .numbering directive
-                    if ($this->tokenNUMBERING->identifyInBuffer($text, 0)) {
-                        if ($this->allNumberingScheme[$relFilename] ?? false) {
-                            $filer->warning("numbering scheme overloading for $relFilename", $filename, $firstLine);
-                        }
-                        $this->allNumberingScheme[$relFilename] = trim(mb_substr($text, $this->tokenNUMBERING->getLength()));
-                        $this->allNumberings[$relFilename] = new Numbering($this->allNumberingScheme[$relFilename]);
-                        if ($defaultNumberingScheme == null) {
-                            $defaultNumberingScheme = $this->allNumberingScheme[$relFilename];
-                        }
-                    }
-                    // store headings
-                    if (($text[0] ?? '') == '#') {
-                        $heading = new Heading($text, $curLineNumber, $filer);
-                        $headingsArray[] = $heading;
-                    }
-                } while (!feof($file));
-                fclose($file);
+                $this->scanFile($filename, $filer, $visited);
+            }
 
-                // force fake line number for languages directive if none
-                if (!isset($this->allStartingLines[$relFilename])) {
-                    $this->allStartingLines[$relFilename] = 0;
-                }
-
-                // force a level 1 object if no headings
-                if (count($headingsArray) == 0) {
-                    $heading = new Heading('# ' . $relFilename, 1, $filer);
-                    $headingsArray[] = $heading;
-                }
-                $this->allHeadingsArrays[$relFilename] = $headingsArray;
-                unset($headingsArray);
-            } // next file
+            // scanFile() registered every discovered .include'd file via addInputFile(), but
+            // that doesn't update $filer's relative-filename list - refresh it now so the
+            // loops below (and the caller's own iteration for the real pass) see the complete
+            // file set, not just the originally-specified ones.
+            $filer->readyInputs();
 
             // check every file gets a numbering if there is a default one
-            if ($defaultNumberingScheme != null) {
+            if ($this->scanDefaultNumberingScheme != null) {
                 foreach ($filer as $relFilename) {
                     if (! \array_key_exists($relFilename, $this->allNumberings)) {
-                        $this->allNumberingScheme[$relFilename] = $defaultNumberingScheme;
-                        $this->allNumberings[$relFilename] = new Numbering($defaultNumberingScheme, $filer);
+                        $this->allNumberingScheme[$relFilename] = $this->scanDefaultNumberingScheme;
+                        $this->allNumberings[$relFilename] = new Numbering($this->scanDefaultNumberingScheme, $filer);
                         $this->allNumberings[$relFilename]->setLevelNumber(1, $this->allTopNumbers[$relFilename]);
                     }
                 }
@@ -1130,6 +998,171 @@ namespace MultilingualMarkdown {
                     $heading->setIndex($index);
                 }
             }
+        }
+
+        /**
+         * Read one line for scanFile()'s content cache, preserving trailing spaces/tabs -
+         * unlike the shared getNextLineTrimmed() utility (which strips them, fine for the
+         * directive-prefix checks it was written for, but not for content that must later
+         * stand in for a direct file read: Markdown gives trailing spaces meaning, and
+         * Storage::loadLine() never strips them either). Mirrors getNextLineTrimmed()'s
+         * line-counting and null-at-EOF contract exactly, byte-for-byte trim aside.
+         */
+        private function readRawLine($file, int &$lineNumber): ?string
+        {
+            $line = fgets($file);
+            if ($line === false) {
+                return null;
+            }
+            $lineNumber++;
+            return rtrim($line, "\n\r") . "\n";
+        }
+
+        /**
+         * Scan one file: discover its .include directives (registering and recursing into
+         * each immediately), extract .languages/headings/.topnumber/.numbering, and cache its
+         * content. Skips files already scanned (handles repeated or circular .include chains).
+         *
+         * .include is recognized unconditionally (matching the previous getIncludedFiles()
+         * behavior), while .languages/headings/.topnumber/.numbering are only recognized once
+         * .languages has been found in scan order (matching the previous preProcess()
+         * behavior) - these are genuinely different gating rules, not an oversight.
+         */
+        private function scanFile(string $filename, Filer &$filer, array &$visited): void
+        {
+            if (isset($visited[$filename])) {
+                return;
+            }
+            $visited[$filename] = true;
+            $relFilename = $filer->computeRelativeFilename($filename);
+            if ($relFilename === null) {
+                return;
+            }
+            $path = pathinfo($filename, PATHINFO_DIRNAME);
+            $file = fopen($filename, 'rb');
+            if ($file === false) {
+                $filer->error("could not open [$filename]", __FILE__, __LINE__);
+                return;
+            }
+            $content = '';
+            $headingsArray = new HeadingArray($relFilename);
+            $curLineNumber = 0;
+            $this->allTopNumbers[$relFilename] = 1;
+            // loop on each line
+            do {
+                $rawLine = $this->readRawLine($file, $curLineNumber);
+                if ($rawLine === null) {
+                    break;
+                }
+                $content .= $rawLine;
+                // trailing spaces/tabs don't affect any of the directive-prefix checks below
+                // (they all match at position 0), but must be preserved in $content since
+                // Storage::loadLine() (used when reading a file directly, and by extension
+                // whatever the cached $content here stands in for) never strips them - and
+                // Markdown gives two trailing spaces a meaning (hard line break).
+                $text = rtrim($rawLine, " \t\n\r") . "\n";
+                // handle .end and .stop directive first
+                if ($this->tokenEND->identifyInBuffer($text, 0)) {
+                    break;
+                }
+                if ($this->tokenSTOP->identifyInBuffer($text, 0)) {
+                    echo "STOP directive found in Lexer::scanFile loop\n";
+                }
+                // handle code fences (unconditional: protects both .include and heading/
+                // numbering detection below from false matches inside fenced example text)
+                if ($this->tokenFENCE->identifyInBuffer($text, 0)) {
+                    $firstLine = $curLineNumber;
+                    do {
+                        $rawLine = $this->readRawLine($file, $curLineNumber);
+                        if ($rawLine !== null) {
+                            $content .= $rawLine;
+                            $text = rtrim($rawLine, " \t\n\r") . "\n";
+                        } else {
+                            $text = null;
+                        }
+                    } while ($text !== null && !$this->tokenFENCE->identifyInBuffer($text, 0));
+                    if ($text === null) {
+                        $filer->error("Code fence (```) unable to find closing code fence", $filename, $firstLine);
+                        break;
+                    }
+                    if ($this->trace) {
+                        $filer->warning("Code fence found at lines $firstLine-$curLineNumber");
+                    }
+                    continue;
+                }
+                // handle .include directive: register and recurse immediately, not gated by
+                // .languages (matches previous getIncludedFiles() behavior)
+                if ($this->tokenINCLUDE->identifyInBuffer($text, 0)) {
+                    $lineEnd = trim(mb_substr($text, $this->tokenINCLUDE->getLength()));
+                    $filePath = $path . '/' . $lineEnd;
+                    if (file_exists($filePath)) {
+                        // resolve to the same canonical path addInputFile() will store, so
+                        // the recursive scanFile() call below computes the same relative
+                        // filename (and caches content under the same key) that the real
+                        // generation pass will look up later - a merely-equivalent-looking
+                        // but differently-formatted path would silently mismatch.
+                        $resolvedPath = $filer->resolveInputPath($filePath);
+                        if ($resolvedPath !== null) {
+                            $filer->addInputFile($resolvedPath);
+                            $this->scanFile($resolvedPath, $filer, $visited);
+                        }
+                    } else {
+                        $filer->error("included file not found $lineEnd in $path");
+                    }
+                    continue;
+                }
+                // handle .languages directive before anything else
+                if ($this->tokenLANGUAGES->identifyInBuffer($text, 0)) {
+                    $languageParams = trim(mb_substr($text, $this->tokenLANGUAGES->getLength()));
+                    $this->setLanguagesFrom($languageParams, $filer);
+                    $this->scanLanguageFound = true;
+                    // remember line number for languages directive
+                    $this->allStartingLines[$relFilename] = $curLineNumber + 1;
+                    continue;
+                }
+                // ignore any line before the .languages directive
+                if ($this->scanLanguageFound === false) {
+                    continue;
+                }
+                // handle .topnumber directive
+                if ($this->tokenTOPNUMBER->identifyInBuffer($text, 0)) {
+                    $this->allTopNumbers[$relFilename] = (int)(mb_substr($text, $this->tokenTOPNUMBER->getLength()));
+                    if ($this->allNumberings[$relFilename] ?? false) {
+                        $this->allNumberings[$relFilename]->setLevelNumber(1, $this->allTopNumbers[$relFilename]);
+                    }
+                }
+                // handle .numbering directive
+                if ($this->tokenNUMBERING->identifyInBuffer($text, 0)) {
+                    if ($this->allNumberingScheme[$relFilename] ?? false) {
+                        $filer->warning("numbering scheme overloading for $relFilename", $filename, $curLineNumber);
+                    }
+                    $this->allNumberingScheme[$relFilename] = trim(mb_substr($text, $this->tokenNUMBERING->getLength()));
+                    $this->allNumberings[$relFilename] = new Numbering($this->allNumberingScheme[$relFilename]);
+                    if ($this->scanDefaultNumberingScheme == null) {
+                        $this->scanDefaultNumberingScheme = $this->allNumberingScheme[$relFilename];
+                    }
+                }
+                // store headings
+                if (($text[0] ?? '') == '#') {
+                    $heading = new Heading($text, $curLineNumber, $filer);
+                    $headingsArray[] = $heading;
+                }
+            } while (!feof($file));
+            fclose($file);
+
+            // force fake line number for languages directive if none
+            if (!isset($this->allStartingLines[$relFilename])) {
+                $this->allStartingLines[$relFilename] = 0;
+            }
+            // force a level 1 object if no headings
+            if (count($headingsArray) == 0) {
+                $heading = new Heading('# ' . $relFilename, 1, $filer);
+                $headingsArray[] = $heading;
+            }
+            $this->allHeadingsArrays[$relFilename] = $headingsArray;
+            unset($headingsArray);
+
+            $filer->cacheFileContent($filename, $content);
         }
         /**
          * Sets te pictures manager root directory.
@@ -1179,6 +1212,7 @@ namespace MultilingualMarkdown {
                         if ($this->mlmdTokensLengths[$key] > $this->tokenMaxLength) {
                             $this->tokenMaxLength = $this->mlmdTokensLengths[$key];
                         }
+                        $this->rebuildFirstCharDispatch();
                     }
                 }
                 $this->languageSet = isset($index);

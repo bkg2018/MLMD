@@ -49,14 +49,17 @@ namespace MultilingualMarkdown {
         }
         /**
          * Identify self against an UTF-8 buffer and position.
-         * Make sure code fence starts a new line.
+         * Make sure code fence starts a new line, tolerating leading indentation
+         * (spaces/tabs only) so fences nested under list items are still recognized.
          */
         public function identifyInBuffer(?string $buffer, int $pos): bool
         {
             if ($buffer != null) {
                 if ($pos > 0) {
-                    $lf = mb_substr($buffer, $pos - 1, 1);
-                    if ($lf != "\n") {
+                    $before = mb_substr($buffer, 0, $pos);
+                    $lastEol = mb_strrpos($before, "\n");
+                    $indent = ($lastEol === false) ? $before : mb_substr($before, $lastEol + 1);
+                    if (trim($indent, " \t") !== '') {
                         return false;
                     }
                 }
@@ -66,6 +69,8 @@ namespace MultilingualMarkdown {
         }
         /**
          * Let the token self-identify against an input Filer or Storage object.
+         * Tolerates leading indentation (spaces/tabs only) before the fence marker,
+         * so fences nested under list items are still recognized as fences.
          *
          * @param object $input the Filer or Storage object
          *
@@ -73,8 +78,13 @@ namespace MultilingualMarkdown {
          */
         public function identify(object $input): bool
         {
-            if ($input->getPrevChar() != "\n") {
-                return false;
+            $prevChars = $input->fetchPreviousChars(32);
+            if ($prevChars !== null && $prevChars !== '') {
+                $lastEol = mb_strrpos($prevChars, "\n");
+                $indent = ($lastEol === false) ? $prevChars : mb_substr($prevChars, $lastEol + 1);
+                if (trim($indent, " \t") !== '') {
+                    return false;
+                }
             }
             return parent::identify($input);
         }
@@ -89,12 +99,21 @@ namespace MultilingualMarkdown {
         public function processInput(Lexer $lexer, object $input, Filer &$filer = null): void
         {
             $this->content = $input->getLine(); // <```code> starting marker
+            $firstLine = $filer->getCurrentLineNumber(); // remember opening line for error reporting
             do {
                 $thisLine = $filer->getLine();
-                if ($thisLine != null) {
-                    $this->content .= "\n" . $thisLine;
+                if ($thisLine === null) {
+                    // EOF reached before a closing fence: getLine() would keep returning null forever
+                    // and identifyInBuffer(null, 0) is always false, so without this guard the loop
+                    // below never terminates. Report and stop instead of spinning.
+                    $filer->error('Code fence (```) unable to find closing code fence', $filer->current(), $firstLine);
+                    break;
                 }
-            } while (!$this->identifyInBuffer($thisLine, 0));
+                $this->content .= "\n" . $thisLine;
+                // allow the closing fence to be indented like the opening one: skip
+                // leading spaces/tabs before checking for the closing marker.
+                $closingPos = mb_strlen($thisLine) - mb_strlen(ltrim($thisLine, " \t"));
+            } while (!$this->identifyInBuffer($thisLine, $closingPos));
             // In the lines below I take care to modify $this->content before
             // appending $this to lexer, but it may be possible to add the token first
             // and then modify its content. As PHP is not clear about about object

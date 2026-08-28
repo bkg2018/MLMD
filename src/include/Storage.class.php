@@ -43,10 +43,18 @@ declare(strict_types=1);
 
 namespace MultilingualMarkdown {
 
+    use function MultilingualMarkdown\Utilities\mb_strcmp;
+
     class Storage
     {
-        /** current line content */
-        private $buffer = '';
+        /**
+         * Current buffered content, pre-split into individual UTF-8 characters so
+         * random-access reads are O(1) instead of the O(n) per-call cost mb_substr()
+         * has on a raw multi-byte string (the previous representation, which made
+         * per-character scanning of a long line or a long undelimited run of text
+         * effectively O(n^2)).
+         */
+        private $bufferChars = [];
         /** current pos in line buffer (utf-8) */
         private $bufferPosition = 0;
         /** current line size in characters (utf-8) */
@@ -87,16 +95,13 @@ namespace MultilingualMarkdown {
             }
             $this->inFile = $file;
             \rewind($file);
-            if (isset($this->buffer)) {
-                unset($this->buffer);
-                $this->buffer = '';
-            };
+            $this->bufferChars = [];
             $this->bufferLength = 0;
             $this->bufferPosition = 0;
             // initialize on first line
             $this->curLine = 1;
             $this->fetchCharacters(1);
-            $this->previousChars[0] = mb_substr($this->buffer, 0, 1);
+            $this->previousChars[0] = $this->bufferChars[0] ?? null;
             return true;
         }
 
@@ -109,12 +114,9 @@ namespace MultilingualMarkdown {
                 unset($this->inFile);
                 $this->inFile = null;
             }
-            if (isset($this->buffer)) {
-                unset($this->buffer);
-                $this->buffer = '';
-                $this->bufferLength = 0;
-                $this->bufferPosition = 0;
-            };
+            $this->bufferChars = [];
+            $this->bufferLength = 0;
+            $this->bufferPosition = 0;
         }
 
         /**
@@ -123,15 +125,13 @@ namespace MultilingualMarkdown {
          */
         public function setInputBuffer(?string $content): void
         {
-            if (isset($this->buffer)) {
-                unset($this->buffer);
-            }
-            $this->buffer = $content;
-            $this->bufferLength = mb_strlen($content);
+            $this->bufferChars = ($content === null || $content === '') ? [] : mb_str_split($content, 1);
+            $this->bufferLength = count($this->bufferChars);
             $this->bufferPosition = 0;
+            $this->curLine = 1;
             if ($this->bufferLength > 0) {
                 // remember first character and simulate a previous EOL
-                $this->previousChars = [mb_substr($this->buffer, 0, 1), "\n"];
+                $this->previousChars = [$this->bufferChars[0], "\n"];
             }
         }
 
@@ -173,13 +173,14 @@ namespace MultilingualMarkdown {
                 return;
             }
             // add to buffer with an EOL
-            $this->buffer .= $line . "\n";
-            $this->bufferLength += (1 + mb_strlen($line));
+            $newChars = mb_str_split($line . "\n", 1);
+            array_push($this->bufferChars, ...$newChars);
+            $this->bufferLength += count($newChars);
             // keep buffer size at about 4KB when position is above 1KB
             if ($this->bufferLength > 4096 && $this->bufferPosition > 1024) {
-                $this->buffer = mb_substr($this->buffer, 1024);
+                array_splice($this->bufferChars, 0, 1024);
                 $this->bufferPosition -= 1024;
-                $this->bufferLength = mb_strlen($this->buffer);
+                $this->bufferLength = count($this->bufferChars);
             }
         }
 
@@ -199,7 +200,7 @@ namespace MultilingualMarkdown {
          */
         public function getCurrentChar(): ?string
         {
-            if (!$this->buffer) {
+            if (empty($this->bufferChars)) {
                 return null;
             }
             // immediate return if ready
@@ -210,7 +211,7 @@ namespace MultilingualMarkdown {
             $this->fetchCharacters(1);
             // check again, length didn't change if we're at EOF
             if ($this->bufferPosition < $this->bufferLength) {
-                $this->previousChars[0] = mb_substr($this->buffer, $this->bufferPosition, 1);
+                $this->previousChars[0] = $this->bufferChars[$this->bufferPosition];
                 return $this->previousChars[0];
             }
             return null;
@@ -241,7 +242,7 @@ namespace MultilingualMarkdown {
                 $c = null;
                 $this->bufferPosition = $this->bufferLength;
             } else {
-                $c = mb_substr($this->buffer, $this->bufferPosition, 1);
+                $c = $this->bufferChars[$this->bufferPosition];
             }
             // adjust previous characters array (0 = current, 1 = previous, 2 = pre-previous)
             if (count($this->previousChars) > 2) {
@@ -357,7 +358,7 @@ namespace MultilingualMarkdown {
             if ($length <= 0) {
                 return null;
             }
-            return mb_substr($this->buffer, $startPosition, $length);
+            return implode('', array_slice($this->bufferChars, $startPosition, $length));
         }
 
         /**
@@ -378,7 +379,7 @@ namespace MultilingualMarkdown {
             if ($nextPosition >= $this->bufferLength) {
                 return null; // end of buffer/file already reached
             }
-            return mb_substr($this->buffer, $nextPosition, $charsNumber);
+            return implode('', array_slice($this->bufferChars, $nextPosition, $charsNumber));
         }
 
         /**

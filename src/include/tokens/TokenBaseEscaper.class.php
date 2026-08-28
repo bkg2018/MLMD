@@ -127,6 +127,9 @@ namespace MultilingualMarkdown {
             $this->length = mb_strlen($this->content);
             $lexer->appendToken($this, $filer);
             $lexer->setCurrentChar($currentChar);
+            if ($currentChar == null && $prevChars != $this->keyword && $filer != null) {
+                $filer->warning("a '{$this->keyword}' has no matching closing '{$this->keyword}'");
+            }
         }
         
         /**
