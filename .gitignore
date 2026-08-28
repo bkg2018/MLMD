@@ -10,3 +10,4 @@ Unused/toctest.md
 Unused/TokenEscaperSpace.class.php
 Unused/unused.php
 vendor/*
+*.log
